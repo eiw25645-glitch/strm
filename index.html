@@ -4168,155 +4168,150 @@ html.chat-kb .ch-box{border-radius:0}
 .hv-sc li.hv-tg .hv-tag{margin-top:2px}
 </style>
 
-<!-- ===== Home redesign v2: profile + level card, level journey, roomier home (scrolls) ===== -->
-<style id="home-v2">
-html.home-lock,html.home-lock body{overflow:auto!important;overscroll-behavior:auto!important}
-#hvHome{padding-bottom:104px}
-#hvHome .hv-sec{margin:20px 4px 10px!important;font-size:1.1rem!important}
-body[data-tab="home"] .hv-sec{margin:20px 4px 10px}
-body[data-tab="home"] .hv-tile{padding:12px 12px}
-body[data-tab="home"] .hv-tile b{font-size:1.9rem}
-body[data-tab="home"] .hv-qb{min-height:66px;padding:10px 12px}
-body[data-tab="home"] #hvHome .live{margin-top:20px;min-height:170px;padding:14px 12px 10px!important}
-.hv2-prof{display:none!important;grid-template-columns:76px 1fr;gap:6px 14px;align-items:center;margin:0 0 12px;padding:14px 14px 12px;background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:none;cursor:pointer;text-align:left}
-.hv2-av{position:relative;width:76px;height:76px;border-radius:50%;background:var(--blue-l);border:1px solid var(--line);display:block;isolation:isolate}
-.hv2-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
-.hv2-av[data-tier]::before{content:"";position:absolute;inset:-6px;border-radius:50%;background:var(--r,var(--blue));z-index:-1;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4.5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 4.5px),#000 calc(100% - 4px))}
-.hv2-info{min-width:0}
-.hv2-name{display:block;font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hv2-for{display:block;font-weight:800;font-size:.74rem;color:var(--muted);margin-top:2px}
-.hv2-chips{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
-.hv2-title{font-family:var(--display);font-size:.8rem;line-height:1.4;padding:1px 10px 2px;border-radius:99px;background:var(--sun-l);border:1px solid var(--line)}
-.hv2-xp{grid-column:1/-1}
-.hv2-bar{display:block;height:10px;border-radius:99px;background:var(--paper);border:1px solid rgba(36,71,214,.22);overflow:hidden}
-.hv2-bar b{display:block;height:100%;width:4%;border-radius:99px;background:var(--blue);transition:width .6s ease}
-.hv2-meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-weight:800;font-size:.72rem;color:#3c3f4d}
-.hv2-meta span:first-child{color:var(--ink)}
-.hv2-meta[hidden],.hv2-prof [hidden]{display:none}
-.hv2-jr{margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:26px;padding:12px 8px 8px;box-shadow:none}
-.hv2-jr .hv2-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px 2px}
-.hv2-lv{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;border:1px solid transparent;border-radius:16px;background:none;font:inherit;color:var(--ink);cursor:pointer;min-width:0}
-.hv2-lv .fvm{width:42px;height:42px;margin:0}
-.hv2-lv .fvm svg{width:24px;height:24px}
-.hv2-lv .fvm.l10{width:44px;height:44px}
-.hv2-lv b{font-family:var(--display);font-weight:400;font-size:.8rem;line-height:1.1}
-.hv2-lv small{font-weight:800;font-size:.62rem;line-height:1.15;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hv2-lv.lock{opacity:.45}
-.hv2-lv.cur{background:var(--blue-l);border-color:var(--blue)}
-.hv2-lv.cur small{color:var(--blue)}
-.hv2-lv:focus-visible,.hv2-prof:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-.wrap{position:relative}
-body[data-tab="home"] h1{flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;text-align:left!important;min-height:34px;padding-right:78px;margin:0 0 14px!important}
-body[data-tab="home"] h1 .ttl{align-items:flex-start;text-align:left}
-body[data-tab="home"] h1 .mascot{display:none!important}
-.hv2-bell{position:absolute;top:2px;right:42px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;z-index:3}
-.hv2-bell svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.hv2-bell .ann-n{top:-5px;right:-5px;min-width:16px;height:16px;font-size:.58rem;line-height:12px;padding:0 4px}
-.hv2-me{position:absolute;top:0;right:0;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--blue-l);cursor:pointer;z-index:3}
-.hv2-me img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
-.hv2-me .fvm.c{width:15px;height:15px;right:-4px;bottom:-4px;border-width:1px;outline-width:1px}
-.hv2-me .fvm.c svg{width:9px;height:9px}
-.hv2-me .fvm.c.l10{width:16px;height:16px;right:-5px;bottom:-5px}
-.hv2-me:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-body:not([data-tab="home"]) .hv2-me{display:none}
-body:not([data-tab="home"]) .hv2-bell{display:none}
-.hv2-bell:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-@media(max-width:340px){.hv2-lv .fvm{width:36px;height:36px}.hv2-lv small{font-size:.56rem}}
+<!-- ===== Home v3: one-screen home (level journey, 1-line activity, compact quick access, "done today" mark) ===== -->
+<style id="home-v3">
+html body[data-tab="home"]{padding-top:10px!important}
+html .wrap{min-height:0!important;padding-top:6px!important}
+html body[data-tab="home"] #hvApp{flex:none}
+html body[data-tab="home"] #hvHome:not([hidden]){flex:none;gap:8px;padding-bottom:84px}
+/* header: one compact row + progress chip */
+html body[data-tab="home"] .sub-line{display:none}
+html body[data-tab="home"] h1{flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;text-align:left!important;margin:0 0 10px!important;padding-right:112px;position:relative;min-height:36px}
+html body[data-tab="home"] h1 .mascot{width:34px!important;height:auto;flex:none}
+html body[data-tab="home"] h1 .ttl{align-items:flex-start;text-align:left}
+html body[data-tab="home"] h1 .t1{font-size:1.1rem}
+html body[data-tab="home"] h1 .t2{font-size:.78rem}
+.hv3-prog{position:absolute;right:0;top:50%;transform:translateY(-50%);display:none;align-items:center;gap:5px;padding:3px 10px 3px 8px;border-radius:99px;border:1px solid var(--line);background:#fff;font:800 .72rem/1.3 'Nunito',sans-serif;color:var(--muted);white-space:nowrap}
+body[data-tab="home"] .hv3-prog{display:inline-flex}
+.hv3-prog svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;display:none}
+.hv3-prog.done{background:#e8f7ee;border-color:rgba(47,180,87,.45);color:#1f8a45}
+.hv3-prog.done svg{display:block}
+.hv3-prog.done i{display:none}
+.hv3-prog i{font-style:normal}
+/* tiles */
+html body[data-tab="home"] .hv-tile{padding:6px 10px!important;gap:8px!important;border-radius:18px}
+html body[data-tab="home"] .hv-tile .c{width:30px!important;height:30px!important}
+html body[data-tab="home"] .hv-tile .c svg{width:17px;height:17px}
+html body[data-tab="home"] .hv-tile b{font-size:1.3rem!important}
+html body[data-tab="home"] .hv-tile small{font-size:.64rem!important;margin-top:1px}
+/* quick access: one slim row of 4 */
+html body[data-tab="home"] #hvHome .hv-sec{margin:4px 2px 0!important;font-size:.9rem!important;gap:6px}
+html body[data-tab="home"] #hvHome .hv-sec .hv-ic{width:17px;height:17px}
+html body[data-tab="home"] .hv-q{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+html body[data-tab="home"] .hv-qb{flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:3px!important;min-height:0!important;padding:7px 2px 6px!important;border-radius:16px!important;position:relative}
+html body[data-tab="home"] .hv-qb .c{width:26px!important;height:26px!important}
+html body[data-tab="home"] .hv-qb .c svg{width:15px;height:15px}
+html body[data-tab="home"] .hv-qb>span:last-child{flex:none;width:100%}
+html body[data-tab="home"] .hv-qb b{font-size:.64rem!important;line-height:1.15;display:block;white-space:nowrap}
+html body[data-tab="home"] .hv-qb small{display:none!important}
+.hv3-ok{position:absolute;top:-5px;right:-3px;width:18px;height:18px;border-radius:50%;background:#2fb457;border:2px solid #fff;display:none;align-items:center;justify-content:center}
+.hv3-ok svg{width:10px;height:10px;fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.hv-qb.is-done .hv3-ok{display:flex}
+/* level journey */
+.hv3-jr{background:#fff;border:1px solid var(--line);border-radius:18px;padding:8px 8px 6px;cursor:pointer;text-align:left}
+.hv3-jh{display:flex;align-items:center;gap:6px;margin:0 2px 5px;font-family:var(--display);font-weight:400;font-size:.9rem;line-height:1.2}
+.hv3-jh .hv-ic{width:17px;height:17px;flex:none}
+.hv3-jh .r{margin-left:auto;font-family:'Nunito',sans-serif;font-weight:800;font-size:.68rem;color:#3c3f4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.hv3-bar{display:block;height:6px;border-radius:99px;background:var(--paper);border:1px solid rgba(36,71,214,.2);overflow:hidden;margin:0 2px 6px}
+.hv3-bar i{display:block;height:100%;width:3%;border-radius:99px;background:var(--blue);transition:width .6s ease}
+.hv3-row{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:1px;align-items:start}
+.hv3-lv{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 0 2px;border:1px solid transparent;border-radius:10px;min-width:0}
+.hv3-lv .fvm{width:24px;height:24px;margin:0}
+.hv3-lv .fvm svg{width:14px;height:14px}
+.hv3-lv .fvm.l10{width:26px;height:26px}
+.hv3-lv b{font:400 .6rem/1 var(--display)}
+.hv3-lv.lock{opacity:.4}
+.hv3-lv.cur{background:var(--blue-l);border-color:var(--blue)}
+.hv3-jr:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* recent activity: a single line */
+html body[data-tab="home"] #hvHome .live{flex:none!important;display:flex;flex-direction:row;align-items:center;gap:8px;margin-top:0!important;min-height:0!important;padding:4px 8px 4px 10px!important;border-radius:22px}
+html body[data-tab="home"] #hvHome .live .lh{margin:0!important;flex:none}
+html body[data-tab="home"] #hvHome .live .lh>span:not(.dot){display:none}
+html body[data-tab="home"] #hvHome .live .lnote{display:none}
+html body[data-tab="home"] #hvHome .lv{flex:1;min-width:0;height:50px!important;min-height:0!important;-webkit-mask-image:none!important;mask-image:none!important}
+html body[data-tab="home"] #hvHome .lv .none br{display:none}
+html body[data-tab="home"] #hvHome .lv .none{font-size:.78rem}
+#liveTrack[data-n="few"]{top:auto;bottom:0}
+/* short screens: squeeze a little more so it still fits without scrolling */
+@media(max-height:720px){
+  html body[data-tab="home"] h1 .mascot{width:28px!important}
+  html body[data-tab="home"] .hv-focus{display:none}
+  html body[data-tab="home"] #hvHome:not([hidden]){gap:6px}
+}
+@media(max-height:620px){ .hv3-jr .hv3-bar{display:none} html body[data-tab="home"] .hv-tile small{display:none} }
 </style>
-<script id="home-v2-js">
+<script id="home-v3-js">
 (function(){
   const $ = id => document.getElementById(id);
-  const home = $('hvHome'); if(!home || home.querySelector('#hv2Prof')) return;
+  const home = $('hvHome'); if(!home || home.querySelector('#hv3Jr')) return;
   const th = () => document.documentElement.lang === 'th';
   const T = (e, t) => th() ? t : e;
   const NAMES = [['Newbie','มือใหม่'],['Fan','แฟนคลับ'],['Voter','นักโหวต'],['Dedicated','ตัวจริง'],['Super Fan','ซูเปอร์แฟน'],
                  ['Star Voter','สตาร์โหวต'],['Elite','อีลีท'],['Master','มาสเตอร์'],['Legend','ตำนาน'],['Hall of Fame','หอเกียรติยศ']];
   const nm = n => NAMES[n - 1][th() ? 1 : 0];
-  const tierOf = n => Math.min(5, Math.ceil(Math.max(1, n) / 2));
-  const medal = n => '<i class="fvm l' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>';
+  const CHECK = '<path d="M5 12.5l4.5 4.5L19 7.5"/>';
+  const FLAG = '<svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg>';
 
-  const prof = document.createElement('section');
-  prof.className = 'hv2-prof'; prof.id = 'hv2Prof'; prof.tabIndex = 0; prof.setAttribute('role', 'button');
-  prof.innerHTML =
-    '<span class="hv2-av" id="hv2Av"><img id="hv2Img" alt=""></span>' +
-    '<div class="hv2-info"><b class="hv2-name" id="hv2Name">–</b>' +
-      '<div class="hv2-chips"><span id="hv2Chip"></span><span class="hv2-title" id="hv2Title" hidden></span></div></div>' +
-    '<div class="hv2-xp"><span class="hv2-bar"><b id="hv2Fill"></b></span>' +
-      '<div class="hv2-meta" id="hv2Meta"><span id="hv2Xp"></span><span id="hv2Next"></span></div></div>';
-  home.insertBefore(prof, home.firstChild);
-
+  /* ---- level journey (after Quick Access) ---- */
   const jr = document.createElement('section');
-  jr.className = 'hv2-jr'; jr.id = 'hv2Jr';
+  jr.className = 'hv3-jr'; jr.id = 'hv3Jr'; jr.tabIndex = 0; jr.setAttribute('role', 'button');
+  jr.innerHTML = '<div class="hv3-jh">' + FLAG + '<span id="hv3Ttl"></span><span class="r" id="hv3Rt"></span></div>' +
+                 '<span class="hv3-bar"><i id="hv3Fill"></i></span><div class="hv3-row" id="hv3Row"></div>';
   const q = home.querySelector('.hv-q');
   if(q) q.after(jr); else home.appendChild(jr);
-  const head = document.createElement('div');
-  head.className = 'hv-sec'; head.id = 'hv2JrHead';
-  jr.before(head);
+  const open = () => { const b = $('lvTap'); if(b) b.click(); };
+  jr.addEventListener('click', open);
+  jr.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); } });
 
-  let cur = 0;
-  function drawJourney(){
-    head.innerHTML = '<svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>' + T('Level Journey', 'เส้นทางเลเวล') + '</span>';
-    let h = '<div class="hv2-grid">';
-    for(let n = 1; n <= 10; n++){
-      h += '<button type="button" class="hv2-lv ' + (n === cur ? 'cur' : (n > cur ? 'lock' : '')) + ' ft' + tierOf(n) + '" data-n="' + n + '">' +
-           medal(n) + '<b>LV.' + n + '</b><small>' + nm(n) + '</small></button>';
+  /* ---- progress chip in the header: n/total today, turns into a green check when all done ---- */
+  const h1 = document.querySelector('.wrap h1');
+  const prog = document.createElement('span');
+  prog.className = 'hv3-prog'; prog.id = 'hv3Prog';
+  prog.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + CHECK + '</svg><i></i><span></span>';
+  if(h1) h1.appendChild(prog);
+
+  /* ---- green check badge on the Quick Update button ---- */
+  const qu = home.querySelector('.hv-qb[data-q="upd"]');
+  if(qu){ qu.insertAdjacentHTML('beforeend', '<span class="hv3-ok" aria-hidden="true"><svg viewBox="0 0 24 24">' + CHECK + '</svg></span>'); }
+
+  let cur = -1;
+  function drawRow(n){
+    let h = '';
+    for(let i = 1; i <= 10; i++){
+      h += '<span class="hv3-lv ' + (i === n ? 'cur' : (i > n ? 'lock' : '')) + '" title="LV.' + i + ' ' + nm(i) + '">' +
+           '<i class="fvm l' + i + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + i + '"/></svg></i><b>' + i + '</b></span>';
     }
-    jr.innerHTML = h + '</div>';
+    $('hv3Row').innerHTML = h;
   }
-
   function sync(){
-    const t = ($('hvMeName') && $('hvMeName').textContent || '').trim();
-    const ok = t && !/^not set|^ยังไม่/i.test(t);
-    $('hv2Name').textContent = ok ? '@' + t.replace(/^@/, '') : T('Not set yet', 'ยังไม่ได้ตั้งค่า');
-    const src = $('hvAv'); if(src && src.getAttribute('src')) $('hv2Img').src = src.getAttribute('src');
-    const w = src && src.parentNode; $('hv2Av').dataset.tier = (w && w.dataset.tier) || '';
-    if(!$('hv2Av').dataset.tier) $('hv2Av').removeAttribute('data-tier');
-    if(w && w.style.getPropertyValue('--r')) $('hv2Av').style.setProperty('--r', w.style.getPropertyValue('--r'));
+    /* level */
     const m = ($('lvBadge') && $('lvBadge').textContent || '').match(/LV\.(\d+)/);
     const n = m ? Math.min(10, +m[1]) : 0;
-    $('hv2Chip').innerHTML = n && window.FVL ? FVL.chip(n) : '';
-    $('hv2Title').hidden = !n; if(n) $('hv2Title').textContent = nm(n);
-    $('hv2Meta').hidden = !n;
-    if(n){
-      $('hv2Xp').textContent = ($('lvXp') && $('lvXp').textContent) || '';
-      $('hv2Next').textContent = ($('lvNext') && $('lvNext').textContent) || '';
-      $('hv2Fill').style.width = ($('lvFill') && $('lvFill').style.width) || '4%';
-    }
-    const mi = $('hv2MeImg'); if(mi && $('hv2Img').getAttribute('src')) mi.src = $('hv2Img').getAttribute('src');
-    $('hv2MeMed').innerHTML = n ? '<i class="fvm c l' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>' : '';
-    me.title = n ? 'LV.' + n + ' ' + nm(n) : '';
-    if(n !== cur || !jr.firstChild){ cur = n; drawJourney(); }
+    $('hv3Ttl').textContent = T('Level Journey', 'เส้นทางเลเวล');
+    $('hv3Rt').textContent = n ? 'LV.' + n + ' ' + nm(n) + ' · ' + (($('lvXp') && $('lvXp').textContent) || '') : '';
+    $('hv3Fill').style.width = n ? (($('lvFill') && $('lvFill').style.width) || '3%') : '3%';
+    if(n !== cur || !$('hv3Row').firstChild){ cur = n; drawRow(n); }
+    /* today's progress */
+    const pm = ($('hvMeApps') && $('hvMeApps').textContent || '').match(/(\d+)\s*\/\s*(\d+)/);
+    const x = pm ? +pm[1] : 0, y = pm ? +pm[2] : 0;
+    const done = y > 0 && x >= y;
+    prog.classList.toggle('done', done);
+    prog.lastChild.textContent = done ? T('Done today', 'วันนี้ครบแล้ว') : T('Today ', 'วันนี้ ') + x + '/' + y;
+    prog.title = done ? T('You updated every app today', 'วันนี้อัปเดตครบทุกแอปแล้ว') : '';
+    if(qu) qu.classList.toggle('is-done', done);
   }
-
-  /* bell (top right, next to the mascot) opens the same announcements panel as the Community bell */
-  const wrap = document.querySelector('.wrap');
-  const bell = document.createElement('button');
-  bell.type = 'button'; bell.className = 'hv2-bell'; bell.id = 'hv2Bell'; bell.setAttribute('aria-label', 'Announcements');
-  bell.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="ann-n" id="hv2BellN" hidden></span>';
-  wrap.insertBefore(bell, wrap.firstChild);
-  bell.addEventListener('click', () => { const b = $('annBell'); if(b) b.click(); });
-  const syncBell = () => { const a = $('annN'), n = $('hv2BellN'); if(!a || !n) return; n.textContent = a.textContent; n.hidden = a.hidden; };
-  const bm = new MutationObserver(syncBell);
-  const hookBell = () => { const a = $('annN'); if(a){ bm.observe(a, {childList:true, characterData:true, subtree:true, attributes:true}); syncBell(); return true; } return false; };
-  if(!hookBell()) [500, 1500, 3000].forEach(t => setTimeout(hookBell, t));
-  const me = document.createElement('button');
-  me.type = 'button'; me.className = 'hv2-me'; me.id = 'hv2Me'; me.setAttribute('aria-label', 'My level');
-  me.innerHTML = '<img id="hv2MeImg" alt=""><span id="hv2MeMed"></span>';
-  wrap.insertBefore(me, wrap.firstChild);
-  me.addEventListener('click', () => open());
-
-  const open = () => { const b = $('lvTap'); if(b) b.click(); };
-  prof.addEventListener('click', open);
-  prof.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); } });
-  jr.addEventListener('click', e => { if(e.target.closest('.hv2-lv')) open(); });
-
   const mo = new MutationObserver(sync);
-  ['hvMeName','lvBadge','lvXp','lvNext','lvFill','hvAv'].forEach(id => {
-    const e = $(id); if(e) mo.observe(e.parentNode || e, {childList:true, characterData:true, subtree:true, attributes:true});
-  });
-  new MutationObserver(() => { jr.innerHTML = ''; sync(); }).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+  ['lvBadge','lvXp','lvFill','hvMeApps'].forEach(id => { const e = $(id); if(e) mo.observe(e, {childList:true, characterData:true, subtree:true, attributes:true}); });
+  new MutationObserver(() => { cur = -1; sync(); }).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
   document.addEventListener('fv:auth', () => setTimeout(sync, 400));
   sync();
   [300, 1000, 2500].forEach(t => setTimeout(sync, t));
+
+  /* ---- recent activity: when only 1-2 rows exist, anchor the newest one in the single-line window ---- */
+  const tk = $('liveTrack');
+  if(tk){
+    const mark = () => { tk.dataset.n = tk.children.length <= 2 ? 'few' : 'many'; };
+    new MutationObserver(mark).observe(tk, {childList:true}); mark();
+  }
 })();
 </script>
