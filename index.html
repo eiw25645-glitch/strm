@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4168,3 +4167,120 @@ html.chat-kb .ch-box{border-radius:0}
 .hv-sc li.hv-tg{display:flex;align-items:flex-start;gap:10px}
 .hv-sc li.hv-tg .hv-tag{margin-top:2px}
 </style>
+
+<!-- ===== Home redesign v2: profile + level card, level journey, roomier home (scrolls) ===== -->
+<style id="home-v2">
+html.home-lock,html.home-lock body{overflow:auto!important;overscroll-behavior:auto!important}
+#hvHome{padding-bottom:104px}
+#hvHome .hv-sec{margin:20px 4px 10px!important;font-size:1.1rem!important}
+body[data-tab="home"] .hv-sec{margin:20px 4px 10px}
+body[data-tab="home"] .hv-tile{padding:12px 12px}
+body[data-tab="home"] .hv-tile b{font-size:1.9rem}
+body[data-tab="home"] .hv-qb{min-height:66px;padding:10px 12px}
+body[data-tab="home"] #hvHome .live{margin-top:20px;min-height:170px;padding:14px 12px 10px!important}
+.hv2-prof{display:grid;grid-template-columns:76px 1fr;gap:6px 14px;align-items:center;margin:0 0 12px;padding:14px 14px 12px;background:#fff;border:2px solid var(--ink);border-radius:26px;box-shadow:var(--soft);cursor:pointer;text-align:left}
+.hv2-av{position:relative;width:76px;height:76px;border-radius:50%;background:var(--blue-l);border:2px solid var(--ink);display:block;isolation:isolate}
+.hv2-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.hv2-av[data-tier]::before{content:"";position:absolute;inset:-6px;border-radius:50%;background:var(--r,var(--blue));z-index:-1;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4.5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 4.5px),#000 calc(100% - 4px))}
+.hv2-info{min-width:0}
+.hv2-name{display:block;font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hv2-for{display:block;font-weight:800;font-size:.74rem;color:var(--muted);margin-top:2px}
+.hv2-chips{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+.hv2-title{font-family:var(--display);font-size:.8rem;line-height:1.4;padding:1px 10px 2px;border-radius:99px;background:var(--sun-l);border:1.5px solid var(--ink)}
+.hv2-xp{grid-column:1/-1}
+.hv2-bar{display:block;height:10px;border-radius:99px;background:var(--paper);border:1.5px solid rgba(36,71,214,.28);overflow:hidden}
+.hv2-bar b{display:block;height:100%;width:4%;border-radius:99px;background:var(--blue);transition:width .6s ease}
+.hv2-meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-weight:800;font-size:.72rem;color:#3c3f4d}
+.hv2-meta span:first-child{color:var(--ink)}
+.hv2-meta[hidden],.hv2-prof [hidden]{display:none}
+.hv2-jr{margin-top:4px;background:#fff;border:2px solid var(--ink);border-radius:26px;padding:12px 8px 8px;box-shadow:var(--soft)}
+.hv2-jr .hv2-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px 2px}
+.hv2-lv{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;border:2px solid transparent;border-radius:16px;background:none;font:inherit;color:var(--ink);cursor:pointer;min-width:0}
+.hv2-lv .fvm{width:42px;height:42px;margin:0}
+.hv2-lv .fvm svg{width:24px;height:24px}
+.hv2-lv .fvm.l10{width:44px;height:44px}
+.hv2-lv b{font-family:var(--display);font-weight:400;font-size:.8rem;line-height:1.1}
+.hv2-lv small{font-weight:800;font-size:.62rem;line-height:1.15;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hv2-lv.lock{opacity:.45}
+.hv2-lv.cur{background:var(--blue-l);border-color:var(--blue)}
+.hv2-lv.cur small{color:var(--blue)}
+.hv2-lv:focus-visible,.hv2-prof:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+@media(max-width:340px){.hv2-lv .fvm{width:36px;height:36px}.hv2-lv small{font-size:.56rem}}
+</style>
+<script id="home-v2-js">
+(function(){
+  const $ = id => document.getElementById(id);
+  const home = $('hvHome'); if(!home || home.querySelector('#hv2Prof')) return;
+  const th = () => document.documentElement.lang === 'th';
+  const T = (e, t) => th() ? t : e;
+  const NAMES = [['Newbie','มือใหม่'],['Fan','แฟนคลับ'],['Voter','นักโหวต'],['Dedicated','ตัวจริง'],['Super Fan','ซูเปอร์แฟน'],
+                 ['Star Voter','สตาร์โหวต'],['Elite','อีลีท'],['Master','มาสเตอร์'],['Legend','ตำนาน'],['Hall of Fame','หอเกียรติยศ']];
+  const nm = n => NAMES[n - 1][th() ? 1 : 0];
+  const tierOf = n => Math.min(5, Math.ceil(Math.max(1, n) / 2));
+  const medal = n => '<i class="fvm l' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>';
+
+  const prof = document.createElement('section');
+  prof.className = 'hv2-prof'; prof.id = 'hv2Prof'; prof.tabIndex = 0; prof.setAttribute('role', 'button');
+  prof.innerHTML =
+    '<span class="hv2-av" id="hv2Av"><img id="hv2Img" alt=""></span>' +
+    '<div class="hv2-info"><b class="hv2-name" id="hv2Name">–</b><span class="hv2-for">For MARK LEE ♡</span>' +
+      '<div class="hv2-chips"><span id="hv2Chip"></span><span class="hv2-title" id="hv2Title" hidden></span></div></div>' +
+    '<div class="hv2-xp"><span class="hv2-bar"><b id="hv2Fill"></b></span>' +
+      '<div class="hv2-meta" id="hv2Meta"><span id="hv2Xp"></span><span id="hv2Next"></span></div></div>';
+  home.insertBefore(prof, home.firstChild);
+
+  const jr = document.createElement('section');
+  jr.className = 'hv2-jr'; jr.id = 'hv2Jr';
+  const q = home.querySelector('.hv-q');
+  if(q) q.after(jr); else home.appendChild(jr);
+  const head = document.createElement('div');
+  head.className = 'hv-sec'; head.id = 'hv2JrHead';
+  jr.before(head);
+
+  let cur = 0;
+  function drawJourney(){
+    head.innerHTML = '<svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>' + T('Level Journey', 'เส้นทางเลเวล') + '</span>';
+    let h = '<div class="hv2-grid">';
+    for(let n = 1; n <= 10; n++){
+      h += '<button type="button" class="hv2-lv ' + (n === cur ? 'cur' : (n > cur ? 'lock' : '')) + ' ft' + tierOf(n) + '" data-n="' + n + '">' +
+           medal(n) + '<b>LV.' + n + '</b><small>' + nm(n) + '</small></button>';
+    }
+    jr.innerHTML = h + '</div>';
+  }
+
+  function sync(){
+    const t = ($('hvMeName') && $('hvMeName').textContent || '').trim();
+    const ok = t && !/^not set|^ยังไม่/i.test(t);
+    $('hv2Name').textContent = ok ? '@' + t.replace(/^@/, '') : T('Not set yet', 'ยังไม่ได้ตั้งค่า');
+    const src = $('hvAv'); if(src && src.getAttribute('src')) $('hv2Img').src = src.getAttribute('src');
+    const w = src && src.parentNode; $('hv2Av').dataset.tier = (w && w.dataset.tier) || '';
+    if(!$('hv2Av').dataset.tier) $('hv2Av').removeAttribute('data-tier');
+    if(w && w.style.getPropertyValue('--r')) $('hv2Av').style.setProperty('--r', w.style.getPropertyValue('--r'));
+    const m = ($('lvBadge') && $('lvBadge').textContent || '').match(/LV\.(\d+)/);
+    const n = m ? Math.min(10, +m[1]) : 0;
+    $('hv2Chip').innerHTML = n && window.FVL ? FVL.chip(n) : '';
+    $('hv2Title').hidden = !n; if(n) $('hv2Title').textContent = nm(n);
+    $('hv2Meta').hidden = !n;
+    if(n){
+      $('hv2Xp').textContent = ($('lvXp') && $('lvXp').textContent) || '';
+      $('hv2Next').textContent = ($('lvNext') && $('lvNext').textContent) || '';
+      $('hv2Fill').style.width = ($('lvFill') && $('lvFill').style.width) || '4%';
+    }
+    if(n !== cur || !jr.firstChild){ cur = n; drawJourney(); }
+  }
+
+  const open = () => { const b = $('lvTap'); if(b) b.click(); };
+  prof.addEventListener('click', open);
+  prof.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); } });
+  jr.addEventListener('click', e => { if(e.target.closest('.hv2-lv')) open(); });
+
+  const mo = new MutationObserver(sync);
+  ['hvMeName','lvBadge','lvXp','lvNext','lvFill','hvAv'].forEach(id => {
+    const e = $(id); if(e) mo.observe(e.parentNode || e, {childList:true, characterData:true, subtree:true, attributes:true});
+  });
+  new MutationObserver(() => { jr.innerHTML = ''; sync(); }).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+  document.addEventListener('fv:auth', () => setTimeout(sync, 400));
+  sync();
+  [300, 1000, 2500].forEach(t => setTimeout(sync, t));
+})();
+</script>
