@@ -1372,7 +1372,7 @@ window.FVL = (function(){
   const box = $('liveBox'), track = $('liveTrack'), cnt = $('liveCnt');
   function measure(){
     const h = box.clientHeight; if(!h) return false;
-    const v = Math.max(ROW, h); if(v === VIEW) return false;
+    const v = Math.max(ROW * 2, h); if(v === VIEW) return false;
     VIEW = v; SHOW = VIEW / ROW; NEED = Math.ceil(SHOW) + 2; return true;
   }
   if(window.ResizeObserver) new ResizeObserver(() => { if(measure() && items.length) rebuild(new Set()); }).observe(box);
@@ -1952,67 +1952,33 @@ html body select{font-size:16px!important}
 </style>
 
 <style>
-/* ===== Home on ONE screen: Level Journey + 1-line Recent Activity + compact Quick Access ===== */
-body[data-tab="home"] .mascot{width:44px!important}
-body[data-tab="home"] h1{margin:2px 0 2px!important}
-body[data-tab="home"] .t2{margin-top:2px!important}
-body[data-tab="home"] .sub-line{margin:0 0 8px!important}
-body[data-tab="home"] .hv-tile{padding:7px 12px!important;gap:8px!important}
-body[data-tab="home"] .hv-tile .c{width:34px!important;height:34px!important}
-body[data-tab="home"] .hv-tile b{font-size:1.55rem!important}
-body[data-tab="home"] .hv-tile small{margin-top:1px!important}
-
-/* Level Journey card */
-.hv-lvj{display:block;width:100%;margin-top:9px;padding:9px 12px 8px;background:#fff;border:1px solid var(--line);border-radius:20px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+/* ===== Home: bigger Level Journey card (below Quick Access) + "all done today" symbol ===== */
+.hv-lvj{display:block;width:100%;margin-top:14px;padding:14px 16px 13px;background:#fff;border:1px solid var(--line);border-radius:24px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
 .hv-lvj:active{transform:scale(.985)}
-.lj-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
-.lj-t{font-family:var(--display);font-weight:400;font-size:1rem;line-height:1.2}
-.lj-st{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-family:'Nunito','Itim',sans-serif;font-weight:800;font-size:.68rem;line-height:1.4;white-space:nowrap;border:1px solid rgba(20,20,20,.2);background:#fff;color:var(--ink)}
+.lj-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.lj-t{font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.2}
+.lj-st{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;font-family:'Nunito','Itim',sans-serif;font-weight:800;font-size:.75rem;line-height:1.4;white-space:nowrap;border:1px solid rgba(20,20,20,.2);background:#fff;color:var(--ink)}
 .lj-st:empty{display:none}
 .lj-st.ok{background:#dcf5e1;border-color:#2fb457;color:#17702f}
-.lj-st svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.lj-path{position:relative;display:flex;justify-content:space-between;align-items:center;height:36px}
-.lj-path+.lj-path{margin-top:2px}
-.lj-line{position:absolute;left:14px;right:14px;top:50%;height:5px;margin-top:-2.5px;border-radius:99px;background:#e6e8f0;overflow:hidden}
+.lj-st svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.lj-path{position:relative;display:flex;justify-content:space-between;align-items:center;height:48px}
+.lj-path+.lj-path{margin-top:4px}
+.lj-line{position:absolute;left:18px;right:18px;top:50%;height:6px;margin-top:-3px;border-radius:99px;background:#e6e8f0;overflow:hidden}
 .lj-line i{display:block;height:100%;width:0;border-radius:99px;background:var(--blue);transition:width .9s cubic-bezier(.34,1.2,.5,1)}
-.jn{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex:none;width:28px;height:28px;border-radius:50%;box-sizing:border-box;background:#fff;border:1.5px solid #cfd2de;font-style:normal}
-.jn svg{width:16px;height:16px;display:block}
+.jn{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex:none;width:36px;height:36px;border-radius:50%;box-sizing:border-box;background:#fff;border:2px solid #cfd2de;font-style:normal}
+.jn svg{width:21px;height:21px;display:block}
 .jn.lock svg{filter:grayscale(1);opacity:.4}
 .jn.on{border-color:var(--blue);background:var(--blue-l)}
-.jn.cur{width:34px;height:34px;margin:0 -3px;border:2px solid var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(36,71,214,.18)}
-.jn.cur svg{width:20px;height:20px}
-.lj-m{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-weight:800;font-size:.68rem;color:#3c3f4d;line-height:1.2}
+.jn.cur{width:46px;height:46px;margin:0 -5px;border:2.5px solid var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(36,71,214,.18)}
+.jn.cur svg{width:28px;height:28px}
+.lj-m{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-weight:800;font-size:.82rem;color:#3c3f4d;line-height:1.25}
 .lj-m b{font-weight:800;color:var(--ink)}
 .lj-m span:last-child{text-align:right}
 
-/* Quick Access: 2 x 2, smaller buttons */
-body[data-tab="home"] .hv-sec{margin:9px 2px 5px!important;font-size:.95rem!important}
-.hv-q{grid-template-columns:1fr 1fr!important;gap:6px!important}
-.hv-qb{flex-direction:row!important;justify-content:flex-start;text-align:left;gap:8px!important;min-height:0!important;padding:6px 10px!important;border-radius:16px!important}
-.hv-qb .c{position:relative;width:30px!important;height:30px!important}
-.hv-qb .c .hv-ic{width:17px;height:17px}
-.hv-qb>span:last-child{flex:1!important;min-width:0}
-.hv-qb b{display:block!important;font-size:.85rem!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.hv-qb small{display:none!important}
-html[lang="th"] .hv-qb b{font-size:.8rem!important}
 /* all apps updated today: green tick on Quick Update */
+.hv-qb .c{position:relative}
 body.all-done .hv-qb[data-q="upd"]{background:#f2fbf4;border-color:#2fb457}
-body.all-done .hv-qb[data-q="upd"] .c::after{content:"✓";display:flex;align-items:center;justify-content:center;position:absolute;right:-5px;top:-5px;width:15px;height:15px;border-radius:50%;box-sizing:border-box;background:#2fb457;color:#fff;border:2px solid #fff;font:900 9px/1 'Nunito',sans-serif}
-
-/* Recent Activity: header + a single row */
-body[data-tab="home"] #hvHome .live{flex:none!important;min-height:0!important;margin-top:9px!important;padding:7px 10px 6px!important;border-radius:20px!important}
-body[data-tab="home"] #hvHome .lh{font-size:.9rem!important;margin:0 2px 3px!important}
-body[data-tab="home"] #hvHome .lv{flex:none!important;height:50px!important;min-height:50px!important}
-#hvHome .lnote{display:none}
-#hvHome .lv .none{font-size:.78rem;padding:0 8px}
-#hvHome .lv .none br{display:none}
-
-@media(max-height:780px){
-  body[data-tab="home"] .mascot{width:34px!important}
-  body[data-tab="home"] .t1{font-size:1.4rem!important}
-  body[data-tab="home"] .sub-line{display:none!important}
-  body[data-tab="home"] .hv-focus{margin-top:6px;padding:6px 10px}
-}
+body.all-done .hv-qb[data-q="upd"] .c::after{content:"✓";display:flex;align-items:center;justify-content:center;position:absolute;right:-5px;top:-5px;width:16px;height:16px;border-radius:50%;box-sizing:border-box;background:#2fb457;color:#fff;border:2px solid #fff;font:900 10px/1 'Nunito',sans-serif}
 </style>
 </body>
 </html>
@@ -2739,12 +2705,6 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
       '<button class="ov-tile blue hv-tile" type="button" data-go="history"><span class="c">' + IC.cal + '</span><span><b id="hvToday">–</b><small>Participants today</small></span></button>' +
       '<button class="ov-tile sun hv-tile" type="button" data-go="history"><span class="c">' + IC.users + '</span><span><b id="hvTotal">–</b><small>All-time participants</small></span></button>' +
     '</div>' +
-    '<button type="button" class="hv-lvj" id="hvLvj">' +
-      '<span class="lj-h"><span class="lj-t">Level Journey</span><span class="lj-st" id="hvDone"></span></span>' +
-      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill"></i></span>' + [1,2,3,4,5].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
-      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill2"></i></span>' + [6,7,8,9,10].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
-      '<span class="lj-m"><span id="hvLjA"></span><span id="hvLjB"></span></span>' +
-    '</button>' +
     '<div class="hv-sec">' + IC.bolt + '<span>Quick Access</span></div>' +
     '<div class="hv-q">' +
       qb('vote', IC.grid, 'App Vote', 'Open voting apps') +
@@ -2752,6 +2712,12 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
       qb('ci', IC.cal, 'Daily Check-in', 'Check in for the day') +
       qb('upd', IC.bolt, 'Quick Update', 'Update your totals') +
     '</div>' +
+    '<button type="button" class="hv-lvj" id="hvLvj">' +
+      '<span class="lj-h"><span class="lj-t">Level Journey</span><span class="lj-st" id="hvDone"></span></span>' +
+      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill"></i></span>' + [1,2,3,4,5].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
+      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill2"></i></span>' + [6,7,8,9,10].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
+      '<span class="lj-m"><span id="hvLjA"></span><span id="hvLjB"></span></span>' +
+    '</button>' +
     (FOCUS_APPS.length ? '<div class="hv-focus"><div class="fh"><svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5-1.5l1.5-4l4-4"/><path d="M9 15l-4.5 4.5"/><path d="M14.5 4l5.5 5.5"/></svg><span>Focus apps this month</span></div><div class="fc">' +
       FOCUS_APPS.map(n => '<button type="button" class="fchip" data-focus="' + esc(n) + '"><i style="background:' + (FOCUS_DOT[n] || '#2447d6') + '"></i>' + esc(n) + '</button>').join('') + '</div></div>' : '') +
   '</div>' +
