@@ -93,7 +93,7 @@ function checkEntry(account, app, count) {
 /* In-memory cache (lives as long as the warm serverless instance, shared by concurrent requests).
    loadAll() reads + parses EVERY vote record, so without this each poll from each open tab repeats it.
    Callers must treat the returned list as read-only. Writes use loadAll(true) / dropAll(). */
-const ALL_TTL = 30000;                       // ms
+const ALL_TTL = 60000;                       // ms
 let _all = null, _allAt = 0, _allP = null;
 async function loadAll(fresh) {
   if (!fresh) {
@@ -124,7 +124,13 @@ async function memo(name, ttl, fn) {
   return p;
 }
 const _lv = new Map();                                  // account -> { at, v }  (XP / level cache)
-const memoDrop = () => { _memo.clear(); _lv.clear(); };
+const memoDrop = (keepAnn) => { for (const k of [..._memo.keys()]) if (!(keepAnn && k === 'annAll')) _memo.delete(k); _lv.clear(); };
+// check-in day count per account (1 h). Used by XP; only changes on check-in, so it must NOT be re-read after every vote.
+const _ci = new Map();                                  // account -> { at, n }
+const CI_TTL = 3600000;
+// profile-photo versions, whole hash in one read (5 min)
+let _avs = null, _avsAt = 0;
+const AVS_TTL = 300000;
 
 function latestMap(list) {
   const m = new Map();
@@ -286,7 +292,10 @@ async function levelsCompute(accounts) {
   const want = [...new Set(accounts.map(lc))];
   const out = {};
   if (!want.length) return out;
-  const [list, ci] = await Promise.all([loadAll(), pipe(want.map(a => ['SMEMBERS', ciKey(a)]))]);
+  const nowT = Date.now();
+  const need = want.filter(a => { const h = _ci.get(a); return !(h && nowT - h.at < CI_TTL); });
+  const [list, ciRows] = await Promise.all([loadAll(), need.length ? pipe(need.map(a => ['SMEMBERS', ciKey(a)])) : []]);
+  need.forEach((a, i) => _ci.set(a, { at: nowT, n: (ciRows[i] || []).length }));
   const per = {};
   want.forEach(a => { per[a] = {}; });
   for (const v of list) {
@@ -296,7 +305,7 @@ async function levelsCompute(accounts) {
     (per[a][d] = per[a][d] || new Set()).add(v.app);        // an app counts once per day
   }
   want.forEach((a, i) => {
-    let xp = (ci[i] || []).length * XP_RULES.checkin;
+    let xp = (_ci.get(a).n) * XP_RULES.checkin;
     for (const s of Object.values(per[a])) {
       xp += s.size * XP_RULES.app;
       if (s.size >= OPEN_APPS.length) xp += XP_RULES.full;
@@ -311,8 +320,13 @@ async function avatarsFor(accounts) {
   const want = [...new Set(accounts.map(lc))];
   const out = {};
   if (!want.length) return out;
-  const vs = (await cmd('HMGET', 'avs', ...want)) || [];
-  want.forEach((a, i) => { out[a] = Number(vs[i]) || 0; });
+  if (!_avs || Date.now() - _avsAt > AVS_TTL) {
+    const flat = (await cmd('HGETALL', 'avs')) || [];
+    const m = {};
+    for (let i = 0; i + 1 < flat.length; i += 2) m[flat[i]] = Number(flat[i + 1]) || 0;
+    _avs = m; _avsAt = Date.now();
+  }
+  want.forEach(a => { out[a] = _avs[a] || 0; });
   return out;
 }
 const AV_MAX = 80000;            // base64 characters (~60 KB jpeg)
@@ -344,7 +358,7 @@ async function rateOk(acc, what, max, sec) {
 }
 
 // all announcements, newest first (cached 30 s per instance; annPost / annDelete clear it)
-const annAll = () => memo('annAll', 30000, async () => {
+const annAll = () => memo('annAll', 120000, async () => {
   const flat = (await cmd('HGETALL', ANN)) || [];
   const items = [];
   for (let i = 1; i < flat.length; i += 2) { try { items.push(JSON.parse(flat[i])); } catch (e) { /* skip bad row */ } }
@@ -405,7 +419,7 @@ const actions = {
     const rec = { id, account, app, count, t: Date.now() };
     if (tickets !== undefined) rec.tickets = tickets;
     await cmd('HSET', HASH, id, JSON.stringify(rec));
-    if (_all) _all = [rec, ..._all]; memoDrop();
+    if (_all) _all = [rec, ..._all]; memoDrop(true);
 
     const res = { ok: true, account, app, count, tickets: tickets === undefined ? null : tickets, prev: prevRec ? prevRec.count : null, prevTickets: prevRec && prevRec.tickets != null ? prevRec.tickets : null };
     if (account === SPECIAL) res.summary = summaryFor([rec, ...list], account);
@@ -420,14 +434,22 @@ const actions = {
     return { ok: true, summary: summaryFor(await loadAll(), account) };
   },
 
-  getTodayFeed() { return memo('feed', 30000, () => this._feed()); },
+  getTodayFeed() { return memo('feed', 60000, () => this._feed()); },
 
   async _feed() {
     const today = dayOf(Date.now());
-    const items = [...latestMap(await loadAll()).values()]
+    const FEED_MS = 2 * 3600 * 1000;                 // an entry leaves the feed 2 h after its last update (room for new people)
+    const cut = Date.now() - FEED_MS;
+    const todayAll = [...latestMap(await loadAll()).values()]
       .filter(v => dayOf(v.t) === today && isFocus(v.app))
-      .sort((a, b) => a.t - b.t || a.id - b.id)
+      .sort((a, b) => a.t - b.t || a.id - b.id);
+    const items = todayAll.filter(v => v.t >= cut)
       .map(v => ({ id: v.id, account: v.account, app: v.app, time: timeOf(v.t) }));
+    // numbers + crowns still count everybody today (not just the last 2 h)
+    const stats = { u: todayAll.length, a: new Set(todayAll.map(v => v.app)).size };
+    const per = new Map();
+    for (const v of todayAll) { const k = lc(v.account), o = per.get(k) || { n: 0, t: '' }, tm = timeOf(v.t); o.n++; if (tm > o.t) o.t = tm; per.set(k, o); }
+    const top = [...per.entries()].sort((a, b) => b[1].n - a[1].n || a[1].t.localeCompare(b[1].t)).slice(0, 3).map(e => e[0]);
     // community posts + admin announcements from today (shown in Recent Activity next to the vote updates)
     const community = [];
     try {
@@ -435,12 +457,10 @@ const actions = {
       const raws = ids.length ? ((await cmd('HMGET', C_POSTS, ...ids)) || []) : [];
       raws.filter(Boolean).forEach(r => {
         const p = JSON.parse(r);
-        if (p.kind !== 'ann' && dayOf(p.t) === today) community.push({ id: 'p' + p.id, c: 'post', account: p.account, time: timeOf(p.t), ts: p.t });
+        if (p.kind !== 'ann' && dayOf(p.t) === today && p.t >= cut) community.push({ id: 'p' + p.id, c: 'post', account: p.account, time: timeOf(p.t), ts: p.t });
       });
-      const flat = (await cmd('HGETALL', ANN)) || [];
-      for (let i = 1; i < flat.length; i += 2) {
-        const a = JSON.parse(flat[i]);
-        if (dayOf(a.t) === today) community.push({ id: 'a' + a.id, c: 'ann', account: a.account, time: timeOf(a.t), ts: a.t });
+      for (const a of await annAll()) {
+        if (dayOf(a.t) === today && a.t >= cut) community.push({ id: 'a' + a.id, c: 'ann', account: a.account, time: timeOf(a.t), ts: a.t });
       }
       community.sort((x, y) => x.ts - y.ts);
     } catch (e) { console.error(e); }
@@ -450,10 +470,10 @@ const actions = {
       const [lvs, avs] = await Promise.all([levelsFor(accs), avatarsFor(accs)]);
       all.forEach(x => { x.lv = (lvs[lc(x.account)] || levelOf(0)).level; x.av = avs[lc(x.account)] || 0; if (x.c === 'ann') x.admin = isAdminAcc(x.account); });
     } catch (e) { console.error(e); }
-    return { ok: true, items, community };
+    return { ok: true, items, community, stats, top };
   },
 
-  getOverview() { return memo('overview', 60000, () => this._overview()); },
+  getOverview() { return memo('overview', 180000, () => this._overview()); },
 
   async _overview() {
     const list = await loadAll(); // newest first
@@ -478,7 +498,7 @@ const actions = {
     if (lc(cleanAcc(acc)) !== lc(me.account)) return MISMATCH;
     const account = me.account;
     const added = Number(await cmd('SADD', ciKey(account), dayOf(Date.now())));
-    _lv.clear();
+    _ci.delete(lc(account)); _lv.clear();
     return checkinData(account, added === 1);
   },
 
@@ -582,6 +602,7 @@ const actions = {
     const a = lc(me.account);
     if (!image) {
       await pipe([['DEL', 'avatar:' + a], ['HDEL', 'avs', a]]);
+      if (_avs) delete _avs[a];
       return { ok: true, v: 0 };
     }
     const pre = 'data:image/jpeg;base64,';
@@ -590,6 +611,7 @@ const actions = {
     if (!(await rateOk(me.account, 'avatar', 10, 3600))) return bad('Too many changes. Please try again later.');
     const v = Date.now();
     await pipe([['SET', 'avatar:' + a, b64], ['HSET', 'avs', a, v]]);
+    if (_avs) _avs[a] = v;
     return { ok: true, v };
   },
 
@@ -968,7 +990,7 @@ const actions = {
     await revokeSessions(account);
     await cmd('DEL', 'pinfail:' + lc(account));
     if (purge) {
-      await cmd('DEL', ciKey(account));
+      await cmd('DEL', ciKey(account)); _ci.delete(lc(account));
       const ids = (await loadAll(true)).filter(v => lc(v.account) === lc(account)).map(v => v.id);
       for (let i = 0; i < ids.length; i += 200) await cmd('HDEL', HASH, ...ids.slice(i, i + 200));
       dropAll();
