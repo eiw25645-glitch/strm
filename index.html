@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1350,7 +1351,7 @@ window.FVL = (function(){
   const SPK = '<svg class="fvsp" viewBox="0 0 24 24" aria-hidden="true"><use href="#fv-spk"/></svg>';
   const PH = ['p1','p2','p3','p4','p5'];
   const phOf = a => { let x = 0; a = String(a || ''); for(let i = 0; i < a.length; i++) x = (x * 31 + a.charCodeAt(i)) >>> 0; return PH[x % PH.length]; };
-  document.body.insertAdjacentHTML('afterbegin', '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="L1" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#fff" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8.5" cy="11" r="1" fill="#141414"/><circle cx="12" cy="11" r="1" fill="#141414"/><circle cx="15.5" cy="11" r="1" fill="#141414"/></symbol><symbol id="L2" viewBox="0 0 24 24"><path d="M4 18l-1.5-10 5.5 4.5L12 5l4 7.5L21.5 8 20 18z" fill="#f5c842" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L3" viewBox="0 0 24 24"><path d="M12 21v-9" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 12c0-4.2 3-6.6 7.5-6.6 0 4.4-3 6.6-7.5 6.6z" fill="#6cc04a" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 15.5c0-3.2-2.2-5-6-5 0 3.2 2.2 5 6 5z" fill="#c8ecaa" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L4" viewBox="0 0 24 24"><g id="l4w"><path d="M7.4 13C5.2 13.2 2.8 11.9 1.5 9.1 3 8.7 4.4 9.1 5.3 10 5 8.2 5.7 6.5 7.1 5.5 7.7 7.3 8.1 9.1 8.1 11Z" fill="#fff" stroke="#141414" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M3.8 9.6c1.2.2 2.1.9 2.7 2" fill="none" stroke="#141414" stroke-width="1" stroke-linecap="round"/></g><use href="#l4w" transform="translate(24 0) scale(-1 1)"/><path d="M12 20.2C7.6 17 6.8 14.7 6.8 13.1a2.9 2.9 0 0 1 5.2-1.7 2.9 2.9 0 0 1 5.2 1.7c0 1.6-.8 3.9-5.2 7.1z" fill="#ff5f7e" stroke="#141414" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.3 12.6c.2-.7.8-1.1 1.4-1" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round"/></symbol><symbol id="L5" viewBox="0 0 24 24"><path d="M13.5 2.5 5.5 13.5h5.2l-1 8 8.3-12h-5.6z" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L6" viewBox="0 0 24 24"><path d="M7.4 12.5 4.5 16l3.6.3M16.6 12.5l2.9 3.5-3.6.3" fill="#fff0a6" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 2.5c3 2 4.5 5.6 4.5 9.5l-1.8 3.5H9.3L7.5 12c0-3.9 1.5-7.5 4.5-9.5z" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="12" cy="9.3" r="1.7" fill="#fff" stroke="#141414" stroke-width="1.3"/><path d="M10.6 18l1.4 3.2 1.4-3.2" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L7" viewBox="0 0 24 24"><path d="M7 4h10l4.5 5L12 20.5 2.5 9z" fill="#5fd3f0" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M2.5 9h19M9 9l3 11.5L15 9M7 4l2 5M17 4l-2 5" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L8" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5v2a3 3 0 0 0 3 3M16 6h3v2a3 3 0 0 1-3 3M12 13v4M8 20h8M10 17h4" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L9" viewBox="0 0 24 24"><path d="M4 18l-1.5-10 5.5 4.5L12 5l4 7.5L21.5 8 20 18z" fill="#ffd23f" stroke="#ffd23f" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L10" viewBox="2.5 4.5 43 43"><g id="lw"><ellipse cx="21.05" cy="42.24" rx="3.90" ry="1.65" transform="rotate(155 21.05 42.24)" fill="#ffd23f"/><ellipse cx="21.92" cy="37.32" rx="3.90" ry="1.65" transform="rotate(225 21.92 37.32)" fill="#ffe99a"/><ellipse cx="16.28" cy="40.65" rx="3.78" ry="1.65" transform="rotate(172 16.28 40.65)" fill="#ffd23f"/><ellipse cx="18.55" cy="36.19" rx="3.78" ry="1.65" transform="rotate(242 18.55 36.19)" fill="#ffe99a"/><ellipse cx="12.19" cy="37.73" rx="3.66" ry="1.65" transform="rotate(189 12.19 37.73)" fill="#ffd23f"/><ellipse cx="15.66" cy="34.13" rx="3.66" ry="1.65" transform="rotate(259 15.66 34.13)" fill="#ffe99a"/><ellipse cx="9.13" cy="33.74" rx="3.54" ry="1.65" transform="rotate(206 9.13 33.74)" fill="#ffd23f"/><ellipse cx="13.50" cy="31.32" rx="3.54" ry="1.65" transform="rotate(276 13.50 31.32)" fill="#ffe99a"/><ellipse cx="7.37" cy="29.03" rx="3.42" ry="1.65" transform="rotate(223 7.37 29.03)" fill="#ffd23f"/><ellipse cx="12.26" cy="27.99" rx="3.42" ry="1.65" transform="rotate(293 12.26 27.99)" fill="#ffe99a"/><ellipse cx="7.06" cy="24.02" rx="3.30" ry="1.65" transform="rotate(240 7.06 24.02)" fill="#ffd23f"/><ellipse cx="12.05" cy="24.45" rx="3.30" ry="1.65" transform="rotate(310 12.05 24.45)" fill="#ffe99a"/><ellipse cx="8.24" cy="19.13" rx="3.18" ry="1.65" transform="rotate(257 8.24 19.13)" fill="#ffd23f"/><ellipse cx="12.87" cy="21.00" rx="3.18" ry="1.65" transform="rotate(327 12.87 21.00)" fill="#ffe99a"/><ellipse cx="10.79" cy="14.80" rx="3.06" ry="1.65" transform="rotate(274 10.79 14.80)" fill="#ffd23f"/><ellipse cx="14.67" cy="17.95" rx="3.06" ry="1.65" transform="rotate(344 14.67 17.95)" fill="#ffe99a"/><polyline points="21.5,39.8 17.4,38.4 13.9,35.9 11.3,32.5 9.8,28.5 9.6,24.2 10.6,20.1 12.7,16.4" fill="none" stroke="#e0a812" stroke-width="1.1" stroke-linecap="round"/></g><use href="#lw" transform="translate(48 0) scale(-1 1)"/><polygon points="24.00,17.80 25.59,22.02 30.09,22.22 26.57,25.03 27.76,29.38 24.00,26.90 20.24,29.38 21.43,25.03 17.91,22.22 22.41,22.02" fill="#ffe99a" stroke="#ffd23f" stroke-width=".8" stroke-linejoin="round"/></symbol><symbol id="fv-spk" viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z" fill="#ffd23f" stroke="#b8860b" stroke-width="1"/></symbol></defs></svg>');
+  document.body.insertAdjacentHTML('afterbegin', '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="L1" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="#fff" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8.5" cy="11" r="1" fill="#141414"/><circle cx="12" cy="11" r="1" fill="#141414"/><circle cx="15.5" cy="11" r="1" fill="#141414"/></symbol><symbol id="L2" viewBox="0 0 24 24"><path d="M4 18l-1.5-10 5.5 4.5L12 5l4 7.5L21.5 8 20 18z" fill="#f5c842" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L3" viewBox="0 0 24 24"><path d="M12 21v-9" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 12c0-4.2 3-6.6 7.5-6.6 0 4.4-3 6.6-7.5 6.6z" fill="#6cc04a" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 15.5c0-3.2-2.2-5-6-5 0 3.2 2.2 5 6 5z" fill="#c8ecaa" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L4" viewBox="0 0 24 24"><path d="M12 2.5c.8 3.6 5.5 5.6 5.5 10.6a5.5 5.5 0 0 1-11 0c0-2.2 1-3.6 2.3-4.8.1 2 .9 2.9 1.9 3.3C10.3 8.6 10.6 5.4 12 2.5z" fill="#f0a35c" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 20a2.6 2.6 0 0 1-2.6-2.7c0-1.6 1.4-2.3 2.6-3.8 1.2 1.5 2.6 2.2 2.6 3.8A2.6 2.6 0 0 1 12 20z" fill="#ffe3bf" stroke="#141414" stroke-width="1.2" stroke-linejoin="round"/></symbol><symbol id="L5" viewBox="0 0 24 24"><path d="M13.5 2.5 5.5 13.5h5.2l-1 8 8.3-12h-5.6z" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L6" viewBox="0 0 24 24"><path d="M7.4 12.5 4.5 16l3.6.3M16.6 12.5l2.9 3.5-3.6.3" fill="#fff0a6" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 2.5c3 2 4.5 5.6 4.5 9.5l-1.8 3.5H9.3L7.5 12c0-3.9 1.5-7.5 4.5-9.5z" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="12" cy="9.3" r="1.7" fill="#fff" stroke="#141414" stroke-width="1.3"/><path d="M10.6 18l1.4 3.2 1.4-3.2" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L7" viewBox="0 0 24 24"><path d="M7 4h10l4.5 5L12 20.5 2.5 9z" fill="#5fd3f0" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M2.5 9h19M9 9l3 11.5L15 9M7 4l2 5M17 4l-2 5" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L8" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5v2a3 3 0 0 0 3 3M16 6h3v2a3 3 0 0 1-3 3M12 13v4M8 20h8M10 17h4" fill="#ffd23f" stroke="#141414" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L9" viewBox="0 0 24 24"><path d="M4 18l-1.5-10 5.5 4.5L12 5l4 7.5L21.5 8 20 18z" fill="#ffd23f" stroke="#ffd23f" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="L10" viewBox="2.5 4.5 43 43"><g id="lw"><ellipse cx="21.05" cy="42.24" rx="3.90" ry="1.65" transform="rotate(155 21.05 42.24)" fill="#ffd23f"/><ellipse cx="21.92" cy="37.32" rx="3.90" ry="1.65" transform="rotate(225 21.92 37.32)" fill="#ffe99a"/><ellipse cx="16.28" cy="40.65" rx="3.78" ry="1.65" transform="rotate(172 16.28 40.65)" fill="#ffd23f"/><ellipse cx="18.55" cy="36.19" rx="3.78" ry="1.65" transform="rotate(242 18.55 36.19)" fill="#ffe99a"/><ellipse cx="12.19" cy="37.73" rx="3.66" ry="1.65" transform="rotate(189 12.19 37.73)" fill="#ffd23f"/><ellipse cx="15.66" cy="34.13" rx="3.66" ry="1.65" transform="rotate(259 15.66 34.13)" fill="#ffe99a"/><ellipse cx="9.13" cy="33.74" rx="3.54" ry="1.65" transform="rotate(206 9.13 33.74)" fill="#ffd23f"/><ellipse cx="13.50" cy="31.32" rx="3.54" ry="1.65" transform="rotate(276 13.50 31.32)" fill="#ffe99a"/><ellipse cx="7.37" cy="29.03" rx="3.42" ry="1.65" transform="rotate(223 7.37 29.03)" fill="#ffd23f"/><ellipse cx="12.26" cy="27.99" rx="3.42" ry="1.65" transform="rotate(293 12.26 27.99)" fill="#ffe99a"/><ellipse cx="7.06" cy="24.02" rx="3.30" ry="1.65" transform="rotate(240 7.06 24.02)" fill="#ffd23f"/><ellipse cx="12.05" cy="24.45" rx="3.30" ry="1.65" transform="rotate(310 12.05 24.45)" fill="#ffe99a"/><ellipse cx="8.24" cy="19.13" rx="3.18" ry="1.65" transform="rotate(257 8.24 19.13)" fill="#ffd23f"/><ellipse cx="12.87" cy="21.00" rx="3.18" ry="1.65" transform="rotate(327 12.87 21.00)" fill="#ffe99a"/><ellipse cx="10.79" cy="14.80" rx="3.06" ry="1.65" transform="rotate(274 10.79 14.80)" fill="#ffd23f"/><ellipse cx="14.67" cy="17.95" rx="3.06" ry="1.65" transform="rotate(344 14.67 17.95)" fill="#ffe99a"/><polyline points="21.5,39.8 17.4,38.4 13.9,35.9 11.3,32.5 9.8,28.5 9.6,24.2 10.6,20.1 12.7,16.4" fill="none" stroke="#e0a812" stroke-width="1.1" stroke-linecap="round"/></g><use href="#lw" transform="translate(48 0) scale(-1 1)"/><polygon points="24.00,17.80 25.59,22.02 30.09,22.22 26.57,25.03 27.76,29.38 24.00,26.90 20.24,29.38 21.43,25.03 17.91,22.22 22.41,22.02" fill="#ffe99a" stroke="#ffd23f" stroke-width=".8" stroke-linejoin="round"/></symbol><symbol id="fv-spk" viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z" fill="#ffd23f" stroke="#b8860b" stroke-width="1"/></symbol></defs></svg>');
   /* LV chip: one logo per level 1-10. plain = no medal inside (used next to a ring avatar) */
   const chip = (n, plain) => { n = L(n); return '<span class="fvc ft' + tier(n) + ' l' + n + (plain ? '' : ' fw') + '">' + (plain ? '' : '<i class="fvm l' + n + '">' + ico(n) + (n === 10 ? SPK : '') + '</i>') + 'LV.' + n + '</span>'; };
   /* photo with tier ring + corner medal */
@@ -1950,36 +1951,6 @@ html body select{font-size:16px!important}
 .fvm.l10 .fvsp{left:-9px;top:-10px}
 .fvc.l10{box-shadow:0 0 3px rgba(255,210,63,.3)!important}
 </style>
-
-<style>
-/* ===== Home: bigger Level Journey card (below Quick Access) + "all done today" symbol ===== */
-.hv-lvj{display:block;width:100%;margin-top:14px;padding:14px 16px 13px;background:#fff;border:1px solid var(--line);border-radius:24px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
-.hv-lvj:active{transform:scale(.985)}
-.lj-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.lj-t{font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.2}
-.lj-st{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;font-family:'Nunito','Itim',sans-serif;font-weight:800;font-size:.75rem;line-height:1.4;white-space:nowrap;border:1px solid rgba(20,20,20,.2);background:#fff;color:var(--ink)}
-.lj-st:empty{display:none}
-.lj-st.ok{background:#dcf5e1;border-color:#2fb457;color:#17702f}
-.lj-st svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.lj-path{position:relative;display:flex;justify-content:space-between;align-items:center;height:48px}
-.lj-path+.lj-path{margin-top:4px}
-.lj-line{position:absolute;left:18px;right:18px;top:50%;height:6px;margin-top:-3px;border-radius:99px;background:#e6e8f0;overflow:hidden}
-.lj-line i{display:block;height:100%;width:0;border-radius:99px;background:var(--blue);transition:width .9s cubic-bezier(.34,1.2,.5,1)}
-.jn{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex:none;width:36px;height:36px;border-radius:50%;box-sizing:border-box;background:#fff;border:2px solid #cfd2de;font-style:normal}
-.jn svg{width:21px;height:21px;display:block}
-.jn.lock svg{filter:grayscale(1);opacity:.4}
-.jn.on{border-color:var(--blue);background:var(--blue-l)}
-.jn.cur{width:46px;height:46px;margin:0 -5px;border:2.5px solid var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(36,71,214,.18)}
-.jn.cur svg{width:28px;height:28px}
-.lj-m{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-weight:800;font-size:.82rem;color:#3c3f4d;line-height:1.25}
-.lj-m b{font-weight:800;color:var(--ink)}
-.lj-m span:last-child{text-align:right}
-
-/* all apps updated today: green tick on Quick Update */
-.hv-qb .c{position:relative}
-body.all-done .hv-qb[data-q="upd"]{background:#f2fbf4;border-color:#2fb457}
-body.all-done .hv-qb[data-q="upd"] .c::after{content:"✓";display:flex;align-items:center;justify-content:center;position:absolute;right:-5px;top:-5px;width:16px;height:16px;border-radius:50%;box-sizing:border-box;background:#2fb457;color:#fff;border:2px solid #fff;font:900 10px/1 'Nunito',sans-serif}
-</style>
 </body>
 </html>
 <style>
@@ -2553,7 +2524,7 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
     'Vote · Check-in · Certificate':'โหวต · เช็คอิน · ใบประกาศ',
     'Home':'หน้าหลัก','More on X':'เพิ่มเติมบน X','Create yours today':'สร้างของคุณวันนี้','How to use':'วิธีใช้งาน','Steps for using this page':'ขั้นตอนการใช้งานหน้านี้','App Vote':'โหวตแอป','History':'ประวัติ','My':'ของฉัน','App':'แอป','Vote':'โหวต',
     'Participants today':'ผู้เข้าร่วมวันนี้','All-time participants':'ผู้เข้าร่วมทั้งหมด',
-    'Quick Access':'เมนูลัด','Level Journey':'เส้นทางเลเวล','Open voting apps':'เปิดแอปโหวต','Voting Guide':'คู่มือการโหวต','How to collect':'วิธีสะสมโหวต',
+    'Quick Access':'เมนูลัด','Open voting apps':'เปิดแอปโหวต','Voting Guide':'คู่มือการโหวต','How to collect':'วิธีสะสมโหวต',
     'Daily Check-in':'เช็คอินประจำวัน','Check in for the day':'เช็คอินประจำวัน','Quick Update':'อัปเดตด่วน','Update your totals':'อัปเดตยอดโหวต',
     'Community':'คอมมูนิตี้','Announcement':'ประกาศ','Recent Activity':'กิจกรรมล่าสุด','Updates about every 10 min. If yours does not show, refresh the page.':'อัปเดตทุกประมาณ 10 นาที ถ้ายอดของคุณยังไม่ขึ้น ลองรีเฟรชหน้าเว็บ','No updates yet today.':'วันนี้ยังไม่มีการอัปเดต','Be the first to update!':'มาเป็นคนแรกกันเลย!',
     'No need to collect':'ไม่ต้องสะสมโหวต','Go to':'ไปที่','Updated today ✓':'อัปเดตวันนี้แล้ว ✓','Not updated today':'วันนี้ยังไม่อัปเดต','Voting info':'วิธีสะสมโหวต',
@@ -2712,12 +2683,6 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
       qb('ci', IC.cal, 'Daily Check-in', 'Check in for the day') +
       qb('upd', IC.bolt, 'Quick Update', 'Update your totals') +
     '</div>' +
-    '<button type="button" class="hv-lvj" id="hvLvj">' +
-      '<span class="lj-h"><span class="lj-t">Level Journey</span><span class="lj-st" id="hvDone"></span></span>' +
-      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill"></i></span>' + [1,2,3,4,5].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
-      '<span class="lj-path"><span class="lj-line"><i id="hvLjFill2"></i></span>' + [6,7,8,9,10].map(n => '<i class="jn lock" data-n="' + n + '"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#L' + n + '"/></svg></i>').join('') + '</span>' +
-      '<span class="lj-m"><span id="hvLjA"></span><span id="hvLjB"></span></span>' +
-    '</button>' +
     (FOCUS_APPS.length ? '<div class="hv-focus"><div class="fh"><svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5-1.5l1.5-4l4-4"/><path d="M9 15l-4.5 4.5"/><path d="M14.5 4l5.5 5.5"/></svg><span>Focus apps this month</span></div><div class="fc">' +
       FOCUS_APPS.map(n => '<button type="button" class="fchip" data-focus="' + esc(n) + '"><i style="background:' + (FOCUS_DOT[n] || '#2447d6') + '"></i>' + esc(n) + '</button>').join('') + '</div></div>' : '') +
   '</div>' +
@@ -2956,25 +2921,12 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
       $('hvMeCi').textContent = CK.days.filter(d => d.indexOf(ym) === 0).length;
     } else $('hvMeCi').textContent = '–';
   }
-  /* Home: "all apps updated today" symbol */
-  function drawDone(){
-    const e = $('hvDone'); if(!e) return;
-    if(!O){ e.innerHTML = ''; return; }
-    const names = FOCUS_APPS.length ? FOCUS_APPS : APPS.map(a => a.name), mine = mineToday();
-    const need = names.length, n = names.filter(x => mine.has(x)).length, all = need > 0 && n >= need, th = LANG === 'th';
-    e.className = 'lj-st ' + (all ? 'ok' : 'todo');
-    e.innerHTML = all
-      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' + (th ? 'วันนี้อัปเดตครบแล้ว' : 'All done today')
-      : n + '/' + need + (th ? ' อัปเดตวันนี้' : ' updated today');
-    document.body.classList.toggle('all-done', all);
-  }
   function render(){
     if(!O) return;
     $('hvToday').textContent = fmt(O.today);
     $('hvTotal').textContent = fmt(O.total);
-    drawApps(); drawHist(); drawMe(); drawDone();
+    drawApps(); drawHist(); drawMe();
     if(typeof fitApps === 'function') fitApps();
-    window.dispatchEvent(new Event('fv-render'));
   }
   function load(){
     if(busy) return; busy = true;
@@ -3487,7 +3439,6 @@ body[data-tab="community"] .cm-fab{display:flex}
   lvOv.addEventListener('click', e => { if(e.target === lvOv) lvOv.classList.remove('show'); });
 
   function drawLevel(){
-    drawHomeLevel();
     if(!LV || !g('lvBadge')) return;
     const b = g('lvBadge'); b.hidden = false; b.innerHTML = FVL.chip(LV.level); if(avWrap) avWrap.dataset.tier = tierOf(LV.level);
     g('lvTap').hidden = false;
@@ -3538,28 +3489,6 @@ body[data-tab="community"] .cm-fab{display:flex}
     }).catch(() => {});
   }
   if(g('lvTap')) g('lvTap').addEventListener('click', () => { drawLevelDialog(); lvOv.classList.add('show'); loadBoard(); });
-
-  /* ---------- Home: level journey ---------- */
-  function drawHomeLevel(){
-    const card = g('hvLvj'); if(!card) return;
-    const nodes = card.querySelectorAll('.jn'), fill = g('hvLjFill'), a = g('hvLjA'), b = g('hvLjB');
-    if(!LV){
-      [].forEach.call(nodes, n => { n.className = 'jn lock'; });
-      fill.style.width = '0%'; g('hvLjFill2').style.width = '0%';
-      a.textContent = L('Set your account to start', 'ตั้งค่าบัญชีเพื่อเริ่มต้น'); b.textContent = '';
-      return;
-    }
-    const lvl = LV.level;
-    [].forEach.call(nodes, n => { const k = Number(n.dataset.n); n.className = 'jn ' + (k < lvl ? 'on' : (k === lvl ? 'cur' : 'lock')); });
-    const prog = LV.max ? 9 : (lvl - 1) + Math.max(0, LV.pct) / 100;
-    fill.style.width = (Math.min(1, prog / 4) * 100) + '%';
-    g('hvLjFill2').style.width = (Math.max(0, Math.min(1, (prog - 5) / 4)) * 100) + '%';
-    a.innerHTML = '<b>LV.' + lvl + '</b> ' + esc(lvName(lvl)) + ' · ' + fmt(LV.xp) + (LV.max ? '' : ' / ' + fmt(LV.to)) + ' XP';
-    b.textContent = LV.max ? L('Max level', 'เลเวลสูงสุด') : L(fmt(LV.to - LV.xp) + ' XP to LV.' + (lvl + 1), 'อีก ' + fmt(LV.to - LV.xp) + ' XP ถึง LV.' + (lvl + 1));
-  }
-  if(g('hvLvj')) g('hvLvj').addEventListener('click', () => { if(!LV){ loadLevel(); return; } drawLevelDialog(); lvOv.classList.add('show'); loadBoard(); });
-  let lastHomeLv = 0;   // refresh XP after the Home data refreshes (e.g. right after an update)
-  window.addEventListener('fv-render', () => { if(document.body.dataset.tab === 'home' && Date.now() - lastHomeLv > 20000){ lastHomeLv = Date.now(); loadLevel(); } });
 
   /* ---------- profile photo ---------- */
   const hvAv = g('hvAv'), avWrap = hvAv && hvAv.parentNode, MASCOT = hvAv ? hvAv.src : '';
@@ -4172,17 +4101,17 @@ body[data-tab="community"] .cm-fab{display:flex}
     const t = document.body.dataset.tab;
     if(t === 'community'){ ySince = PSEEN || null; if(filter === 'chat') loadChat(true); else loadFeed(true); loadAnn(); setTimeout(() => { if(inCm()) markSeen(); }, 1200); }
     applyChat();
-    if(t === 'me' || t === 'home') loadLevel();
+    if(t === 'me') loadLevel();
   }
   new MutationObserver(onTab).observe(document.body, {attributes:true, attributeFilter:['data-tab']});
   new MutationObserver(() => {
     drawStatic(); drawFeed(); drawLevel(); drawNew(); drawDetail(); if(chatMode()) drawChat(false);
     if(lvOv.classList.contains('show')) drawLevelDialog();
   }).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
-  document.addEventListener('fv:auth', () => { ANN.items = []; ANN.unread = 0; ANN.pnew = 0; ANN.ready = false; PSEEN = 0; ySince = null; ANN.admin = false; drawBadge(); loadAnn(); LV = null; myAcc = ''; myAv = 0; drawAvatar(); posts = []; loadedOnce = false; store.set('fv_lv_seen', ''); drawHomeLevel(); if(['me','home'].indexOf(document.body.dataset.tab) >= 0) loadLevel(); if(document.body.dataset.tab === 'community'){ chMsgs = []; chLast = 0; if(filter === 'chat') loadChat(true); else loadFeed(true); } });
+  document.addEventListener('fv:auth', () => { ANN.items = []; ANN.unread = 0; ANN.pnew = 0; ANN.ready = false; PSEEN = 0; ySince = null; ANN.admin = false; drawBadge(); loadAnn(); LV = null; myAcc = ''; myAv = 0; drawAvatar(); posts = []; loadedOnce = false; store.set('fv_lv_seen', ''); if(document.body.dataset.tab === 'me') loadLevel(); if(document.body.dataset.tab === 'community'){ chMsgs = []; chLast = 0; if(filter === 'chat') loadChat(true); else loadFeed(true); } });
 
   drawStatic(); drawFeed(); applyChat();
-  drawHomeLevel(); if(['me','home'].indexOf(document.body.dataset.tab) >= 0) loadLevel();
+  if(document.body.dataset.tab === 'me') loadLevel();
 })();
 </script>
 
