@@ -556,6 +556,14 @@ button.tr{padding:5px 0!important;gap:12px!important}
 .tc{width:38px!important}.tc .cover{border-radius:9px!important;box-shadow:none!important}
 .tt b{font-size:16px!important;line-height:1.2!important}.tt small{font-size:13px!important;line-height:1.2!important}
 .tp{width:30px!important;height:30px!important}.tp svg{width:11px!important;height:11px!important;margin-left:1px}
+
+/* ===== full-page view ===== */
+#fp{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;background:linear-gradient(180deg,#fff 0,#f3f6ff 45%,#e1e9ff 100%)}
+#fp.show{display:flex}
+.fph{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(255,255,255,.95);border-bottom:1px solid #e8eaf3}
+.fph h2{font-size:20px;font-weight:400;display:flex;align-items:center;gap:8px}.fph h2::before{content:"";width:5px;height:22px;border-radius:4px;background:#ff7a5c}
+.fpx{all:unset;cursor:pointer;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid #dcdfe8;background:#fff;display:grid;place-items:center;font-size:18px;color:var(--ink)}
+.fpb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 18px calc(24px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
@@ -624,12 +632,13 @@ function open_(u){if(!u)return toast(t("nolink"));window.open(u,"_blank","noopen
 const ARTIST="https://open.spotify.com/artist/70DFixYAFPv4Pf9kgSfR9O?si=jFHZlwTcRbys0fWlgYN4qQ&utm_source=copy-link";
 const MORE=[["Fraktsiya (feat. Lee Young-ji)","2024"],["200","2024"],["Toronto’s Window","2025"],["Journey Mercies","2025"],["Sunkissed (Big Naughty feat. Mark)","Feature"]];
 function openLink(i){open_(SONGS[i].u||ARTIST)}
+function fpage(title,body){let f=$("fp");if(!f){f=document.createElement("div");f.id="fp";document.body.appendChild(f)}
+f.innerHTML=`<div class="fph"><h2>${title}</h2><button class="fpx" onclick="closeF()" aria-label="Close">\u2715</button></div><div class="fpb">${body}</div>`;f.classList.add("show");document.documentElement.style.overflow="hidden";f.scrollTop=0}
+function closeF(){const f=$("fp");if(f)f.classList.remove("show");document.documentElement.style.overflow=""}
 function songsAll(){
-const mini=h=>`<div style="width:46px;flex:none">${h}</div>`;
-const rows=SONGS.map((x,i)=>`<div class="sl">${mini(cover(i))}<div class="sn"><b>${x.t}</b><small>MARK</small></div><button class="pb" onclick="openLink(${i})" aria-label="Play ${x.t}">${PLAY}</button></div>`).join("")
-+MORE.map(m=>`<div class="sl">${mini('<div class="cover" style="background:linear-gradient(135deg,#a9bcff,#2447d6)">♪</div>')}<div class="sn"><b>${m[0]}</b><small>${m[1]}</small></div><button class="pb" onclick="open_(ARTIST)" aria-label="Play ${m[0]}">${PLAY}</button></div>`).join("");
-modal(`<h2>${t("songs")}</h2><div class="slist">${rows}</div><p style="margin:12px 0 0"><button class="btn" onclick="open_(ARTIST)">Open on Spotify</button></p>`);
-const b=$("mbox");const c=b.lastElementChild;b.removeChild(c);b.insertAdjacentHTML("beforeend",`<p style="margin:10px 0 0"><button class="btn alt" onclick="closeM()">${t("cancel")}</button></p>`)}
+const rows=SONGS.map((x,i)=>`<button class="tr" onclick="openLink(${i})" aria-label="Play ${x.t}"><span class="tn">${i+1}</span><span class="tc">${cover(i)}</span><span class="tt"><b>${x.t}</b><small>MARK</small></span><span class="tp">${PLAY}</span></button>`).join("")
++MORE.map((m,j)=>`<button class="tr" onclick="open_(ARTIST)" aria-label="Play ${m[0]}"><span class="tn">${SONGS.length+j+1}</span><span class="tc"><div class="cover" style="background:linear-gradient(135deg,#a9bcff,#2447d6)">\u266a</div></span><span class="tt"><b>${m[0]}</b><small>${m[1]}</small></span><span class="tp">${PLAY}</span></button>`).join("");
+fpage(t("songs"),`<div class="fpl">${rows}</div><p style="text-align:center;margin:16px 0 8px"><button class="btn" onclick="open_(ARTIST)">Open on Spotify</button></p>`)}
 function cover(i){const s=SONGS[i];return `<div class="cover" style="background:${s.img?`center/cover url('${s.img}')`:`linear-gradient(135deg,${s.c[0]},${s.c[1]})`}">${s.img?"":'<span style="position:absolute;top:4px;left:8px;opacity:.5;font-size:11px">MARK</span>'}${s.img?"":s.t.length<6?s.t:"♪"}</div>`}
 const API="/api/rpc";
 async function api(a,d={}){let j=null;if(!api.off){try{const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a,token:S.token,...d})});j=await r.json()}catch(e){j=null}}
