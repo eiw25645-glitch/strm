@@ -62,7 +62,11 @@ async function mailSet(p, u, me) {
 }
 
 export default async (req, res) => {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") {
+    const d = { runtime: "ok", url_set: !!U, url_https: !!U && U.startsWith("https://"), token_set: !!TK, token_len: TK ? TK.length : 0, admin_set: !!process.env.ADMIN_PASSWORD };
+    try { d.redis_ping = await r("PING"); } catch (e) { d.redis_error = String((e && e.message) || e).slice(0, 150); }
+    return res.status(200).json(d);
+  }
   const b = req.body || {}, out = (o, s = 200) => res.status(s).json(o);
   try {
     const saved = await J("cfg") || {};
