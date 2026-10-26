@@ -190,5 +190,5 @@ module.exports = async (req, res) => {
       }
     }
     return out({ error: "unknown" }, 400);
-  } catch (e) { return out({ error: "server" }, 500); }
+  } catch (e) { return out({ error: "server", detail: String((e && e.message) || e).slice(0, 120) }, 500); }
 };
