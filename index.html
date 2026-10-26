@@ -322,14 +322,28 @@ body::before{display:none}
 .plat i{width:52px;height:52px;margin:0 auto 4px}
 .plat span{font-size:12px;line-height:1.3}
 .plat em{display:inline}.plat .kr{display:block}
-/* ===== nav: cleaner inactive icons ===== */
-.tab:not(.on) svg{stroke-width:1.6}
-.tab:not(.on) svg [fill]:not([fill="none"]):not([fill="currentColor"]):not([fill="#FFE27A" i]){fill:rgba(255,255,255,.16)}
-.tab:not(.on){color:rgba(255,255,255,.88)}
 /* ===== hero title: one cohesive style ===== */
 .hero h1 span{background:none;padding:0;border-radius:0}
 .fm{display:inline-block;margin-top:6px;background:#fbf3a0;border:1px solid var(--line);border-radius:99px;padding:1px 14px;font:400 15px var(--hf);color:var(--blue)}
 .dash{margin-top:6px}
+/* ===== nav: white bar flush to screen edges ===== */
+nav{bottom:0;padding:0}
+nav>div{max-width:none;width:100%;margin:0;background:#fff;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none;padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px))}
+.tab{color:var(--sub);border:1px solid transparent;border-radius:16px}
+.tab svg{stroke-width:1.8}
+.tab.on{background:#fbf3a0;color:var(--ink);border:1px solid var(--line);border-radius:16px}
+/* ===== Spotify-style compact track list ===== */
+.trks{margin-bottom:6px}
+.trk{display:flex;align-items:center;gap:10px;padding:5px 2px;border-bottom:1px solid #edf1ff}
+.trk .no{flex:0 0 16px;text-align:center;font:400 13px var(--hf);color:var(--sub)}
+.trk .tc{flex:0 0 38px}
+.trk .tc .cover{border-radius:6px;box-shadow:none;font-size:12px}
+.trk .tt{flex:1;min-width:0}
+.trk .tt b{display:block;font:400 15px/1.2 var(--hf);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk .tt small{display:block;font-size:11px;color:var(--sub)}
+.trk .tp{all:unset;cursor:pointer;box-sizing:border-box;flex:0 0 30px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);color:var(--ink);display:grid;place-items:center}
+.trk .tp svg{width:12px;height:12px;margin-left:1px}
+.trk .tp:active{background:#fbf3a0}
 </style>
 </head>
 <body>
@@ -415,10 +429,10 @@ const SH=IC('<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'),RP=I
 const PRV='<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M6 5h2.4v14H6zM19 5.6v12.8a.8.8 0 0 1-1.25.66L9.5 12.66a.8.8 0 0 1 0-1.32l8.25-5.4A.8.8 0 0 1 19 5.6z"/></svg>';
 function songCards(){
 const mf=Math.max(0,SONGS.findIndex(x=>/my\s*friend/i.test(x.t)));
-const alb=SONGS.map((x,i)=>i===mf?"":`<div class="alb"><div class="art">${cover(i)}</div><small>MARK</small><b>${x.t}</b><div class="ctl"><button class="plb" onclick="openLink(${i})" aria-label="Play ${x.t}">${PLAY}</button><span>${SH}</span><span>${RP}</span></div></div>`).join("");
+let n=0;const alb=SONGS.map((x,i)=>i===mf?"":`<div class="trk"><span class="no">${++n}</span><div class="tc">${cover(i)}</div><div class="tt"><b>${x.t}</b><small>MARK</small></div><button class="tp" onclick="openLink(${i})" aria-label="Play ${x.t}">${PLAY}</button></div>`).join("");
 const bars=Array.from({length:30},(_,k)=>`<i class="${k<12?"on":""}" style="--h:${25+(k*47%65)}%;--d:${(k%7)*.12}s"></i>`).join("");
 const m=SONGS[mf];
-return `<div class="albs">${alb}</div><div class="pcard"><div class="pt"><div class="pa">${cover(mf)}</div><div class="pi"><small>NOW PLAYING</small><b>${m.t}</b><em>MARK</em><div class="pk"><span class="nv">${PRV}</span><button class="pp" onclick="mfPlay()" aria-label="Play ${m.t}">${PLAY}</button><span class="nv nx">${PRV}</span></div></div><button class="hrt" aria-label="Favorite" onclick="this.classList.toggle('on')">${HT}</button></div><div class="prg"><span class="tm">0:45</span><div class="bar2"><i></i></div><div class="eq">${bars}</div></div></div>`}
+return `<div class="trks">${alb}</div><div class="pcard"><div class="pt"><div class="pa">${cover(mf)}</div><div class="pi"><small>NOW PLAYING</small><b>${m.t}</b><em>MARK</em><div class="pk"><span class="nv">${PRV}</span><button class="pp" onclick="mfPlay()" aria-label="Play ${m.t}">${PLAY}</button><span class="nv nx">${PRV}</span></div></div><button class="hrt" aria-label="Favorite" onclick="this.classList.toggle('on')">${HT}</button></div><div class="prg"><span class="tm">0:45</span><div class="bar2"><i></i></div><div class="eq">${bars}</div></div></div>`}
 const MFURL="https://open.spotify.com/track/1GiP26gz7ODqQ8dxweTPo7";let SPC=null,SPL=0;
 SONGS.forEach(x=>{if(/my\s*friend/i.test(x.t)&&!x.u)x.u=MFURL});
 function mfPlay(){const d=$("spd");d.classList.add("show");
