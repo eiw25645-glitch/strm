@@ -271,7 +271,7 @@ const LV_AT = [0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500];   // XP ne
 // true  = LIVE: everyone sees it, one box per day (same day reset as check-in).
 const BOX_LIVE = false;
 const BOX_TESTERS = (process.env.BOX_TESTERS || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
-const BOX_PRIZES = [[5, 40], [10, 30], [15, 20], [25, 8], [50, 2]];      // [XP, weight]  ~11 XP on average
+const BOX_PRIZES = Array.from({ length: 11 }, (_, i) => [i + 1, 1]);      // [XP, weight]  1-11 XP, equal chance (~6 XP on average)
 const boxKey = a => 'box:' + a.toLowerCase();                           // hash: day (or day:time while testing) -> XP won
 const boxOk = a => BOX_LIVE || isAdminAcc(a) || BOX_TESTERS.includes(a.toLowerCase());
 const boxPick = () => { let r = Math.random() * BOX_PRIZES.reduce((s, p) => s + p[1], 0); for (const [xp, w] of BOX_PRIZES) { if ((r -= w) < 0) return xp; } return BOX_PRIZES[0][0]; };
