@@ -695,11 +695,11 @@ html.mt-on,html.mt-on body{overflow:hidden}
 </style>
 <style>
 /* Lucky Box: Home card + popup */
-.bx-btn{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:9px 12px;background:#fff;border:1px solid var(--line);border-radius:22px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bx-btn{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:7px 12px;background:#fff;border:1px solid var(--line);border-radius:22px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bx-btn:active{transform:scale(.98)}
 .bx-btn.done{opacity:.7}
-.bx-ic{flex:none;width:40px;height:40px;border-radius:50%;background:var(--sun-l);display:flex;align-items:center;justify-content:center}
-.bx-ic svg{width:26px;height:26px}
+.bx-ic{flex:none;width:38px;height:38px;border-radius:50%;background:none;display:flex;align-items:center;justify-content:center}
+.bx-ic svg{width:38px;height:38px;overflow:visible}
 .bx-btn:not(.done) .bx-ic svg{animation:bxwig 2.4s ease-in-out infinite}
 @keyframes bxwig{0%,70%,100%{transform:rotate(0)}76%{transform:rotate(-12deg)}82%{transform:rotate(10deg)}88%{transform:rotate(-6deg)}}
 .bx-t b{display:block;font-family:var(--display);font-weight:400;font-size:1rem;line-height:1.2}
@@ -710,14 +710,20 @@ html.mt-on,html.mt-on body{overflow:hidden}
 .bx-card{position:relative;width:min(320px,100%);background:#fff;border:1px solid var(--ink);border-radius:24px;padding:20px 18px 18px;text-align:center;animation:bxin .3s ease-out}
 @keyframes bxin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 .bx-x{position:absolute;top:10px;right:10px}
-.bx-tag{display:inline-block;font-family:var(--display);font-size:.85rem;border:1px solid var(--ink);border-radius:99px;padding:2px 12px 3px;background:var(--sun-l)}
-.bx-stage{position:relative;height:190px;display:flex;align-items:flex-end;justify-content:center;margin:6px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bx-tag{display:inline-block;font-family:var(--display);font-size:.85rem;border:1px solid var(--ink);border-radius:99px;padding:2px 12px 3px;background:#fcf1bb}
+.bx-stage{position:relative;height:200px;display:flex;align-items:flex-end;justify-content:center;margin:6px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bx-box{width:120px;height:120px;overflow:visible}
-.bx-lid{transform-origin:14px 66px;transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
-.bx-stage.open .bx-lid{transform:translateY(-28px) rotate(-20deg)}
+.bx-lid{transform-origin:13px 62px;transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
+.bx-stage.open .bx-lid{transform:translate(-8px,-30px) rotate(-22deg)}
+.bx-in{opacity:0;transition:opacity .2s .1s}.bx-stage.open .bx-in{opacity:1}
+.bx-star{transform-box:fill-box;transform-origin:center;transform:translateY(16px) scale(.2);opacity:0;transition:transform .5s cubic-bezier(.2,1.6,.4,1) .15s,opacity .2s .15s}
+.bx-stage.open .bx-star{transform:none;opacity:1;animation:bxtw 1.3s ease-in-out .8s infinite alternate}
+.bx-star:nth-of-type(3){animation-delay:1s!important}
+@keyframes bxtw{to{transform:scale(1.18) rotate(10deg)}}
+@media (prefers-reduced-motion:reduce){.bx-star,.bx-in{transition:none;animation:none!important}}
 .bx-stage.shake .bx-box{animation:bxsh .45s ease-in-out infinite}
 @keyframes bxsh{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}75%{transform:rotate(7deg)}}
-.bx-prize{position:absolute;left:0;right:0;top:0;font-family:var(--display);font-size:2.1rem;line-height:1.1;color:var(--blue);opacity:0;transform:translateY(24px) scale(.6);transition:all .4s cubic-bezier(.2,1.5,.4,1)}
+.bx-prize{position:absolute;left:0;right:0;top:0;font-family:var(--display);font-size:1.3rem;line-height:1.1;color:var(--blue);opacity:0;transform:translateY(24px) scale(.6);transition:all .4s cubic-bezier(.2,1.5,.4,1)}
 .bx-stage.open .bx-prize{opacity:1;transform:none}
 .bx-fx{position:absolute;inset:0;pointer-events:none}
 .bx-fx i{position:absolute;left:50%;top:58%;width:8px;height:8px;border-radius:2px;background:var(--c);animation:bxc .95s ease-out forwards}
@@ -2849,8 +2855,6 @@ body[data-tab="vote"] .wrap{padding-bottom:0!important;min-height:0!important}
       qb('ci', IC.cal, 'Daily Check-in', 'Check in for the day') +
       qb('upd', IC.bolt, 'Quick Update', 'Update your totals') +
     '</div>' +
-    (FOCUS_APPS.length ? '<div class="hv-focus"><div class="fh"><svg class="hv-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5-1.5l1.5-4l4-4"/><path d="M9 15l-4.5 4.5"/><path d="M14.5 4l5.5 5.5"/></svg><span>Focus apps this month</span></div><div class="fc">' +
-      FOCUS_APPS.map(n => '<button type="button" class="fchip" data-focus="' + esc(n) + '"><i style="background:' + (FOCUS_DOT[n] || '#2447d6') + '"></i>' + esc(n) + '</button>').join('') + '</div></div>' : '') +
   '</div>' +
   '<div class="hv-view" data-v="vote" hidden><h2 class="hv-h">App <mark>Vote</mark></h2><p class="hv-s">Tap an app to see how to collect</p><div id="hvApps"></div></div>' +
   '<div class="hv-view" data-v="history" hidden><h2 class="hv-h"><mark>History</mark></h2><p class="hv-s">Everyone’s updates from the last 3 days</p>' +
@@ -3779,13 +3783,12 @@ body[data-tab="community"] .cm-fab{display:flex}
   if(g('lvTap')) g('lvTap').addEventListener('click', () => { lvSel = 0; drawLevelDialog(); lvOv.classList.add('show'); loadBoard(); });
 
   /* ---------- Lucky Box: one tap a day, a little bonus XP. The server decides who can see it (BOX_LIVE in api/rpc.js). ---------- */
-  const BX_SVG = '<svg class="bx-box" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#141414" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">' +
-    '<path d="M14 66a46 46 0 0 0 92 0z" fill="#fdf0be" stroke="none"/><rect x="14" y="64" width="92" height="4" fill="#141414" stroke="none"/>' +
-    '<ellipse cx="31" cy="95" rx="6" ry="4.8" fill="#f7b6c6" stroke="none"/><ellipse cx="89" cy="95" rx="6" ry="4.8" fill="#f7b6c6" stroke="none"/>' +
-    '<circle cx="42.3" cy="86" r="5" fill="#141414" stroke="none"/><circle cx="77.7" cy="86" r="5" fill="#141414" stroke="none"/>' +
-    '<path d="M51.5 92.5Q60 99.5 68.5 92.5" fill="none"/><circle class="bx-mole" cx="80.5" cy="100" r="1.6" fill="#141414" stroke="none"/>' +  /* mole: same spot as the mascot (under the right eye) */
-    '<path d="M14 66a46 46 0 0 0 92 0z" fill="none"/>' +
-    '<g class="bx-lid"><path d="M14 66a46 46 0 0 1 92 0z" fill="#2447d6"/><path d="M31 49Q34 40 47 35.5" fill="none" stroke="#fff" stroke-width="3.4"/></g></g></svg>';
+  const BX_SVG = '<svg class="bx-box" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#141414" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round">' +
+    '<circle class="bx-in" cx="60" cy="46" r="27" fill="#fcf1bb" stroke="none"/>' +
+    '<rect x="20" y="56" width="80" height="54" rx="7" fill="#b87a3c"/>' +
+    '<ellipse class="bx-in" cx="60" cy="58" rx="36" ry="6" fill="#7a4d22"/>' +
+    '<path class="bx-star" d="M60 23Q60 35 72 35Q60 35 60 47Q60 35 48 35Q60 35 60 23Z" fill="#ffd84d" stroke-width="2.4"/><path class="bx-star" d="M37 38Q37 45 44 45Q37 45 37 52Q37 45 30 45Q37 45 37 38Z" fill="#ffd84d" stroke-width="2.4"/><path class="bx-star" d="M85 33Q85 41 93 41Q85 41 85 49Q85 41 77 41Q85 41 85 33Z" fill="#ffd84d" stroke-width="2.4"/>' +
+    '<g class="bx-lid"><rect x="13" y="40" width="94" height="22" rx="7" fill="#cf9455"/></g></g></svg>';
   let BX = null;
   function bxDraw(){
     const home = g('hvHome'); let b = g('bxBtn');
@@ -3798,7 +3801,7 @@ body[data-tab="community"] .cm-fab{display:flex}
       b.addEventListener('click', bxOpen);
     }
     b.classList.toggle('done', done);
-    b.innerHTML = '<span class="bx-ic">' + BX_SVG.replace('class="bx-box"', '') + '</span><span class="bx-t"><b>' + L('Lucky Box', 'กล่องสุ่มโชคดี') + (BX.test ? ' <em>TEST</em>' : '') + '</b><small>' +
+    b.innerHTML = '<span class="bx-ic">' + BX_SVG.replace('class="bx-box"', '') + '</span><span class="bx-t"><b>' + L('Lucky Box', 'กล่องสุ่มโชคดี') + (BX.test ? ' <em>NEW! LIMITED</em>' : '') + '</b><small>' +
       (done ? L('Opened today · +' + BX.xp + ' XP', 'เปิดแล้ววันนี้ · +' + BX.xp + ' XP') : L('Open for bonus XP', 'เปิดรับ XP โบนัส')) + '</small></span>';
   }
   function bxLoad(){
