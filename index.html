@@ -698,21 +698,22 @@ html.mt-on,html.mt-on body{overflow:hidden}
 .bx-btn{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:7px 12px;background:#fff;border:1px solid var(--line);border-radius:22px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bx-btn:active{transform:scale(.98)}
 .bx-btn.done{opacity:.7}
-.bx-ic{flex:none;width:46px;height:46px;border-radius:50%;background:#fcf1bb;border:2px solid #141414;box-sizing:border-box;display:flex;align-items:center;justify-content:center}
-.bx-ic svg{width:30px;height:30px;overflow:visible;margin-top:2px}
+.bx-ic{flex:none;width:46px;height:46px;background:none;display:flex;align-items:center;justify-content:center}
+.bx-ic svg{width:46px;height:46px;overflow:visible}
 .bx-btn:not(.done) .bx-ic svg{animation:bxwig 2.4s ease-in-out infinite}
 @keyframes bxwig{0%,70%,100%{transform:rotate(0)}76%{transform:rotate(-12deg)}82%{transform:rotate(10deg)}88%{transform:rotate(-6deg)}}
 .bx-t b{display:block;font-family:var(--display);font-weight:400;font-size:1rem;line-height:1.2}
 .bx-t small{display:block;font-weight:800;font-size:.75rem;color:var(--muted)}
 .bx-t em{font-style:normal;font-family:'Nunito',sans-serif;font-weight:800;font-size:.58rem;background:var(--red);color:#fff;border-radius:99px;padding:1px 6px 2px;margin-left:4px;vertical-align:2px}
-#bxPop{display:none;position:fixed;inset:0;z-index:99980;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px));background:rgba(20,20,20,.45)}
+#bxPop{display:none;position:fixed;inset:0;z-index:99980;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px));background:rgba(8,8,8,.82)}
 #bxPop.on{display:flex}
 .bx-card{position:relative;width:min(320px,100%);background:#fff;border:1px solid var(--ink);border-radius:24px;padding:20px 18px 18px;text-align:center;animation:bxin .3s ease-out}
 @keyframes bxin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 .bx-x{position:absolute;top:10px;right:10px}
 .bx-tag{display:inline-block;font-family:var(--display);font-size:.85rem;border:1px solid var(--ink);border-radius:99px;padding:2px 12px 3px;background:#fcf1bb}
 .bx-stage{position:relative;height:200px;display:flex;align-items:flex-end;justify-content:center;margin:6px 0 0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.bx-box{width:120px;height:120px;overflow:visible}
+.bx-box{width:150px;height:150px;overflow:visible}
+.bx-cl{transition:opacity .15s}.bx-stage.open .bx-cl{opacity:0}
 .bx-lid{transform-origin:13px 62px;transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
 .bx-stage.open .bx-lid{transform:translate(-8px,-30px) rotate(-22deg)}
 .bx-in{opacity:0;transition:opacity .2s .1s}.bx-stage.open .bx-in{opacity:1}
@@ -3783,12 +3784,20 @@ body[data-tab="community"] .cm-fab{display:flex}
   if(g('lvTap')) g('lvTap').addEventListener('click', () => { lvSel = 0; drawLevelDialog(); lvOv.classList.add('show'); loadBoard(); });
 
   /* ---------- Lucky Box: one tap a day, a little bonus XP. The server decides who can see it (BOX_LIVE in api/rpc.js). ---------- */
-  const BX_SVG = '<svg class="bx-box" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#141414" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round">' +
-    '<circle class="bx-in" cx="60" cy="46" r="27" fill="#fcf1bb" stroke="none"/>' +
-    '<rect x="20" y="56" width="80" height="54" rx="7" fill="#b87a3c"/>' +
-    '<ellipse class="bx-in" cx="60" cy="58" rx="36" ry="6" fill="#7a4d22"/>' +
-    '<path class="bx-star" d="M60 23Q60 35 72 35Q60 35 60 47Q60 35 48 35Q60 35 60 23Z" fill="#ffd84d" stroke-width="2.4"/><path class="bx-star" d="M37 38Q37 45 44 45Q37 45 37 52Q37 45 30 45Q37 45 37 38Z" fill="#ffd84d" stroke-width="2.4"/><path class="bx-star" d="M85 33Q85 41 93 41Q85 41 85 49Q85 41 77 41Q85 41 85 33Z" fill="#ffd84d" stroke-width="2.4"/>' +
-    '<g class="bx-lid"><rect x="13" y="40" width="94" height="22" rx="7" fill="#cf9455"/></g></g></svg>';
+  const BX_SVG = '<svg class="bx-box" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="bxg"><stop offset="0" stop-color="#fcf1bb" stop-opacity=".95"/><stop offset="1" stop-color="#fcf1bb" stop-opacity="0"/></radialGradient></defs>' +
+    '<ellipse cx="60" cy="107" rx="36" ry="5" fill="#000" opacity=".12"/>' +
+    '<circle class="bx-in" cx="60" cy="38" r="36" fill="url(#bxg)"/>' +
+    '<g stroke="#141414" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">' +
+    '<polygon points="18,46 60,63 60,103 18,86" fill="#a5753f"/>' +
+    '<polygon points="60,63 102,46 102,86 60,103" fill="#7a5630"/>' +
+    '<g class="bx-cl"><polygon points="18,46 60,29 102,46 60,63" fill="#c18f55"/>' +
+    '<polygon points="76,56.5 85.6,52.6 85.6,70.5 76,74.5" fill="#d6bf86"/>' +
+    '<polygon points="34.4,39.4 44.5,35.3 85.6,52.6 76,56.5" fill="#e6d19a"/></g>' +
+    '<g class="bx-in"><polygon points="18,46 60,29 102,46 60,63" fill="#64472a"/>' +
+    '<polygon points="18,46 60,63 51,76 9,58" fill="#bb8c58"/>' +
+    '<polygon points="60,63 102,46 111,58 69,76" fill="#96703f"/></g>' +
+    '<path class="bx-star" d="M60 12Q60 28 76 28Q60 28 60 44Q60 28 44 28Q60 28 60 12Z" fill="#ffd84d" stroke-width="2.6"/><path class="bx-star" d="M33 30Q33 38 41 38Q33 38 33 46Q33 38 25 38Q33 38 33 30Z" fill="#ffd84d" stroke-width="2.4"/><path class="bx-star" d="M88 30Q88 38 96 38Q88 38 88 46Q88 38 80 38Q88 38 88 30Z" fill="#ffd84d" stroke-width="2.4"/>' +
+    '</g></svg>';
   const BX_ICON = '<svg viewBox="0 0 120 120" aria-hidden="true"><g stroke="#141414" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">' +
     '<polygon points="18,46 60,63 60,103 18,86" fill="#a5753f"/>' +
     '<polygon points="60,63 102,46 102,86 60,103" fill="#7a5630"/>' +
@@ -3808,7 +3817,7 @@ body[data-tab="community"] .cm-fab{display:flex}
       b.addEventListener('click', bxOpen);
     }
     b.classList.toggle('done', done);
-    b.innerHTML = '<span class="bx-ic">' + BX_ICON + '</span><span class="bx-t"><b>' + L('Lucky Box', 'กล่องสุ่มโชคดี') + (BX.test ? ' <em>NEW! LIMITED</em>' : '') + '</b><small>' +
+    b.innerHTML = '<span class="bx-ic">' + BX_ICON + '</span><span class="bx-t"><b>' + L('Lucky Box', 'กล่องสุ่มโชคดี') + ' <em>NEW! LIMITED</em>' + '</b><small>' +
       (done ? L('Opened today · +' + BX.xp + ' XP', 'เปิดแล้ววันนี้ · +' + BX.xp + ' XP') : L('Open for bonus XP', 'เปิดรับ XP โบนัส')) + '</small></span>';
   }
   function bxLoad(){
@@ -3846,15 +3855,15 @@ body[data-tab="community"] .cm-fab{display:flex}
           if(!r || !r.ok) return set('retry', (r && r.message) || L('Something went wrong. Please try again.', 'เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะ'), L('Try again', 'ลองอีกครั้ง'));
           stage.classList.add('open'); prize.textContent = '+' + r.xp + ' XP'; boom();
           BX = Object.assign({}, BX, { opened: true, xp: r.xp }); bxDraw();
-          if(r.already) set('done', L('You already opened today’s box. New box at 22:00 (Thai time).', 'วันนี้เปิดกล่องไปแล้ว กล่องใหม่เวลา 22:00 น. (ไทย)'), L('Close', 'ปิด'));
+          if(r.already) set('done', L('You already opened today’s box. New box at 00:00 KST.', 'วันนี้เปิดกล่องไปแล้ว กล่องใหม่เวลา 00:00 น. (เกาหลี)'), L('Close', 'ปิด'));
           else if(BX.test) set('again', L('Added to your XP! (test mode: open as many times as you like)', 'เพิ่มเข้า XP แล้ว! (โหมดทดสอบ เปิดซ้ำได้)'), L('Open again', 'เปิดอีกครั้ง'));
-          else set('done', L('Added to your XP! New box at 22:00 (Thai time).', 'เพิ่มเข้า XP แล้ว! กล่องใหม่เวลา 22:00 น. (ไทย)'), L('Nice!', 'เยี่ยม!'));
+          else set('done', L('Added to your XP! New box at 00:00 KST.', 'เพิ่มเข้า XP แล้ว! กล่องใหม่เวลา 00:00 น. (เกาหลี)'), L('Nice!', 'เยี่ยม!'));
           if(window.fvApplyLevel && r.lv) window.fvApplyLevel(r);
         }).catch(() => { busy = false; btn.disabled = false; stage.classList.remove('shake'); set('retry', L('Something went wrong. Please try again.', 'เกิดข้อผิดพลาด ลองใหม่อีกครั้งนะ'), L('Try again', 'ลองอีกครั้ง')); });
     };
     if(BX && BX.opened && !BX.test){
       stage.classList.add('open'); prize.textContent = '+' + BX.xp + ' XP';
-      set('done', L('You already opened today’s box. New box at 22:00 (Thai time).', 'วันนี้เปิดกล่องไปแล้ว กล่องใหม่เวลา 22:00 น. (ไทย)'), L('Close', 'ปิด'));
+      set('done', L('You already opened today’s box. New box at 00:00 KST.', 'วันนี้เปิดกล่องไปแล้ว กล่องใหม่เวลา 00:00 น. (เกาหลี)'), L('Close', 'ปิด'));
     } else set('idle', L('Tap the box! One a day, a little bonus XP.', 'แตะกล่องเลย! วันละหนึ่งกล่อง รับ XP โบนัสนิดหน่อย'), L('Open', 'เปิดกล่อง'));
     btn.addEventListener('click', () => { if(state === 'done') close(); else go(); });
     stage.addEventListener('click', () => { if(state === 'idle' || state === 'retry') go(); });
@@ -4543,3 +4552,99 @@ html.chat-kb .ch-box{border-radius:0}
 .hv-sc li.hv-tg{display:flex;align-items:flex-start;gap:10px}
 .hv-sc li.hv-tg .hv-tag{margin-top:2px}
 </style>
+
+<style id="halloween-theme">
+/* ===== HALLOWEEN (เปิด/ปิดได้ด้วยปุ่มมุมขวาล่าง) ===== */
+html.hw{
+  --blue:#6d28d9; --blue-d:#4c1d95; --blue-l:#ece3ff;
+  --butter:#ff9f1c; --sun-l:#ffe2bd; --rose:#ffe2bd;
+  --paper:#fff4e6;
+}
+html.hw body{
+  background-color:#fff4e6!important;
+  background-image:
+    radial-gradient(circle at 12% 8%,rgba(109,40,217,.10),transparent 38%),
+    radial-gradient(circle at 92% 96%,rgba(255,159,28,.18),transparent 40%)!important;
+  background-attachment:fixed!important;
+}
+html.hw .t1{color:#6d28d9}
+html.hw .t1::before{content:'\1F383';font-size:.55em;margin-right:8px;display:inline-block;animation:hwBob 2.8s ease-in-out infinite}
+html.hw .t1::after{content:'\1F987';font-size:.5em;margin-left:8px;display:inline-block;animation:hwBob 3.4s .4s ease-in-out infinite}
+html.hw .t2{background:#ff9f1c}
+html.hw .card{border-color:#2a1740}
+html.hw ::selection{background:#ff9f1c;color:#2a1740}
+
+#hw-fx{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:3;display:none}
+html.hw #hw-fx{display:block}
+.hw-bat{position:absolute;left:0;width:34px;height:18px;opacity:.55;color:#2a1740;will-change:transform;animation:hwFly linear infinite}
+.hw-bat svg{width:100%;height:100%;display:block;animation:hwFlap .45s ease-in-out infinite alternate;transform-origin:center}
+.hw-bat.b1{top:14%;animation-duration:26s}
+.hw-bat.b2{top:38%;animation-duration:34s;animation-delay:-12s;width:26px;height:14px;opacity:.4}
+.hw-bat.b3{top:66%;animation-duration:30s;animation-delay:-21s;width:30px;height:16px;opacity:.45}
+@keyframes hwFly{
+  0%{transform:translate(-60px,0)}
+  25%{transform:translate(28vw,-22px)}
+  50%{transform:translate(56vw,14px)}
+  75%{transform:translate(84vw,-18px)}
+  100%{transform:translate(calc(100vw + 60px),0)}
+}
+@keyframes hwFlap{from{transform:scaleY(1)}to{transform:scaleY(.55)}}
+@keyframes hwBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-5px) rotate(4deg)}}
+@keyframes hwFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.hw-web{position:absolute;top:0;left:0;width:96px;height:96px;opacity:.28;color:#2a1740}
+.hw-ghost{position:absolute;left:10px;bottom:14px;font-size:30px;opacity:.85;animation:hwFloat 3.6s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(42,23,64,.2))}
+
+#hw-toggle{
+  position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:60;
+  width:42px;height:42px;border-radius:50%;border:2px solid #2a1740;background:#ff9f1c;
+  font-size:20px;line-height:1;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;
+  box-shadow:2px 3px 0 #2a1740;transition:transform .15s
+}
+#hw-toggle:active{transform:translate(2px,2px);box-shadow:0 0 0 #2a1740}
+html:not(.hw) #hw-toggle{background:#fff;filter:grayscale(.9);opacity:.75}
+
+@media (prefers-reduced-motion:reduce){
+  .hw-bat,.hw-bat svg,.hw-ghost,html.hw .t1::before,html.hw .t1::after{animation:none!important}
+  .hw-bat.b1{left:70%}.hw-bat.b2{left:20%}.hw-bat.b3{left:45%}
+}
+</style>
+
+<script id="halloween-theme-js">
+(function(){
+  var KEY='hw_theme', root=document.documentElement;
+  function load(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
+  function save(v){ try{ localStorage.setItem(KEY,v); }catch(e){} }
+  function setMeta(on){
+    var m=document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', on ? '#fff4e6' : '#ffffff');
+  }
+  function apply(on){
+    root.classList.toggle('hw',on);
+    setMeta(on);
+    var b=document.getElementById('hw-toggle');
+    if(b){ b.setAttribute('aria-pressed',on?'true':'false'); b.title=on?'ปิดธีมฮาโลวีน':'เปิดธีมฮาโลวีน'; }
+  }
+  var bat='<svg viewBox="0 0 34 18" fill="currentColor" aria-hidden="true"><path d="M17 5c1 0 1.6 1 2 2 2-2 5-4 9-4-1 2-1 4-1 6 2 0 4 1 6 3-3-1-5-1-7 0-1 1-2 3-3 4-1-1-2-2-3-2l-2 3-2-3c-1 0-2 1-3 2-1-1-2-3-3-4-2-1-4-1-7 0 2-2 4-3 6-3 0-2 0-4-1-6 4 0 7 2 9 4 .4-1 1-2 2-2z"/></svg>';
+  var web='<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M0 0L96 0M0 0L0 96M0 0L84 54M0 0L54 84M0 0L92 28M0 0L28 92"/><path d="M22 0Q18 18 0 22M44 0Q36 38 0 44M66 0Q54 58 0 66M88 0Q70 76 0 88"/></svg>';
+  function build(){
+    if(document.getElementById('hw-fx')) return;
+    var fx=document.createElement('div'); fx.id='hw-fx'; fx.setAttribute('aria-hidden','true');
+    fx.innerHTML='<div class="hw-web">'+web+'</div>'
+      +'<div class="hw-bat b1">'+bat+'</div><div class="hw-bat b2">'+bat+'</div><div class="hw-bat b3">'+bat+'</div>'
+      +'<div class="hw-ghost">\uD83D\uDC7B</div>';
+    document.body.appendChild(fx);
+    var btn=document.createElement('button');
+    btn.id='hw-toggle'; btn.type='button'; btn.textContent='\uD83C\uDF83';
+    btn.setAttribute('aria-label','Halloween theme');
+    btn.addEventListener('click',function(){
+      var on=!root.classList.contains('hw'); save(on?'on':'off'); apply(on);
+    });
+    document.body.appendChild(btn);
+    apply(load()!=='off');
+  }
+  // กันกระพริบ: ใส่คลาสก่อนวาดหน้า
+  if(load()!=='off') root.classList.add('hw');
+  if(document.body) build(); else document.addEventListener('DOMContentLoaded',build);
+})();
+</script>
