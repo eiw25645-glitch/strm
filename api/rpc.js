@@ -291,6 +291,7 @@ export default async function handler(req, res) {
   } catch (e) {
     if (e.code) return res.status(e.code).json({ error: e.message });
     console.error(e);
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: 'Server error: ' + e.message });
+
   }
 }
