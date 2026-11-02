@@ -1,0 +1,8 @@
+{
+  "name": "molo2-space",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@upstash/redis": "^1.34.0"
+  }
+}
