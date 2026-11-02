@@ -1,7 +1,8 @@
 import { Redis } from '@upstash/redis';
 import crypto from 'crypto';
 
-const redis = Redis.fromEnv();
+const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN });
+
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 
