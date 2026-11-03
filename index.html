@@ -70,41 +70,47 @@ nav button:active{transform:scale(.86)}
 #bar.on{opacity:1;animation:sl 1s linear infinite}
 @keyframes sl{from{background-position:-40% 0}to{background-position:140% 0}}
 
-/* ===== white base, colour tiles, deep-blue panels ===== */
-:root{--ink:#141a2e;--mute:#6a7590;--blue:#0b57b3;--blue2:#4a8ef0;--soft:#e4edfc;--card:#fff;--line:#dfe7f5;--butter:#ffe58a;--lav:#d9d8ff;--tan:#ffd9a3;--thin:1px solid var(--line)}
+/* ===== black & white line style ===== */
+:root{--ink:#14161c;--mute:#6b7080;--blue:#14161c;--blue2:#4a8ef0;--soft:#f1f2f5;--line:#e3e5ea;--butter:#ffe58a;--lav:#dcd9ff;--mint:#cdeedd;--peach:#ffd9bd;--bd:1.25px solid var(--ink)}
 body{background:#fff}
-h2,.big,header h1,.card h3{font-family:"Poppins","Nunito","Itim",sans-serif;font-weight:700}
-.card h3{font-weight:600}.hero .big{font-weight:700}
-header{border-bottom:0;padding:16px 20px 6px}
-.logo{background:var(--lav);border:1px solid var(--ink);border-radius:16px}
+svg.i{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+h2,.big,header h1,.card h3{font-family:"Poppins","Prompt",sans-serif;font-weight:700}
+.card h3{font-weight:600}
+header{border-bottom:0;padding:14px 20px 4px}
+.logo{background:var(--butter);border:var(--bd);border-radius:16px;color:var(--ink)}
 header h1{font-size:15px;line-height:1}
 header h1 .chip{display:inline-block;background:var(--ink);color:var(--butter);border-radius:14px;padding:7px 12px;font-size:19px;letter-spacing:.3px}
 header h1 small{display:block;font-size:10px;letter-spacing:1.6px;color:var(--mute);font-weight:600;margin:6px 0 0 4px}
-.pill{background:#fff;border:1px solid var(--ink);color:var(--ink)}
-.card{border:var(--thin);background:#fff;box-shadow:none;border-radius:22px}
-.hero{position:relative;overflow:hidden;border:0;border-radius:26px;background:linear-gradient(180deg,#0b57b3 55%,#3b82e6)}
-.hero::after{content:"🎧";position:absolute;right:-4px;bottom:-16px;font-size:100px;opacity:.15;pointer-events:none}
-.stat{border:1px solid rgba(20,26,46,.12);border-radius:26px;padding:18px;background:var(--butter)}
-.grid .stat:nth-child(2){background:var(--lav)}
-.grid .stat:nth-child(3){background:var(--tan)}
-.grid .stat:nth-child(4){background:var(--ink);color:#fff}
-.grid .stat:nth-child(4) .l{color:rgba(255,255,255,.7)}
-.stat .l{color:rgba(20,26,46,.65)}
-.btn{background:var(--blue);box-shadow:none}
-.btn.soft{background:var(--lav);color:var(--ink);border:1px solid rgba(20,26,46,.12)}
-.btn.w{background:#fff;color:var(--blue)}
-.tag{background:var(--butter);color:var(--ink);border:1px solid rgba(20,26,46,.12)}
-.tag.ok{background:#d9f3e5;color:#1f6f49}.tag.bad{background:#fde0e6;color:#b3261e}
-.seg .on,a{color:var(--blue)}
-input,select{border:var(--thin);border-radius:14px;background:#fff}
-input:focus,select:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,142,240,.2)}
-.list>div{border-bottom:1px dashed #c3d2ec}
-.av{background:var(--lav);border:1px solid var(--ink)}
-.bar{height:8px;background:rgba(11,87,179,.12)}.bar i{background:var(--blue)}
-.hero .bar{background:rgba(255,255,255,.3)}.hero .bar i{background:var(--butter)}
-.chart i{background:#bcd4f7}.chart .hi i{background:var(--blue)}
-nav{bottom:calc(10px + env(safe-area-inset-bottom));width:min(456px,calc(100% - 24px));border:0;border-radius:99px;background:var(--blue);backdrop-filter:none;padding:6px;box-shadow:0 8px 24px rgba(11,87,179,.28)}
-nav button{color:rgba(255,255,255,.78);border-radius:99px;padding:7px 0}
+.pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:var(--bd);color:var(--ink)}
+main{padding:12px 18px 96px}
+.card{border:var(--bd);background:#fff;box-shadow:none;border-radius:22px;padding:14px 16px;margin-bottom:10px}
+.hero{background:var(--ink);color:#fff;border-radius:22px}
+.hero .big{font-size:26px;font-weight:700;margin:0}
+.hero .nm{font-size:13px;font-weight:500;opacity:.8;margin-left:4px;font-family:"Poppins","Prompt",sans-serif}
+.hero .bar{background:rgba(255,255,255,.22);margin:10px 0 6px}.hero .bar i{background:var(--butter)}
+.stat{background:#fff;border:var(--bd);border-radius:20px;padding:12px 8px;text-align:center}
+.stat .n{font-size:18px;font-weight:700}.stat .l{font-size:10.5px;line-height:1.25;color:var(--mute)}
+.ico{width:36px;height:36px;border-radius:50%;border:var(--bd);display:grid;place-items:center;background:var(--butter);color:var(--ink);flex:none}
+.ico.c2{background:var(--lav)}.ico.c3{background:var(--mint)}.ico.c4{background:var(--peach)}
+.stat .ico{margin:0 auto 6px}
+.grid{gap:10px;margin-bottom:10px}.g4{grid-template-columns:repeat(4,1fr);gap:8px}
+.btn{background:var(--ink);color:#fff;box-shadow:none}
+.btn.soft{background:#fff;color:var(--ink);border:var(--bd)}
+.btn.w{background:#fff;color:var(--ink)}
+.tag{background:var(--soft);color:var(--ink);border:1px solid #14161c33;font-family:inherit}
+.tag.ok{background:#d9f3e5;color:#1f6f49;border-color:#1f6f4933}.tag.bad{background:#fde0e6;color:#b3261e;border-color:#b3261e33}
+a{color:var(--ink)}.seg .on{background:var(--ink);color:#fff}
+input,select{border:1px solid #cfd2da;border-radius:14px;background:#fff}
+input:focus,select:focus{outline:0;border-color:var(--ink)}
+.list>div{border-bottom:1px dashed #cfd2da}
+.av{background:var(--butter);border:var(--bd)}
+.bar{height:8px;background:#e8eaef}.bar i{background:var(--blue2)}
+.chart i{background:#d5d8e0}.chart .hi i{background:var(--ink)}
+.ach span{width:54px;height:54px;border-radius:50%;border:var(--bd);background:var(--butter);display:grid;place-items:center;margin:0 auto 6px;font-size:0}
+.ach .lock span{background:#f1f2f5}
+nav{bottom:calc(10px + env(safe-area-inset-bottom));width:min(456px,calc(100% - 24px));border:0;border-radius:99px;background:var(--ink);backdrop-filter:none;padding:6px;box-shadow:none}
+nav button{color:rgba(255,255,255,.75);border-radius:99px;padding:7px 0}
+nav button span{display:grid;place-items:center}
 nav .on{background:var(--butter);color:var(--ink)}
 :focus-visible{outline:2px solid var(--blue2)}
 /* ===== fonts + clean login ===== */
@@ -126,7 +132,7 @@ body{font-size:15px;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
 <div id="bar"></div>
 <div id="app">
   <header>
-    <div class="logo">🎧</div>
+    <div class="logo"><svg class="i" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="2"/><rect x="17" y="14" width="4" height="7" rx="2"/></svg></div>
     <div class="hgrow"><h1><span class="chip">MOLO2 ♡</span><small>STREAMING SPACE</small></h1><p id="tag"></p></div>
     <button class="pill" id="lang"></button>
   </header>
@@ -137,6 +143,8 @@ body{font-size:15px;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
 <script>
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const IC={"home": "<path d=\"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/>", "music": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>", "radio": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"12\" rx=\"3\"/><path d=\"M7 8l10-5\"/><circle cx=\"9\" cy=\"14\" r=\"2.5\"/><path d=\"M15 12h3M15 15h3\"/>", "spark": "<path d=\"M12 3l2.4 5.6 6 .6-4.5 4 1.4 5.9L12 16l-5.3 3.1 1.4-5.9-4.5-4 6-.6z\"/>", "chart": "<path d=\"M4 20v-9M10 20V4M16 20v-6M2 20h20\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/>", "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "bolt": "<path d=\"M13 2L4 14h7l-1 8 9-12h-7z\"/>", "flame": "<path d=\"M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z\"/>", "trophy": "<path d=\"M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M10 17h4\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"/>", "medal": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"M8.5 13L7 21l5-3 5 3-1.5-8\"/>", "crown": "<path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/>", "diamond": "<path d=\"M6 3h12l4 6-10 12L2 9zM2 9h20\"/>", "sprout": "<path d=\"M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z\"/>"};
+const ic=(n,s=20)=>`<svg class="i" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
 const safeUrl = (u) => (/^https:\/\//.test(u || '') ? esc(u) : '#');
 const DEMO = new URLSearchParams(location.search).has('demo');
 const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10);
@@ -219,11 +227,11 @@ const lock = (el) => { if (el) { el.dataset.t = el.textContent; el.disabled = tr
 function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; clearHC(); for (const k in MEM) delete MEM[k]; render(); }
 
 /* ---------- views ---------- */
-const TABS = [['home', '🏠'], ['playlist', '🎵'], ['station', '📻'], ['missions', '✨'], ['stats', '📊'], ['profile', '🤍']];
+const TABS = [['home', 'home'], ['playlist', 'music'], ['station', 'radio'], ['missions', 'spark'], ['stats', 'chart'], ['profile', 'user']];
 const LV_NAMES = [['Newbie', 'มือใหม่'], ['Fan', 'แฟนคลับ'], ['Voter', 'นักโหวต'], ['Dedicated', 'ตัวจริง'], ['Super Fan', 'ซูเปอร์แฟน'], ['Star Voter', 'สตาร์โหวต'], ['Elite', 'อีลีท'], ['Master', 'มาสเตอร์'], ['Legend', 'ตำนาน'], ['Hall of Fame', 'หอเกียรติยศ']];
 const LV_ICON = ['🌱', '🎧', '📣', '⭐', '💫', '🌟', '💎', '👑', '🔥', '🏆'];
-const lvName = (n) => { const i = Math.min(Math.max(n, 1), 10) - 1; return LV_ICON[i] + ' ' + LV_NAMES[i][lang === 'th' ? 1 : 0]; };
-const ACH = [['first', '🌱'], ['streak5', '🔥'], ['listener', '🎧'], ['dedicated', '⭐'], ['crown', '👑'], ['diamond', '💎']];
+const lvName = (n) => { const i = Math.min(Math.max(n, 1), 10) - 1; return LV_NAMES[i][lang === 'th' ? 1 : 0]; };
+const ACH = [['first', 'sprout'], ['streak5', 'flame'], ['listener', 'headphones'], ['dedicated', 'spark'], ['crown', 'crown'], ['diamond', 'diamond']];
 const pct = (u) => (u.nextExp ? Math.min(100, ((u.exp - u.prevExp) / (u.nextExp - u.prevExp)) * 100) : 100);
 const fmtDate = (d) => new Date(d + 'T00:00:00Z').toLocaleDateString(lang === 'th' ? 'th-TH-u-ca-gregory' : 'en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
@@ -231,32 +239,27 @@ const V = {
   async home() {
     const [m, d] = await Promise.all([api('me'), api('today')]);
     S.user = m.user; const u = m.user;
-    return `<p class="sub" style="margin:0">${esc(fmtDate(d.date))}</p><h2>${t('welcome')} ✨</h2><br>
-    <div class="card hero"><small>${t('journey')}</small><div class="big">LV.${u.level}</div><div class="nm">${esc(lvName(u.level))}</div><br>
-      <div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div>
-      <small>${u.nextExp ? t('left', u.nextExp - u.exp, u.level + 1) : t('maxed')}</small></div>
-    <div class="grid">
-      <div class="stat"><div class="e">⏱️</div><div class="n">${u.totalHours}<small style="font-size:14px"> ${t('hrs').toLowerCase()}</small></div><div class="l">${t('hours')}</div></div>
-      <div class="stat"><div class="e">🎵</div><div class="n">${u.totalStreams.toLocaleString()}</div><div class="l">${t('streams')}</div></div>
-      <div class="stat"><div class="e">⚡</div><div class="n">${u.exp}</div><div class="l">${t('totalExp')}</div></div>
-      <div class="stat"><div class="e">🔥</div><div class="n">${u.streak} <small style="font-size:14px">${t('days')}</small></div><div class="l">${t('streak')}</div></div></div>
-    <div class="card"><div class="row"><h3>${t('todayPl')}</h3><span class="tag">${d.date.slice(5)}</span></div><br>
-      <div class="row"><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>Spotify</p></div>
-      ${d.playlist ? `<a class="tag" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('open')}</a>` : ''}</div></div>
-    <div class="card"><div class="row"><div><h3>Stationhead 📻</h3><p>${t('join')}</p></div><button class="tag" style="border:0" onclick="go('station')">${t('open')}</button></div></div>`;
+    const st = (c, i, n, l) => `<div class="stat"><div class="ico ${c}">${ic(i, 18)}</div><div class="n">${n}</div><div class="l">${l}</div></div>`;
+    const rw = 'style="justify-content:flex-start;gap:12px"';
+    return `<p class="sub" style="margin:0 0 2px;font-size:12px">${esc(fmtDate(d.date))}</p><h2 style="font-size:22px;margin:0 0 10px">${t('welcome')}</h2>
+    <div class="card hero"><div class="row"><div class="big">LV.${u.level} <span class="nm">${esc(lvName(u.level))}</span></div><small>${u.exp} / ${u.nextExp ?? '—'} EXP</small></div>
+      <div class="bar"><i style="width:${pct(u)}%"></i></div><small>${u.nextExp ? t('left', u.nextExp - u.exp, u.level + 1) : t('maxed')}</small></div>
+    <div class="grid g4">${st('', 'clock', u.totalHours, t('hours'))}${st('c2', 'music', u.totalStreams.toLocaleString(), t('streams'))}${st('c3', 'bolt', u.exp, t('totalExp'))}${st('c4', 'flame', u.streak, t('streak'))}</div>
+    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico">${ic('music', 18)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="tag" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('open')}</a>` : ''}</div></div>
+    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico c2">${ic('radio', 18)}</div><div><b>Stationhead</b><p>${t('join')}</p></div></div><button class="tag" onclick="go('station')">${t('open')}</button></div></div>`;
   },
   async playlist() {
     const [d, s] = await Promise.all([api('today'), api('schedule')]);
     return `<h2>${esc(fmtDate(d.date).split(',')[0])}</h2><p class="sub">${t('todayPl')}</p>
-    <div class="card"><div class="row" style="gap:14px;justify-content:flex-start"><div class="logo" style="width:64px;height:64px;font-size:30px">🎧</div><div><p>Spotify</p><h3>${esc(d.playlist ? d.playlist.title : t('none'))}</h3></div></div>
+    <div class="card"><div class="row" style="gap:14px;justify-content:flex-start"><div class="logo" style="width:64px;height:64px">${ic('headphones', 30)}</div><div><p>Spotify</p><h3>${esc(d.playlist ? d.playlist.title : t('none'))}</h3></div></div>
       ${d.playlist ? `<a class="btn" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('openSpotify')} ↗</a>` : ''}</div>
     <div class="card"><h3>${t('schedule')}</h3><div class="list">${s.items.map((i, n) => `<div><div><b>${i.date.slice(5)}</b><p>${esc(i.title || t('notSet'))}</p></div><span class="tag">${n ? t('upcoming') : t('today')}</span></div>`).join('')}</div></div>
     <div class="card"><h3>${t('howStream')}</h3><p>${t('howStreamTxt')}</p></div>`;
   },
   async station() {
     const d = await api('today');
-    return `<h2>Stationhead 📻</h2><p class="sub">${t('join')}</p>
-    <div class="card hero" style="text-align:center"><div style="font-size:56px">📻</div><div class="big" style="font-size:26px">MARK LEE STATION</div><p style="color:#fff;opacity:.9;margin:6px 0 16px">Listen together. Support together.</p>
+    return `<h2>Stationhead</h2><p class="sub">${t('join')}</p>
+    <div class="card hero" style="text-align:center"><div style="display:grid;place-items:center">${ic('radio', 52)}</div><div class="big" style="font-size:26px">MARK LEE STATION</div><p style="color:#fff;opacity:.9;margin:6px 0 16px">Listen together. Support together.</p>
       ${d.room ? `<a class="btn w" href="${safeUrl(d.room)}" target="_blank" rel="noopener">${t('join')} ↗</a>` : ''}</div>
     <div class="card"><h3>${t('how')}</h3><div class="list"><div><span>1 · ${t('s1')}</span></div><div><span>2 · ${t('s2')}</span></div><div><span>3 · ${t('s3')}</span></div></div></div>
     <div class="card"><h3>${t('room')}</h3><p>${d.room ? esc(d.room) : t('roomNone')}</p>${d.room ? `<a class="btn soft" href="${safeUrl(d.room)}" target="_blank" rel="noopener">${t('openRoom')} ↗</a>` : ''}</div>`;
@@ -277,7 +280,7 @@ const V = {
     const max = Math.max(1, ...s.week), dn = T[lang].days7;
     const wd = (new Date(Date.now() + 7 * 36e5).getUTCDay() + 6) % 7;
     const st = { pending: 'tag', approved: 'tag ok', rejected: 'tag bad' };
-    return `<h2>${t('stats')} 📊</h2><p class="sub"></p>
+    return `<h2>${t('stats')}</h2><p class="sub"></p>
     <div class="grid"><div class="stat"><div class="l">${t('hours')}</div><div class="n">${s.totalHours}</div></div><div class="stat"><div class="l">${t('streams')}</div><div class="n">${s.totalStreams.toLocaleString()}</div></div></div>
     <div class="card"><h3>${t('weeklyAct')}</h3><div class="chart">${s.week.map((h, i) => `<div class="${i === wd ? 'hi' : ''}"><i style="height:${(h / max) * 110}px" title="${h}h"></i>${dn[i]}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('submit')}</h3><p>${t('submitD')}</p>
@@ -293,21 +296,21 @@ const V = {
     const m = await api('me'); const u = (S.user = m.user);
     return `<div class="av">${esc(u.avatar)}</div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
-    <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="e">🏅</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="e">🔥</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="e">⏱️</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
-    <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${e}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
+    <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
-    <div class="more"><button class="pill" onclick="go('ranking')">🏆 ${t('ranking')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">⚙️ ${t('admin')}</button>` : ''}</div>`;
+    <div class="more"><button class="pill" onclick="go('ranking')">${ic('trophy', 14)} ${t('ranking')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
   },
   async ranking() {
     const r = await api('ranking');
-    return `<h2>🏆 ${t('ranking')}</h2><p class="sub"></p><div class="card"><div class="list">${r.items.length ? r.items.map((x) => `<div><span>${x.rank}. ${esc(x.avatar)} <b>${esc(x.username)}</b></span><span class="tag">${x.exp} EXP · Lv ${x.level}</span></div>`).join('') : `<p>${t('empty')}</p>`}</div></div>`;
+    return `<h2>${t('ranking')}</h2><p class="sub"></p><div class="card"><div class="list">${r.items.length ? r.items.map((x) => `<div><span>${x.rank}. ${esc(x.avatar)} <b>${esc(x.username)}</b></span><span class="tag">${x.exp} EXP · Lv ${x.level}</span></div>`).join('') : `<p>${t('empty')}</p>`}</div></div>`;
   },
   async admin() {
     if (!S.user) S.user = (await api('me')).user;
-    if (!S.user.isAdmin) return `<h2>⚙️ ${t('admin')}</h2><div class="card"><p>Admin only.</p></div>`;
+    if (!S.user.isAdmin) return `<h2>${t('admin')}</h2><div class="card"><p>Admin only.</p></div>`;
     const p = await api('a_pending');
-    return `<h2>⚙️ ${t('admin')}</h2><p class="sub"></p>
+    return `<h2>${t('admin')}</h2><p class="sub"></p>
     <div class="card"><h3>${t('aPl')}</h3><label for="a-d">${t('date')}</label><input id="a-d" type="date" value="${thaiToday()}"><label for="a-t">${t('aTitle')}</label><input id="a-t" value="MARK LEE — Daily Stream"><label for="a-u">${t('aUrl')}</label><input id="a-u" type="url"><button class="btn" onclick="adm('a_setPlaylist',{date:v('a-d'),title:v('a-t'),url:v('a-u')})">${t('save')}</button></div>
     <div class="card"><h3>${t('aRoom')}</h3><input id="a-r" type="url" placeholder="https://"><button class="btn" onclick="adm('a_setRoom',{url:v('a-r')})">${t('save')}</button></div>
     <div class="card"><h3>${t('aSpecial')}</h3><input id="a-x"><button class="btn" onclick="adm('a_setSpecial',{text:v('a-x')})">${t('save')}</button></div>
@@ -364,7 +367,7 @@ async function render(force) {
   if (!S.token && !DEMO) { nav.hidden = true; main.innerHTML = V.auth(); shown = 'auth'; return; }
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
-  if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${e}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
+  if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
   [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'profile' && ['ranking', 'admin'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; }
