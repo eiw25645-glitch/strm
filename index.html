@@ -338,6 +338,18 @@ input:focus,select:focus{border-color:#8ecbff;box-shadow:none}
 nav{background:#181529;border-top:2px solid #2d2a4a;border-radius:26px 26px 0 0}
 nav button{color:#8f8bb5;border-radius:16px}
 nav .on{background:#8ecbff;color:#1c1930;border-radius:16px;box-shadow:0 3px 0 #4a7fb0}
+/* ===== thin borders, no shadows ===== */
+*{box-shadow:none!important}
+:root{--bd:1px solid #2d2a4a}
+.card,.stat,.song,.pf,.pill,.btn.soft,input,select,.toast{border-width:1px}
+.ico,.ach span,.feat,.go,.hero,.av{border-width:1px}
+.feat,.hero,.ico,.ach span,.go,.av{border-color:rgba(255,255,255,.14)}
+.feat,.hero{border-color:rgba(0,0,0,.25)}
+.tag,.tag.ok,.tag.ol{border-width:1px}.tag.bad{border:1px dashed #7a3d62}
+.lvc.cur{border-width:1px;border-color:rgba(0,0,0,.3)}
+.list>div{border-bottom:1px dotted #2d2a4a}
+nav{border-top-width:1px}
+.btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
