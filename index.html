@@ -125,6 +125,10 @@ body{font-size:15px;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
 .login input{padding:16px 18px;border-radius:99px;background:#f6f8fd;border-color:transparent;font-size:16px}
 .login input:focus{background:#fff;border-color:var(--blue)}
 .login .btn{margin-top:18px;padding:16px;font-weight:600}.login .btn.soft{margin-top:10px}
+/* ===== quiet header, no loading effects ===== */
+header{padding:16px 20px 0}
+header h1 .chip{background:none;color:var(--ink);padding:0;border-radius:0;font-size:24px;letter-spacing:-.3px;box-shadow:inset 0 -9px 0 var(--butter)}
+#bar,.sk{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -132,8 +136,7 @@ body{font-size:15px;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
 <div id="bar"></div>
 <div id="app">
   <header>
-    <div class="logo"><svg class="i" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="7" rx="2"/><rect x="17" y="14" width="4" height="7" rx="2"/></svg></div>
-    <div class="hgrow"><h1><span class="chip">MOLO2 ♡</span><small>STREAMING SPACE</small></h1><p id="tag"></p></div>
+    <div class="hgrow"><h1><span class="chip">MOLO2</span></h1></div>
     <button class="pill" id="lang"></button>
   </header>
   <main id="main"></main>
@@ -344,10 +347,10 @@ window.adm = safe(async (a, b) => { await api(a, b); toast(t('saved')); });
 window.review = safe(async (rid, approve) => { await api('a_review', { rid, approve }); render(); });
 
 /* ---------- shell ---------- */
-const HC = {}; // rendered HTML per tab: shown instantly, refreshed in background
+const HC = (() => { try { return JSON.parse(sessionStorage.getItem('hc') || '{}'); } catch { return {}; } })(); // rendered HTML per tab: shown instantly, refreshed in background
 let warmed = false, shown = '', gen = 0;
-const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; };
-const SKEL = '<div class="sk" style="height:150px"></div><div class="grid"><div class="sk" style="height:96px"></div><div class="sk" style="height:96px"></div></div><div class="sk" style="height:110px"></div>';
+const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; try { sessionStorage.removeItem('hc'); } catch {} };
+const SKEL = '';
 function warm() {
   if (warmed || DEMO || !S.token) return;
   warmed = true;
@@ -359,7 +362,6 @@ function warm() {
   }, 600);
 }
 async function render(force) {
-  $('#tag').textContent = t('tag');
   $('#lang').textContent = lang === 'th' ? 'EN' : 'ไทย';
   document.documentElement.lang = lang;
   document.body.classList.toggle('login', !S.token && !DEMO);
@@ -377,6 +379,7 @@ async function render(force) {
   const typing = !force && /INPUT|SELECT/.test((document.activeElement || {}).tagName || '');
   if (HC[key] !== html && !typing) main.innerHTML = html;
   HC[key] = html;
+  try { sessionStorage.setItem('hc', JSON.stringify(HC)); } catch {}
   warm();
 }
 $('#lang').onclick = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(); };
