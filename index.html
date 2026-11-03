@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MOLO2 Streaming Space</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Nunito:wght@600;700;800&family=Itim&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1f2a44;--mute:#7a859c;--blue:#7ba7d9;--blue2:#a8c4e8;--soft:#eef4fc;--card:#f6f8fc;--line:#e4e9f2;--ok:#4c9f7a;--bad:#c4526a}
+:root{--ink:#141414;--mute:#5f6272;--blue:#2447d6;--blue2:#5b7bf0;--soft:#dde5ff;--card:#f5f7fc;--line:#e4e9f2;--ok:#2f8f63;--bad:#d63a30;--paper:#fff;--butter:#ffd84d}
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
-body{font-family:"Plus Jakarta Sans","Noto Sans Thai",system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-tap-highlight-color:transparent}
+body{font-family:"Nunito","Itim",system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-tap-highlight-color:transparent}
 #app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
 header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
 .logo{width:44px;height:44px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:22px}
 header h1{font-size:17px;font-weight:800}header h1 b{color:var(--blue)}
 header p{font-size:12px;color:var(--mute)}
 .hgrow{flex:1}
-.pill{border:0;background:var(--soft);color:#4a76ab;border-radius:99px;padding:8px 12px;font:600 12px inherit;font-family:inherit;cursor:pointer}
+.pill{border:0;background:var(--soft);color:#1a36a8;border-radius:99px;padding:8px 12px;font:600 12px inherit;font-family:inherit;cursor:pointer}
 main{flex:1;padding:18px 20px 110px}
 h2{font-size:24px;font-weight:800;margin:4px 0 2px}
 .sub{color:var(--mute);font-size:14px;margin-bottom:16px}
@@ -34,30 +35,45 @@ h2{font-size:24px;font-weight:800;margin:4px 0 2px}
 .stat{background:var(--card);border-radius:20px;padding:16px}
 .stat .n{font-size:28px;font-weight:800}.stat .l{color:var(--mute);font-size:13px}.stat .e{font-size:22px}
 .btn{display:block;width:100%;text-align:center;border:0;border-radius:99px;padding:14px;font:700 15px inherit;font-family:inherit;background:var(--blue);color:#fff;cursor:pointer;text-decoration:none;margin-top:12px}
-.btn.soft{background:var(--soft);color:#4a76ab}.btn.w{background:#fff;color:#4a76ab;display:inline-block;width:auto;padding:14px 28px}
+.btn.soft{background:var(--soft);color:#1a36a8}.btn.w{background:#fff;color:#1a36a8;display:inline-block;width:auto;padding:14px 28px}
 .btn:disabled{opacity:.5}
-.tag{background:var(--soft);color:#4a76ab;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+.tag{background:var(--soft);color:#1a36a8;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:600;white-space:nowrap}
 .tag.ok{background:#e3f4ec;color:var(--ok)}.tag.bad{background:#fbe6ec;color:var(--bad)}
 .list>div{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
 .list>div:last-child{border:0}
 label{display:block;font-size:13px;color:var(--mute);margin:12px 0 6px}
 input,select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;font:15px inherit;font-family:inherit;background:#fff;color:var(--ink)}
-.seg{display:flex;gap:8px;margin-bottom:14px}.seg button{border:0;border-radius:99px;padding:10px 16px;font:600 14px inherit;font-family:inherit;background:var(--card);color:var(--mute)}.seg .on{background:var(--soft);color:#4a76ab}
+.seg{display:flex;gap:8px;margin-bottom:14px}.seg button{border:0;border-radius:99px;padding:10px 16px;font:600 14px inherit;font-family:inherit;background:var(--card);color:var(--mute)}.seg .on{background:var(--soft);color:#1a36a8}
 .chart{display:flex;align-items:flex-end;gap:8px;height:150px;margin-top:14px}
 .chart div{flex:1;text-align:center;font-size:12px;color:var(--mute)}.chart i{display:block;background:var(--blue2);border-radius:10px 10px 4px 4px;min-height:6px;margin-bottom:6px}.chart .hi i{background:var(--blue)}
 .ach{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center;font-size:12px;margin-top:12px}.ach span{display:block;font-size:30px}.ach .lock{opacity:.3;filter:grayscale(1)}
 .av{width:96px;height:96px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:48px;margin:6px auto 10px}
 nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fffffff2;backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
 nav button{flex:1;border:0;background:0;font:600 10px inherit;font-family:inherit;color:var(--mute);padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
-nav button span{font-size:20px}nav .on{color:#4a76ab}
+nav button span{font-size:20px}nav .on{color:#1a36a8}
 .more{display:flex;gap:10px;justify-content:center;margin-top:6px}
 .toast{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-size:14px;z-index:9;max-width:90%}
 .err{color:var(--bad);font-size:13px;margin-top:10px}
-a{color:#4a76ab}
+a{color:#1a36a8}
 :focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button,.btn,.tag,.pill{touch-action:manipulation}
+.tag{display:inline-block}
+h2,.big,header h1,.card h3{font-family:"Jua","Itim",sans-serif;font-weight:400}
+.hero .big{font-weight:400}
+.btn,.pill,.tag,nav button,.seg button{transition:transform .12s ease,filter .12s,background .15s}
+.btn:active,.pill:active,button.tag:active,a.tag:active,.seg button:active{transform:scale(.94)}
+.btn:active{filter:brightness(.94)}
+nav button:active{transform:scale(.86)}
+.sk{background:linear-gradient(90deg,#f0f3f9 25%,#e6ecf6 37%,#f0f3f9 63%);background-size:400% 100%;animation:sh 1.2s ease infinite;border-radius:22px;margin-bottom:14px}
+@keyframes sh{0%{background-position:100% 50%}100%{background-position:0 50%}}
+#bar{position:fixed;top:0;left:0;width:100%;height:3px;opacity:0;transition:opacity .25s;z-index:20;pointer-events:none;background:linear-gradient(90deg,transparent,var(--blue),transparent) no-repeat;background-size:40% 100%}
+#bar.on{opacity:1;animation:sl 1s linear infinite}
+@keyframes sl{from{background-position:-40% 0}to{background-position:140% 0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
+<div id="bar"></div>
 <div id="app">
   <header>
     <div class="logo">🎧</div>
@@ -87,7 +103,7 @@ const T = {
     plM: 'Daily playlist', plD: 'Listen to the daily playlist, then claim.', claim: 'Claim', wkM: 'Weekly streamer', wkD: 'Submit records on 5 different days.', spM: 'MOLO2 special mission', noSpecial: 'No special mission right now.',
     weeklyAct: 'Weekly activity', submit: 'Submit streaming record', submitD: 'Add your own listening activity. Records count after admin approval.', platform: 'Platform', sh: 'Streaming hours', rs: 'Reported streams (optional)', date: 'Date', ev: 'Evidence link (optional)', send: 'Submit record', recent: 'Recent records', noRec: 'No records yet.',
     pending: 'Pending', approved: 'Approved', rejected: 'Rejected', badges: 'Badges', hrs: 'Hours', ach: 'Achievements', acc: 'Account settings', pub: 'Public leaderboard', on: 'ON', off: 'OFF', logout: 'Log out',
-    login: 'Log in', register: 'Create account', user: 'Username', pin: 'PIN (4–8 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
+    login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
   th: { tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
@@ -100,7 +116,7 @@ const T = {
     plM: 'เพลย์ลิสต์ประจำวัน', plD: 'ฟังเพลย์ลิสต์ประจำวัน แล้วกดรับ', claim: 'รับ EXP', wkM: 'นักสตรีมประจำสัปดาห์', wkD: 'ส่งบันทึกให้ครบ 5 วันที่ต่างกัน', spM: 'ภารกิจพิเศษ MOLO2', noSpecial: 'ตอนนี้ยังไม่มีภารกิจพิเศษ',
     weeklyAct: 'กิจกรรมรายสัปดาห์', submit: 'ส่งบันทึกการสตรีม', submitD: 'เพิ่มกิจกรรมการฟังของคุณ บันทึกจะนับเมื่อแอดมินอนุมัติ', platform: 'แพลตฟอร์ม', sh: 'ชั่วโมงสตรีม', rs: 'ยอดสตรีมที่รายงาน (ไม่บังคับ)', date: 'วันที่', ev: 'ลิงก์หลักฐาน (ไม่บังคับ)', send: 'ส่งบันทึก', recent: 'บันทึกล่าสุด', noRec: 'ยังไม่มีบันทึก',
     pending: 'รอตรวจ', approved: 'อนุมัติแล้ว', rejected: 'ไม่ผ่าน', badges: 'เหรียญ', hrs: 'ชั่วโมง', ach: 'ความสำเร็จ', acc: 'ตั้งค่าบัญชี', pub: 'แสดงในอันดับสาธารณะ', on: 'เปิด', off: 'ปิด', logout: 'ออกจากระบบ',
-    login: 'เข้าสู่ระบบ', register: 'สร้างบัญชี', user: 'ชื่อผู้ใช้', pin: 'PIN (ตัวเลข 4–8 หลัก)', gained: (n) => `+${n} EXP`, already: 'วันนี้ทำไปแล้ว', saved: 'บันทึกแล้ว',
+    login: 'เข้าสู่ระบบ', register: 'สร้างบัญชี', user: 'บัญชี Twitter', pin: 'PIN (ตัวเลข 4 หลัก)', gained: (n) => `+${n} EXP`, already: 'วันนี้ทำไปแล้ว', saved: 'บันทึกแล้ว',
     aPl: 'ตั้งเพลย์ลิสต์รายวัน', aTitle: 'ชื่อ', aUrl: 'ลิงก์ (https://…)', aRoom: 'ตั้งลิงก์ห้อง Stationhead', aSpecial: 'ข้อความภารกิจพิเศษ', save: 'บันทึก', aPend: 'บันทึกที่รอตรวจ', approve: 'อนุมัติ', reject: 'ปฏิเสธ', empty: 'ยังไม่มีรายการ', secret: 'รหัสแอดมิน', unlock: 'ปลดล็อก',
     ach_first: 'ก้าวแรก', ach_streak5: 'สตรีค 5 วัน', ach_listener: 'ผู้ฟัง', ach_dedicated: 'ทุ่มเท', ach_crown: 'มงกุฎ', ach_diamond: 'เพชร', days7: ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.'] },
 };
@@ -119,7 +135,23 @@ const MOCK = {
   ranking: () => ({ items: [{ rank: 1, username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4 }, { rank: 2, username: 'bunny_01', avatar: '🐱', exp: 420, level: 3 }] }),
   a_pending: () => ({ items: [] }),
 };
+const TTL = { today: 60e3, schedule: 60e3, ranking: 30e3 }, MEM = {};
+const READ = new Set(['me', 'today', 'schedule', 'missions', 'stats', 'ranking', 'a_pending', 'login', 'register']);
+let pending = 0;
+const bar = (d) => { pending += d; $('#bar').classList.toggle('on', pending > 0); };
 async function api(action, body = {}) {
+  const ttl = TTL[action];
+  if (ttl && MEM[action] && Date.now() - MEM[action].t < ttl) return MEM[action].v;
+  bar(1);
+  try {
+    const v = await rawApi(action, body);
+    if (ttl) MEM[action] = { t: Date.now(), v };
+    if (action.startsWith('a_set')) { delete MEM.today; delete MEM.schedule; }
+    if (!READ.has(action)) clearHC();
+    return v;
+  } finally { bar(-1); }
+}
+async function rawApi(action, body = {}) {
   if (DEMO) { const f = MOCK[action]; return f ? f() : { ok: true, user: S.user, gained: 10 }; }
   const r = await fetch('/api/rpc', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token, 'x-admin-secret': S.admin }, body: JSON.stringify({ action, ...body }) });
   const j = await r.json().catch(() => ({ error: 'Server error' }));
@@ -127,11 +159,20 @@ async function api(action, body = {}) {
   return j;
 }
 function toast(m) { const e = document.createElement('div'); e.className = 'toast'; e.textContent = m; document.body.append(e); setTimeout(() => e.remove(), 2200); }
-const safe = (fn) => async (...a) => { try { await fn(...a); } catch (e) { toast(e.message); } };
-function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; render(); }
+let busy = false;
+const safe = (fn) => async (...a) => {
+  if (busy) return; busy = true;
+  const el = a.find((x) => x instanceof HTMLElement);
+  try { await fn(...a); } catch (e) { toast(e.message); if (el) { el.disabled = false; el.textContent = el.dataset.t; } } finally { busy = false; }
+};
+const lock = (el) => { if (el) { el.dataset.t = el.textContent; el.disabled = true; el.textContent = '…'; } };
+function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; clearHC(); for (const k in MEM) delete MEM[k]; render(); }
 
 /* ---------- views ---------- */
 const TABS = [['home', '🏠'], ['playlist', '🎵'], ['station', '📻'], ['missions', '✨'], ['stats', '📊'], ['profile', '🤍']];
+const LV_NAMES = [['Newbie', 'มือใหม่'], ['Fan', 'แฟนคลับ'], ['Voter', 'นักโหวต'], ['Dedicated', 'ตัวจริง'], ['Super Fan', 'ซูเปอร์แฟน'], ['Star Voter', 'สตาร์โหวต'], ['Elite', 'อีลีท'], ['Master', 'มาสเตอร์'], ['Legend', 'ตำนาน'], ['Hall of Fame', 'หอเกียรติยศ']];
+const LV_ICON = ['🌱', '🎧', '📣', '⭐', '💫', '🌟', '💎', '👑', '🔥', '🏆'];
+const lvName = (n) => { const i = Math.min(Math.max(n, 1), 10) - 1; return LV_ICON[i] + ' ' + LV_NAMES[i][lang === 'th' ? 1 : 0]; };
 const ACH = [['first', '🌱'], ['streak5', '🔥'], ['listener', '🎧'], ['dedicated', '⭐'], ['crown', '👑'], ['diamond', '💎']];
 const pct = (u) => (u.nextExp ? Math.min(100, ((u.exp - u.prevExp) / (u.nextExp - u.prevExp)) * 100) : 100);
 const fmtDate = (d) => new Date(d + 'T00:00:00Z').toLocaleDateString(lang === 'th' ? 'th-TH-u-ca-gregory' : 'en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -141,7 +182,7 @@ const V = {
     const [m, d] = await Promise.all([api('me'), api('today')]);
     S.user = m.user; const u = m.user;
     return `<p class="sub" style="margin:0">${esc(fmtDate(d.date))}</p><h2>${t('welcome')} ✨</h2><br>
-    <div class="card hero"><small>${t('journey')}</small><div class="big">Level ${String(u.level).padStart(2, '0')}</div><div class="nm">${esc(u.levelName)}</div><br>
+    <div class="card hero"><small>${t('journey')}</small><div class="big">LV.${u.level}</div><div class="nm">${esc(lvName(u.level))}</div><br>
       <div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div>
       <small>${u.nextExp ? t('left', u.nextExp - u.exp, u.level + 1) : t('maxed')}</small></div>
     <div class="grid">
@@ -176,9 +217,9 @@ const V = {
     const mc = (title, desc, exp, body) => `<div class="card"><div class="row"><h3>${title}</h3><span class="tag">+${exp} EXP</span></div><p>${desc}</p>${body}</div>`;
     const done = `<span class="tag ok" style="display:inline-block;margin-top:12px">✓ ${t('done')}</span>`;
     return `<h2>${t('missions')}</h2><p class="sub">Little steps, more EXP.</p>
-    ${mc(t('checkin'), t('checkinD'), 10, m.checkin ? done : `<button class="btn soft" onclick="doCheckin()">${t('doCheckin')}</button>`)}
-    ${mc(t('plM'), t('plD'), 20, m.playlist.done ? done : `<button class="btn soft" ${m.playlist.available ? '' : 'disabled'} onclick="doAct('claimPlaylist')">${t('claim')}</button>`)}
-    ${mc(t('wkM'), t('wkD'), 100, `<div class="bar"><i style="width:${Math.min(100, (w.days / w.target) * 100)}%"></i></div><p>${w.days} / ${w.target} ${t('days')}</p>${w.claimed ? done : `<button class="btn soft" ${w.days >= w.target ? '' : 'disabled'} onclick="doAct('claimWeekly')">${t('claim')}</button>`}`)}
+    ${mc(t('checkin'), t('checkinD'), 10, m.checkin ? done : `<button class="btn soft" onclick="doCheckin(this)">${t('doCheckin')}</button>`)}
+    ${mc(t('plM'), t('plD'), 20, m.playlist.done ? done : `<button class="btn soft" ${m.playlist.available ? '' : 'disabled'} onclick="doAct('claimPlaylist',this)">${t('claim')}</button>`)}
+    ${mc(t('wkM'), t('wkD'), 100, `<div class="bar"><i style="width:${Math.min(100, (w.days / w.target) * 100)}%"></i></div><p>${w.days} / ${w.target} ${t('days')}</p>${w.claimed ? done : `<button class="btn soft" ${w.days >= w.target ? '' : 'disabled'} onclick="doAct('claimWeekly',this)">${t('claim')}</button>`}`)}
     ${mc(t('spM'), esc(m.special || t('noSpecial')), 200, '')}`;
   },
   async stats() {
@@ -195,25 +236,26 @@ const V = {
       <label for="f-s">${t('rs')}</label><input id="f-s" type="number" inputmode="numeric" min="0" placeholder="150">
       <label for="f-d">${t('date')}</label><input id="f-d" type="date" value="${thaiToday()}" max="${thaiToday()}">
       <label for="f-e">${t('ev')}</label><input id="f-e" type="url" placeholder="https://">
-      <button class="btn" onclick="sendRec()">${t('send')}</button></div>
+      <button class="btn" onclick="sendRec(this)">${t('send')}</button></div>
     <div class="card"><h3>${t('recent')}</h3><div class="list">${s.recent.length ? s.recent.map((r) => `<div><div><b>${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams</p></div><span class="${st[r.status]}">${t(r.status)}</span></div>`).join('') : `<p>${t('noRec')}</p>`}</div></div>`;
   },
   async profile() {
     const m = await api('me'); const u = (S.user = m.user);
-    return `<div class="av">${esc(u.avatar)}</div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">Level ${String(u.level).padStart(2, '0')} · ${esc(u.levelName)}</span></p>
+    return `<div class="av">${esc(u.avatar)}</div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="e">🏅</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="e">🔥</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="e">⏱️</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${e}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
-    <div class="more"><button class="pill" onclick="go('ranking')">🏆 ${t('ranking')}</button><button class="pill" onclick="go('admin')">⚙️ ${t('admin')}</button></div>`;
+    <div class="more"><button class="pill" onclick="go('ranking')">🏆 ${t('ranking')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">⚙️ ${t('admin')}</button>` : ''}</div>`;
   },
   async ranking() {
     const r = await api('ranking');
     return `<h2>🏆 ${t('ranking')}</h2><p class="sub"></p><div class="card"><div class="list">${r.items.length ? r.items.map((x) => `<div><span>${x.rank}. ${esc(x.avatar)} <b>${esc(x.username)}</b></span><span class="tag">${x.exp} EXP · Lv ${x.level}</span></div>`).join('') : `<p>${t('empty')}</p>`}</div></div>`;
   },
   async admin() {
-    if (!S.admin) return `<h2>⚙️ ${t('admin')}</h2><div class="card"><label for="a-s">${t('secret')}</label><input id="a-s" type="password" autocomplete="off"><button class="btn" onclick="unlock()">${t('unlock')}</button></div>`;
+    if (!S.user) S.user = (await api('me')).user;
+    if (!S.user.isAdmin) return `<h2>⚙️ ${t('admin')}</h2><div class="card"><p>Admin only.</p></div>`;
     const p = await api('a_pending');
     return `<h2>⚙️ ${t('admin')}</h2><p class="sub"></p>
     <div class="card"><h3>${t('aPl')}</h3><label for="a-d">${t('date')}</label><input id="a-d" type="date" value="${thaiToday()}"><label for="a-t">${t('aTitle')}</label><input id="a-t" value="MARK LEE — Daily Stream"><label for="a-u">${t('aUrl')}</label><input id="a-u" type="url"><button class="btn" onclick="adm('a_setPlaylist',{date:v('a-d'),title:v('a-t'),url:v('a-u')})">${t('save')}</button></div>
@@ -223,7 +265,7 @@ const V = {
   },
   auth() {
     return `<h2>MOLO2 Space</h2><p class="sub">${t('tag')}</p><div class="card">
-    <label for="u">${t('user')}</label><input id="u" autocomplete="username" autocapitalize="none"><label for="p">${t('pin')}</label><input id="p" type="password" inputmode="numeric" autocomplete="current-password">
+    <label for="u">${t('user')}</label><input id="u" autocomplete="username" autocapitalize="none" placeholder="@twitter"><label for="p">${t('pin')}</label><input id="p" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password">
     <button class="btn" onclick="auth('login')">${t('login')}</button><button class="btn soft" onclick="auth('register')">${t('register')}</button><div class="err" id="err" role="alert"></div></div>`;
   },
 };
@@ -236,11 +278,12 @@ window.auth = async (kind) => {
   try { const r = await api(kind, { username: v('u'), pin: v('p') }); S.token = r.token; S.user = r.user; localStorage.setItem('tok', r.token); S.tab = 'home'; render(); }
   catch (e) { $('#err').textContent = e.message; }
 };
-window.doCheckin = safe(async () => { const r = await api('checkin'); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
-window.doAct = safe(async (a) => { const r = await api(a); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
-window.sendRec = safe(async () => {
+window.doCheckin = safe(async (el) => { lock(el); const r = await api('checkin'); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
+window.doAct = safe(async (a, el) => { lock(el); const r = await api(a); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
+window.sendRec = safe(async (el) => {
+  lock(el);
   await api('submitRecord', { platform: v('f-p'), hours: v('f-h'), streams: v('f-s'), date: v('f-d'), evidence: v('f-e') });
-  toast(t('saved')); render();
+  toast(t('saved')); render(true);
 });
 window.togglePub = safe(async (val) => { await api('setPublic', { value: val }); render(); });
 window.unlock = safe(async () => { S.admin = v('a-s'); sessionStorage.setItem('adm', S.admin); try { await api('a_pending'); } catch (e) { S.admin = ''; sessionStorage.removeItem('adm'); throw e; } render(); });
@@ -248,17 +291,39 @@ window.adm = safe(async (a, b) => { await api(a, b); toast(t('saved')); });
 window.review = safe(async (rid, approve) => { await api('a_review', { rid, approve }); render(); });
 
 /* ---------- shell ---------- */
-async function render() {
+const HC = {}; // rendered HTML per tab: shown instantly, refreshed in background
+let warmed = false, shown = '', gen = 0;
+const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; };
+const SKEL = '<div class="sk" style="height:150px"></div><div class="grid"><div class="sk" style="height:96px"></div><div class="sk" style="height:96px"></div></div><div class="sk" style="height:110px"></div>';
+function warm() {
+  if (warmed || DEMO || !S.token) return;
+  warmed = true;
+  setTimeout(async () => {
+    for (const k of ['playlist', 'missions', 'stats']) {
+      const key = k + lang;
+      try { if (!HC[key] && S.token) HC[key] = await V[k](); } catch {}
+    }
+  }, 600);
+}
+async function render(force) {
   $('#tag').textContent = t('tag');
   $('#lang').textContent = lang === 'th' ? 'EN' : 'ไทย';
   document.documentElement.lang = lang;
   const nav = $('#nav'), main = $('#main');
-  if (!S.token && !DEMO) { nav.hidden = true; main.innerHTML = V.auth(); return; }
+  if (!S.token && !DEMO) { nav.hidden = true; main.innerHTML = V.auth(); shown = 'auth'; return; }
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
-  nav.innerHTML = TABS.map(([k, e]) => `<button class="${S.tab === k || (k === 'profile' && ['ranking', 'admin'].includes(S.tab)) ? 'on' : ''}" onclick="go('${k}')"><span>${e}</span>${t(k)}</button>`).join('');
-  try { main.innerHTML = await V[S.tab](); } catch (e) { main.innerHTML = `<div class="card"><p>${esc(e.message)}</p></div>`; }
-  window.scrollTo(0, 0);
+  if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${e}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
+  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'profile' && ['ranking', 'admin'].includes(S.tab))));
+  const tab = S.tab, key = tab + lang, my = ++gen;
+  if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; }
+  let html;
+  try { html = await V[tab](); } catch (e) { html = `<div class="card"><p>${esc(e.message)}</p></div>`; }
+  if (my !== gen) return;
+  const typing = !force && /INPUT|SELECT/.test((document.activeElement || {}).tagName || '');
+  if (HC[key] !== html && !typing) main.innerHTML = html;
+  HC[key] = html;
+  warm();
 }
 $('#lang').onclick = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(); };
 render();
