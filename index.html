@@ -264,6 +264,21 @@ nav .on{background:rgba(77,163,255,.14);color:#5aa9ff;border-radius:14px}
 .bar i,.hero .bar i{background:#4da3ff}
 .hero{background:#2f6df0;color:#fff}
 .feat{background:#4da3ff;color:#0b0c10}
+/* ===== glow, still no gradients ===== */
+header h1 .chip{box-shadow:none;font-size:20px;letter-spacing:.5px}
+header h1 .chip em{font-style:normal;color:#4da3ff}
+svg[data-n=cal]{--ic:#5aa9ff}
+.dt{display:flex;align-items:center;gap:6px;margin:0 0 2px;font-size:12px}.dt svg{color:#5aa9ff}
+.wl{font-size:22px;margin:0 0 12px}
+.ico svg{filter:drop-shadow(0 0 5px var(--ic,transparent))}
+.feat{background:#14233f;border:1px solid #3d74e0;box-shadow:0 0 18px rgba(77,163,255,.3);color:#f2f4f8}
+.feat b{color:#fff}.feat p{color:#9fb3d9}
+.feat .ico{background:#4da3ff;border-color:transparent}.feat .ico svg{color:#fff;filter:none}
+.go{width:36px;height:36px;border-radius:50%;background:#0b0c10;color:#fff;display:grid;place-items:center;flex:none;border:1px solid #2a3350}
+.tag.ol{background:transparent;border:1px solid #4da3ff;color:#7db8ff;box-shadow:0 0 10px rgba(77,163,255,.25)}
+.ico.gr{background:rgba(52,211,153,.16)}.ico.gr svg{--ic:#34d399}
+.btn.sm{box-shadow:0 0 10px rgba(77,163,255,.3)}
+nav .on{background:#2b5fd9;color:#fff;box-shadow:0 0 14px rgba(77,163,255,.45)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -271,7 +286,7 @@ nav .on{background:rgba(77,163,255,.14);color:#5aa9ff;border-radius:14px}
 <div id="bar"></div>
 <div id="app">
   <header>
-    <div class="hgrow"><h1><span class="chip">MOLO#2 STRM HUB</span></h1></div>
+    <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM HUB</em></span></h1></div>
     <button class="pill" id="lang"></button>
   </header>
   <main id="main"></main>
@@ -283,7 +298,7 @@ const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const IC={"home": "<path d=\"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/>", "music": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>", "radio": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"12\" rx=\"3\"/><path d=\"M7 8l10-5\"/><circle cx=\"9\" cy=\"14\" r=\"2.5\"/><path d=\"M15 12h3M15 15h3\"/>", "spark": "<path d=\"M12 3l2.4 5.6 6 .6-4.5 4 1.4 5.9L12 16l-5.3 3.1 1.4-5.9-4.5-4 6-.6z\"/>", "chart": "<path d=\"M4 20v-9M10 20V4M16 20v-6M2 20h20\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/>", "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "bolt": "<path d=\"M13 2L4 14h7l-1 8 9-12h-7z\"/>", "flame": "<path d=\"M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z\"/>", "trophy": "<path d=\"M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M10 17h4\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"/>", "medal": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"M8.5 13L7 21l5-3 5 3-1.5-8\"/>", "crown": "<path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/>", "diamond": "<path d=\"M6 3h12l4 6-10 12L2 9zM2 9h20\"/>", "sprout": "<path d=\"M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z\"/>"};
 const ic=(n,s=20)=>`<svg class="i" data-n="${n}" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
-IC.play='<rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>';IC.arrow='<path d="M5 12h14M13 6l6 6-6 6"/>';
+IC.cal='<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>';IC.play='<rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>';IC.arrow='<path d="M5 12h14M13 6l6 6-6 6"/>';
 // MARK's songs: add img:'/covers/xxx.jpg' (any image path) and the real Spotify link as url
 const SONGS = [
   { t: '1999', img: '', url: 'https://open.spotify.com/search/MARK%201999' },
@@ -405,10 +420,10 @@ const V = {
     S.user = m.user; const u = m.user;
     const st = (c, i, n, l) => `<div class="stat"><div class="ico ${c}">${ic(i, 18)}</div><div class="n">${n}</div><div class="l">${l}</div></div>`;
     const rw = 'style="justify-content:flex-start;gap:12px"';
-    return `<p class="sub" style="margin:0 0 2px;font-size:12px">${esc(fmtDate(d.date))}</p><h2 style="font-size:22px;margin:0 0 10px">${t('welcome')}</h2>
+    return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${t('welcome')} 👋</h2>
     <div class="grid g4">${st('', 'clock', u.totalHours, t('hours'))}${st('c2', 'music', u.totalStreams.toLocaleString(), t('streams'))}${st('c3', 'bolt', u.exp, t('totalExp'))}${st('c4', 'flame', u.streak, t('streak'))}</div>
-    <div class="card feat"><div class="row"><div class="row" ${rw}><div class="ico">${ic('music', 18)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="tag" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('open')}</a>` : ''}</div></div>
-    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico c2">${ic('radio', 18)}</div><div><b>Stationhead</b><p>${t('join')}</p></div></div><button class="tag" onclick="go('station')">${t('open')}</button></div></div>
+    <div class="card feat"><div class="row"><div class="row" ${rw}><div class="ico">${ic('music', 18)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="go" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener" aria-label="Open">${ic('arrow', 16)}</a>` : ''}</div></div>
+    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico gr">${ic('headphones', 18)}</div><div><b>Stationhead</b><p>Join Stationhead</p></div></div><button class="tag ol" onclick="go('station')">${t('open')}</button></div></div>
     <h3 class="sec">MARK's Songs</h3>
     <div class="songs">${SONGS.map((x) => `<div class="song"><div class="cov">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 22)}</div><b>${esc(x.t)}</b><a class="btn sm" href="${safeUrl(x.url)}" target="_blank" rel="noopener">Stream</a></div>`).join('')}</div>
     <div class="card pfc"><div class="row"><h3 class="sec nob">${ic('music', 20)} Streaming Platforms</h3><button class="tag" onclick="this.closest('.pfc').classList.toggle('all')">View all ${ic('arrow', 12)}</button></div>
