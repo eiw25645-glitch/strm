@@ -147,6 +147,18 @@ nav .on{background:#fff;color:#111}
 input:focus,select:focus{border-color:#111;box-shadow:none}
 :focus-visible{outline:2px solid #111}
 .err,.msg{color:#111}
+/* ===== songs + platforms ===== */
+.sec{font:700 16px "Poppins","Prompt",sans-serif;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec::before{content:"";width:4px;height:18px;border-radius:4px;background:#111}
+.songs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.song{border:var(--bd);border-radius:18px;padding:8px;text-align:center;background:#fff;min-width:0}
+.cov{aspect-ratio:1;border-radius:12px;background:#f2f2f3;display:grid;place-items:center;overflow:hidden;margin-bottom:6px}
+.cov img{width:100%;height:100%;object-fit:cover}
+.song b{display:block;font-size:11px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn.sm{display:block;width:auto;padding:6px 0;font-size:11px;text-align:center;text-decoration:none;border-radius:99px}
+.pfs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.pfs::-webkit-scrollbar{display:none}
+.pf{flex:0 0 118px;border:var(--bd);border-radius:20px;padding:12px;background:#fff;color:#111;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pf b{font-size:13px}.pf span{font-size:12px;font-weight:500;display:inline-flex;gap:4px;align-items:center}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -166,6 +178,18 @@ const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const IC={"home": "<path d=\"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/>", "music": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>", "radio": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"12\" rx=\"3\"/><path d=\"M7 8l10-5\"/><circle cx=\"9\" cy=\"14\" r=\"2.5\"/><path d=\"M15 12h3M15 15h3\"/>", "spark": "<path d=\"M12 3l2.4 5.6 6 .6-4.5 4 1.4 5.9L12 16l-5.3 3.1 1.4-5.9-4.5-4 6-.6z\"/>", "chart": "<path d=\"M4 20v-9M10 20V4M16 20v-6M2 20h20\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/>", "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "bolt": "<path d=\"M13 2L4 14h7l-1 8 9-12h-7z\"/>", "flame": "<path d=\"M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z\"/>", "trophy": "<path d=\"M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M10 17h4\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"/>", "medal": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"M8.5 13L7 21l5-3 5 3-1.5-8\"/>", "crown": "<path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/>", "diamond": "<path d=\"M6 3h12l4 6-10 12L2 9zM2 9h20\"/>", "sprout": "<path d=\"M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z\"/>"};
 const ic=(n,s=20)=>`<svg class="i" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
+IC.play='<rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>';IC.arrow='<path d="M5 12h14M13 6l6 6-6 6"/>';
+// MARK's songs: add img:'/covers/xxx.jpg' (any image path) and the real Spotify link as url
+const SONGS = [
+  { t: '1999', img: '', url: 'https://open.spotify.com/search/MARK%201999' },
+  { t: 'My Friend', img: '', url: 'https://open.spotify.com/search/MARK%20My%20Friend' },
+  { t: 'Golden Hour', img: '', url: 'https://open.spotify.com/search/MARK%20Golden%20Hour' },
+  { t: 'Child', img: '', url: 'https://open.spotify.com/search/MARK%20Child' }];
+const HUB_PF = [
+  { n: 'Spotify', i: 'music', url: 'https://open.spotify.com' },
+  { n: 'YouTube', i: 'play', url: 'https://music.youtube.com' },
+  { n: 'Apple Music', i: 'music', url: 'https://music.apple.com' },
+  { n: 'Melon', i: 'music', url: 'https://www.melon.com' }];
 const safeUrl = (u) => (/^https:\/\//.test(u || '') ? esc(u) : '#');
 const DEMO = new URLSearchParams(location.search).has('demo');
 const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10);
@@ -267,7 +291,11 @@ const V = {
       <div class="bar"><i style="width:${pct(u)}%"></i></div><small>${u.nextExp ? t('left', u.nextExp - u.exp, u.level + 1) : t('maxed')}</small></div>
     <div class="grid g4">${st('', 'clock', u.totalHours, t('hours'))}${st('c2', 'music', u.totalStreams.toLocaleString(), t('streams'))}${st('c3', 'bolt', u.exp, t('totalExp'))}${st('c4', 'flame', u.streak, t('streak'))}</div>
     <div class="card"><div class="row"><div class="row" ${rw}><div class="ico">${ic('music', 18)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="tag" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('open')}</a>` : ''}</div></div>
-    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico c2">${ic('radio', 18)}</div><div><b>Stationhead</b><p>${t('join')}</p></div></div><button class="tag" onclick="go('station')">${t('open')}</button></div></div>`;
+    <div class="card"><div class="row"><div class="row" ${rw}><div class="ico c2">${ic('radio', 18)}</div><div><b>Stationhead</b><p>${t('join')}</p></div></div><button class="tag" onclick="go('station')">${t('open')}</button></div></div>
+    <h3 class="sec">MARK's Songs</h3>
+    <div class="songs">${SONGS.map((x) => `<div class="song"><div class="cov">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 22)}</div><b>${esc(x.t)}</b><a class="btn sm" href="${safeUrl(x.url)}" target="_blank" rel="noopener">Stream</a></div>`).join('')}</div>
+    <h3 class="sec">Streaming Platforms</h3>
+    <div class="pfs">${HUB_PF.map((x) => `<a class="pf" href="${safeUrl(x.url)}" target="_blank" rel="noopener"><div class="ico">${ic(x.i, 18)}</div><b>${x.n}</b><span>Stream ${ic('arrow', 12)}</span></a>`).join('')}</div>`;
   },
   async playlist() {
     const [d, s] = await Promise.all([api('today'), api('schedule')]);
