@@ -159,6 +159,45 @@ input:focus,select:focus{border-color:#111;box-shadow:none}
 .pfs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.pfs::-webkit-scrollbar{display:none}
 .pf{flex:0 0 118px;border:var(--bd);border-radius:20px;padding:12px;background:#fff;color:#111;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px}
 .pf b{font-size:13px}.pf span{font-size:12px;font-weight:500;display:inline-flex;gap:4px;align-items:center}
+/* ===== colour accents, docked nav, level journey ===== */
+:root{--butter:#ffe58a;--lav:#e6e1ff;--mint:#d5f1e3;--peach:#ffdccb;--blue2:#4a8ef0;--ok:#157347;--bad:#c4372d}
+svg[data-n=clock],svg[data-n=headphones]{--ic:#2447d6}
+svg[data-n=music]{--ic:#7a5af8}
+svg[data-n=bolt],svg[data-n=medal],svg[data-n=spark],svg[data-n=crown],svg[data-n=trophy]{--ic:#e08a00}
+svg[data-n=flame]{--ic:#ef5b3f}
+svg[data-n=radio],svg[data-n=sprout]{--ic:#12946c}
+svg[data-n=diamond]{--ic:#2aa4d8}
+.ico svg,.ach span svg,.pill svg{color:var(--ic,#111)}
+.ico{background:#fff1b8}.ico.c2{background:var(--lav)}.ico.c3{background:var(--mint)}.ico.c4{background:var(--peach)}
+.ach span{background:#fff1b8}.ach .lock span{background:#f2f2f3}.ach .lock span svg{color:#a8a9b0}
+.av{background:#ffe58a;filter:none}
+header h1 .chip{box-shadow:inset 0 -9px 0 #ffe58a}
+.tag{background:#eef1ff;color:#2447d6;border:1px solid #2447d622}
+.tag.ok{background:#d9f3e5;color:#157347;border:1px solid #15734733}
+.tag.bad{background:#fde0e6;color:#b3261e;border:1px solid #b3261e33}
+.bar i{background:linear-gradient(90deg,#4a8ef0,#7a5af8)}.hero .bar i{background:#ffe58a}
+.chart i{background:#cfd9f7}.chart .hi i{background:#4a8ef0}
+.sec::before{background:#4a6cf0}
+a{color:#2447d6}
+nav{bottom:0;width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+nav .on{background:var(--butter);color:#111}
+main{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+.lvgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px 2px}
+.lvc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 5px;border-radius:16px;border:1.25px solid transparent}
+.lvc b{font-size:11px;font-weight:600}
+.lvc.cur{background:#ffe58a;border-color:#111}
+.lvc.lock b{color:#9a9ca5}
+.lvq{text-align:center;color:#2447d6;font-weight:600;margin:10px 0 0;font-size:13px}
+/* ===== platforms card ===== */
+.pfc{padding:12px}
+.sec.nob::before{display:none}.sec svg{color:#4a6cf0}
+.pfc .sec{margin:0}
+.pfs{margin-top:10px}
+.pf{flex:0 0 108px;padding:12px 6px 10px;gap:4px;border-radius:18px}
+.pf em{font-style:normal;font-size:9.5px;color:#6b7080;line-height:1.2;white-space:nowrap}
+.pf span{font-size:11px;color:#6b7080;margin-top:4px}
+.pfc.all .pfs{flex-wrap:wrap;overflow:visible}
+.pfc.all .pf{flex:1 0 calc(33.33% - 7px)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -177,7 +216,7 @@ input:focus,select:focus{border-color:#111;box-shadow:none}
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const IC={"home": "<path d=\"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/>", "music": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>", "radio": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"12\" rx=\"3\"/><path d=\"M7 8l10-5\"/><circle cx=\"9\" cy=\"14\" r=\"2.5\"/><path d=\"M15 12h3M15 15h3\"/>", "spark": "<path d=\"M12 3l2.4 5.6 6 .6-4.5 4 1.4 5.9L12 16l-5.3 3.1 1.4-5.9-4.5-4 6-.6z\"/>", "chart": "<path d=\"M4 20v-9M10 20V4M16 20v-6M2 20h20\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/>", "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "bolt": "<path d=\"M13 2L4 14h7l-1 8 9-12h-7z\"/>", "flame": "<path d=\"M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z\"/>", "trophy": "<path d=\"M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M10 17h4\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"/>", "medal": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"M8.5 13L7 21l5-3 5 3-1.5-8\"/>", "crown": "<path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/>", "diamond": "<path d=\"M6 3h12l4 6-10 12L2 9zM2 9h20\"/>", "sprout": "<path d=\"M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z\"/>"};
-const ic=(n,s=20)=>`<svg class="i" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
+const ic=(n,s=20)=>`<svg class="i" data-n="${n}" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
 IC.play='<rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>';IC.arrow='<path d="M5 12h14M13 6l6 6-6 6"/>';
 // MARK's songs: add img:'/covers/xxx.jpg' (any image path) and the real Spotify link as url
 const SONGS = [
@@ -185,11 +224,25 @@ const SONGS = [
   { t: 'My Friend', img: '', url: 'https://open.spotify.com/search/MARK%20My%20Friend' },
   { t: 'Golden Hour', img: '', url: 'https://open.spotify.com/search/MARK%20Golden%20Hour' },
   { t: 'Child', img: '', url: 'https://open.spotify.com/search/MARK%20Child' }];
+const PF_LOGO = {"sp": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#1db954\"/><path d=\"M10 15c7-2 14-1.5 20 1.5M11.5 21c6-1.6 12-1 17 1.5M13 26.5c5-1.2 9.5-.8 13.5 1.2\" stroke=\"#fff\" stroke-width=\"2.6\" stroke-linecap=\"round\" fill=\"none\"/>", "yt": "<rect x=\"3\" y=\"8\" width=\"34\" height=\"24\" rx=\"7\" fill=\"#e53935\"/><path d=\"M16 14l10 6-10 6z\" fill=\"#fff\"/>", "ap": "<rect x=\"3\" y=\"3\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fa4b5f\"/><path d=\"M16 27V13l11-2v13\" stroke=\"#fff\" stroke-width=\"2.4\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"13.5\" cy=\"27\" r=\"3\" fill=\"#fff\"/><circle cx=\"24.5\" cy=\"24\" r=\"3\" fill=\"#fff\"/>", "me": "<circle cx=\"18\" cy=\"23\" r=\"12\" fill=\"#00cd3c\"/><circle cx=\"18\" cy=\"23\" r=\"5\" fill=\"#fff\"/><circle cx=\"32\" cy=\"9\" r=\"4.5\" fill=\"#00cd3c\"/>", "ge": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#3b9cf5\"/><text x=\"20\" y=\"28\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"800\" fill=\"#fff\" font-family=\"Poppins,sans-serif\">g</text>", "bu": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#f05a3c\"/><text x=\"20\" y=\"28\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"800\" fill=\"#fff\" font-family=\"Poppins,sans-serif\">b</text>"};
 const HUB_PF = [
-  { n: 'Spotify', i: 'music', url: 'https://open.spotify.com' },
-  { n: 'YouTube', i: 'play', url: 'https://music.youtube.com' },
-  { n: 'Apple Music', i: 'music', url: 'https://music.apple.com' },
-  { n: 'Melon', i: 'music', url: 'https://www.melon.com' }];
+  { n: 'Spotify', l: 'sp', url: 'https://open.spotify.com' },
+  { n: 'YouTube', l: 'yt', url: 'https://music.youtube.com' },
+  { n: 'Apple Music', l: 'ap', url: 'https://music.apple.com' },
+  { n: 'Melon', l: 'me', kr: 1, url: 'https://www.melon.com' },
+  { n: 'Genie', l: 'ge', kr: 1, url: 'https://www.genie.co.kr' },
+  { n: 'Bugs', l: 'bu', kr: 1, url: 'https://music.bugs.co.kr' }];
+const LVG = ['<ellipse cx="12" cy="15" rx="5" ry="4"/><circle cx="6" cy="9.5" r="2"/><circle cx="10" cy="6.5" r="2"/><circle cx="14" cy="6.5" r="2"/><circle cx="18" cy="9.5" r="2"/>', IC.headphones, IC.bolt, IC.music,
+  '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>', IC.flame,
+  '<path d="M3 10v4h4l6 4V6L7 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>',
+  '<rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="9" width="4" height="11" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/>', IC.crown, IC.crown];
+const LVC = ['#c9d6ff', '#d5d1ff', '#ffe58a', '#c9ecff', '#ffd7a8', '#ffc9bd', '#c5efd9', '#d5d1ff', '#ffe58a', '#ffd1e0'];
+const LVF = [1, 0, 1, 0, 0, 1, 1, 1, 1, 1];
+const lvBadge = (n, st = 'lock', sz = 48) => {
+  const on = st !== 'lock', ring = on ? '#14161c' : '#b3b5bc';
+  return `<svg viewBox="0 0 64 64" width="${sz}" height="${sz}" aria-hidden="true">${n === 10 ? `<path d="M15 20L9 8l13 7zM49 20l6-12-13 7z" fill="${on ? '#ffe58a' : '#ececee'}" stroke="${ring}" stroke-width="2.5" stroke-linejoin="round"/>` : ''}<circle cx="32" cy="30" r="22" fill="${on ? LVC[n - 1] : '#efeff2'}" stroke="${ring}" stroke-width="2.5"/><path d="M19 25a14 14 0 0 1 8-9" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".85"/><g transform="translate(19 17) scale(1.08)" fill="${LVF[n - 1] ? (on ? '#fff' : '#fff') : 'none'}" stroke="${ring}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${LVG[n - 1]}</g><rect x="23" y="47" width="18" height="11" rx="5.5" fill="#fff" stroke="${ring}" stroke-width="2"/><text x="32" y="55.6" text-anchor="middle" font-size="8" font-weight="700" fill="${ring}" font-family="Poppins,sans-serif">${n}</text></svg>`;
+};
+const journey = (lv) => `<h3 class="sec">Level Journey</h3><div class="card"><div class="lvgrid">${Array.from({ length: 10 }, (_, i) => { const n = i + 1, st = n === lv ? 'cur' : n < lv ? 'done' : 'lock'; return `<div class="lvc ${st}">${lvBadge(n, st, 46)}<b>LV.${n}</b></div>`; }).join('')}</div><p class="lvq">From little cub to chart king</p></div>`;
 const safeUrl = (u) => (/^https:\/\//.test(u || '') ? esc(u) : '#');
 const DEMO = new URLSearchParams(location.search).has('demo');
 const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10);
@@ -287,15 +340,15 @@ const V = {
     const st = (c, i, n, l) => `<div class="stat"><div class="ico ${c}">${ic(i, 18)}</div><div class="n">${n}</div><div class="l">${l}</div></div>`;
     const rw = 'style="justify-content:flex-start;gap:12px"';
     return `<p class="sub" style="margin:0 0 2px;font-size:12px">${esc(fmtDate(d.date))}</p><h2 style="font-size:22px;margin:0 0 10px">${t('welcome')}</h2>
-    <div class="card hero"><div class="row"><div class="big">LV.${u.level} <span class="nm">${esc(lvName(u.level))}</span></div><small>${u.exp} / ${u.nextExp ?? '—'} EXP</small></div>
+    <div class="card hero"><div class="row"><div class="row" style="justify-content:flex-start;gap:10px">${lvBadge(u.level, 'cur', 44)}<div class="big">LV.${u.level} <span class="nm">${esc(lvName(u.level))}</span></div></div><small>${u.exp} / ${u.nextExp ?? '—'} EXP</small></div>
       <div class="bar"><i style="width:${pct(u)}%"></i></div><small>${u.nextExp ? t('left', u.nextExp - u.exp, u.level + 1) : t('maxed')}</small></div>
     <div class="grid g4">${st('', 'clock', u.totalHours, t('hours'))}${st('c2', 'music', u.totalStreams.toLocaleString(), t('streams'))}${st('c3', 'bolt', u.exp, t('totalExp'))}${st('c4', 'flame', u.streak, t('streak'))}</div>
     <div class="card"><div class="row"><div class="row" ${rw}><div class="ico">${ic('music', 18)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="tag" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('open')}</a>` : ''}</div></div>
     <div class="card"><div class="row"><div class="row" ${rw}><div class="ico c2">${ic('radio', 18)}</div><div><b>Stationhead</b><p>${t('join')}</p></div></div><button class="tag" onclick="go('station')">${t('open')}</button></div></div>
     <h3 class="sec">MARK's Songs</h3>
     <div class="songs">${SONGS.map((x) => `<div class="song"><div class="cov">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 22)}</div><b>${esc(x.t)}</b><a class="btn sm" href="${safeUrl(x.url)}" target="_blank" rel="noopener">Stream</a></div>`).join('')}</div>
-    <h3 class="sec">Streaming Platforms</h3>
-    <div class="pfs">${HUB_PF.map((x) => `<a class="pf" href="${safeUrl(x.url)}" target="_blank" rel="noopener"><div class="ico">${ic(x.i, 18)}</div><b>${x.n}</b><span>Stream ${ic('arrow', 12)}</span></a>`).join('')}</div>`;
+    <div class="card pfc"><div class="row"><h3 class="sec nob">${ic('music', 20)} Streaming Platforms</h3><button class="tag" onclick="this.closest('.pfc').classList.toggle('all')">View all ${ic('arrow', 12)}</button></div>
+    <div class="pfs">${HUB_PF.map((x) => `<a class="pf" href="${safeUrl(x.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">${PF_LOGO[x.l]}</svg><b>${x.n}</b><em>${x.kr ? 'KR Digital Chart' : '&nbsp;'}</em><span>Stream ${ic('arrow', 12)}</span></a>`).join('')}</div></div>`;
   },
   async playlist() {
     const [d, s] = await Promise.all([api('today'), api('schedule')]);
@@ -345,6 +398,7 @@ const V = {
     const m = await api('me'); const u = (S.user = m.user);
     return `<div class="av">${esc(u.avatar)}</div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
+    ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
