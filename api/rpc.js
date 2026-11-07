@@ -238,6 +238,17 @@ const A = {
       .map((x, i) => ({ rank: i + 1, username: String(x.username), avatar: x.avatar, exp: x.exp, level: levelOf(x.exp) }));
     return { items };
   },
+  async changePin({ oldPin, newPin }, ctx) {
+    const id = ctx.need();
+    await limit(`ss:rl:pin:${id}`, 10, 3600);
+    const rec = await redis.hget('users', id);
+    if (!rec) fail('User not found', 404);
+    await checkPin(rec, oldPin);
+    if (!/^\d{4}$/.test(String(newPin || ''))) fail('PIN must be 4 digits');
+    const salt = crypto.randomBytes(16).toString('hex');
+    await redis.hset('users', { [id]: { ...rec, salt, hash: hashPin(newPin, salt), updated: Date.now() } });
+    return { ok: true };
+  },
   async setPublic({ value }, ctx) {
     const id = ctx.need();
     await redis.hset(`ss:user:${id}`, { public: value ? 1 : 0 });
