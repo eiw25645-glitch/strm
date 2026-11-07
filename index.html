@@ -640,10 +640,10 @@ nav .on{width:46px;height:46px;margin:0;background:var(--y);color:var(--on)}
 html[data-theme=dark] nav{background:#1d1c21}
 html[data-theme=dark] nav button{color:#a6a5ad}
 html[data-theme=dark] nav .on{color:#1d1c21}
-html[data-theme=light] nav{background:#fff!important;border:0!important;border-top:1px solid #c9ced6!important;border-radius:0!important}
+html[data-theme=light] nav{background:#fff!important;border:1px solid #d6dae1!important;border-bottom:0!important}
 html[data-theme=light] nav button{background:transparent!important;color:#6b6a73!important}
 html[data-theme=light] nav .on{background:#fae469!important;color:#1d1c21!important}
-html[data-theme=dark] nav{border-top:1px solid #34333a!important}
+html[data-theme=dark] nav{border:1px solid #34333a!important;border-bottom:0!important}
 /* ===== soft, quick press + page fade ===== */
 .btn,.pill,.tag,.go,.pb,.tr,.pf,.ytv,.seg button,nav button,.card[role=button],.card.feat,.lvc,.stat{transition:transform .24s cubic-bezier(.2,.8,.2,1),background-color .2s ease,filter .2s ease}
 .pr{transform:scale(.96)!important;filter:none!important;transition:transform .12s ease-out!important}
@@ -659,6 +659,24 @@ html[data-theme=light]{--bg:#fff}
 html,body,body.idpg,body.rkpg,body.nothome,body.login{background:var(--bg)!important;background-image:none!important}
 #app,main,header{background:transparent!important}
 html[data-theme=dark] nav{background:#000!important}
+
+/* ===== restored: labelled dock (rounded top, wide yellow active) ===== */
+nav{bottom:0;border-radius:22px 22px 0 0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:4px;justify-content:space-between}
+nav button{flex:1 1 0;width:auto;height:auto;min-width:0;border-radius:18px;padding:8px 0 7px;font:600 11px/1.2 "Rubik","Anuphan",sans-serif;gap:3px;flex-direction:column;align-items:center;background:transparent}
+nav .on{width:auto;height:auto;margin:0;background:var(--y);color:var(--on)}
+/* ===== restored: centered profile header ===== */
+.phd{display:flex;flex-direction:column;align-items:center;text-align:center;margin:6px 0 16px}
+.phd .pfa{width:112px;height:112px;border:0;padding:0;background:var(--y);margin:0 auto 12px}
+.phd .pfp{background:var(--y);font-size:60px}
+.pfn2{font-size:22px;font-weight:800;color:var(--tx);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pfsub{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;color:var(--mu);font-size:14px}
+.lvt{display:inline-block;background:var(--lkbg);color:var(--lk);border:1px solid var(--lkbd);border-radius:99px;padding:4px 12px;font-weight:700;font-size:13px}
+.more{margin-top:14px;flex-wrap:wrap}
+
+/* ===== snappy: no page fade, short press transitions ===== */
+.fi{animation:none!important}
+.btn,.pill,.tag,.go,.pb,.tr,.pf,.ytv,.seg button,nav button,.card[role=button],.card.feat,.lvc,.stat{transition:transform .1s ease-out,background-color .1s ease,filter .1s ease}
+.pr{transition:transform .06s ease-out!important}
 </style>
 </head>
 <body>
@@ -763,9 +781,16 @@ const TTL = { today: 60e3, schedule: 60e3, ranking: 30e3, me: 20e3, missions: 20
 const READ = new Set(['me', 'today', 'schedule', 'missions', 'stats', 'ranking', 'a_pending', 'login', 'register']);
 let pending = 0;
 const bar = (d) => { pending += d; $('#bar').classList.toggle('on', pending > 0); };
-async function api(action, body = {}) {
+const INF = {};
+function api(action, body = {}) {
   const ttl = TTL[action];
-  if (ttl && MEM[action] && Date.now() - MEM[action].t < ttl) return MEM[action].v;
+  if (ttl && MEM[action] && Date.now() - MEM[action].t < ttl) return Promise.resolve(MEM[action].v);
+  if (ttl && INF[action]) return INF[action];
+  const p = apiRun(action, body, ttl);
+  if (ttl) { INF[action] = p; p.then(() => delete INF[action], () => delete INF[action]); }
+  return p;
+}
+async function apiRun(action, body, ttl) {
   bar(1);
   try {
     const v = await rawApi(action, body);
@@ -794,7 +819,7 @@ const lock = (el) => { if (el) { el.dataset.t = el.textContent; el.disabled = tr
 function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; clearHC(); for (const k in MEM) delete MEM[k]; render(); }
 
 /* ---------- views ---------- */
-const TABS = [['home', 'home'], ['playlist', 'music'], ['missions', 'spark'], ['stats', 'chart'], ['ranking', 'trophy'], ['profile', 'user']];
+const TABS = [['home', 'home'], ['playlist', 'music'], ['missions', 'spark'], ['stats', 'chart'], ['profile', 'user']];
 const LV_NAMES = [['Newbie', 'มือใหม่'], ['Fan', 'แฟนคลับ'], ['Voter', 'นักโหวต'], ['Dedicated', 'ตัวจริง'], ['Super Fan', 'ซูเปอร์แฟน'], ['Star Voter', 'สตาร์โหวต'], ['Elite', 'อีลีท'], ['Master', 'มาสเตอร์'], ['Legend', 'ตำนาน'], ['Hall of Fame', 'หอเกียรติยศ']];
 const LV_ICON = ['🌱', '🎧', '📣', '⭐', '💫', '🌟', '💎', '👑', '🔥', '🏆'];
 const lvName = (n) => { const i = Math.min(Math.max(n, 1), 10) - 1; return LV_NAMES[i][lang === 'th' ? 1 : 0]; };
@@ -889,6 +914,21 @@ window.saveId = () => {
   }, 'image/png');
 };
 
+const eventCards = () => {
+  const row = (a, b) => `<div><span>${a}</span><span class="tag">${b}</span></div>`;
+  const step = (n, a, extra = '') => `<div><span>${n} · ${a}</span>${extra}</div>`;
+  return `<h3 class="sec">Support Stream “Windmill”</h3>
+    <div class="card"><h3>🐯♥️ ทีมสตรีมหลังบ้าน 5 คน</h3><div class="list">${row('LP vinyl (ถ้าหาได้)', '1 คน')}${row('Day dream kit', '1 คน')}${row('Photo Art Book', '1 คน')}${row('Pocket', '2 คน')}</div></div>
+    <div class="card"><h3>💬 วิธีเข้าร่วมกิจกรรม</h3><p>ให้ลงบันทึกการสตรีมรายวัน</p><div class="list">${step('1', 'check in สตรีมต่อเนื่องทุกวัน (เช็คจากระบบพี่เหมย)', '<span class="tag bad">กำลังพัฒนา</span>')}${step('2', 'เช็คอินวันที่สตรีม')}${step('3', 'กรอกจำนวนที่สตรีมต่อวัน')}</div>
+      <p style="margin-top:12px">กิจกรรมนี้จะสุ่มผู้โชคดีโดยนับจาก <b>5 ไอดี = 1 สิทธิ์</b></p>
+      <p style="margin-top:8px">ผู้เข้าร่วมต้องลงทะเบียนในเว็บของแอดมินเพื่อเช็คอินรายวันเท่านั้น โดยผู้เช็คอินจะถือว่าเข้าร่วมกิจกรรมโดยอัตโนมัติ</p>
+      <button class="btn soft" onclick="go('stats')">กรอกยอดสตรีม</button></div>
+    <div class="card"><h3>🎀 ประกาศ</h3><div class="list"><div><span>อัพเดทจำนวนสิทธิ์</span><span class="tag">หลังจบกิจกรรม 3 วัน</span></div><div><span>ประกาศผู้โชคดี</span><span class="tag">หลังจบกิจกรรม 7 วัน</span></div></div>
+      <p style="margin-top:10px">หากพบว่ามีการกรอกยอดเข้ามาเกินความเป็นจริง ขออนุญาตตัดสิทธิ์โดยไม่แจ้งให้ทราบ</p><p style="margin-top:6px">คำตัดสินจากทางบ้านถือเป็นที่สิ้นสุด</p></div>
+    <div class="card"><h3>🐯🎧 Markfs Spotify</h3><div class="list">${row('Pocket', '3 คน')}</div>
+      <p style="margin-top:10px">แคปหน้า listen stat วันที่ 4-6/12/26</p><p style="margin-top:6px">Top song : เพลงใหม่ของมาร์ค</p><p style="margin-top:6px">ยอดสตรีมขั้นต่ำ 82 plays</p></div>`;
+};
+
 const V = {
   async home() {
     const [m, d, yv] = await Promise.all([api('me'), api('today'), getViews()]);
@@ -932,7 +972,8 @@ const V = {
     ${mc(t('checkin'), t('checkinD'), 10, m.checkin ? done : `<button class="btn soft" onclick="doCheckin(this)">${t('doCheckin')}</button>`)}
     ${mc(t('plM'), t('plD'), 20, m.playlist.done ? done : `<button class="btn soft" ${m.playlist.available ? '' : 'disabled'} onclick="doAct('claimPlaylist',this)">${t('claim')}</button>`)}
     ${mc(t('wkM'), t('wkD'), 100, `<div class="bar"><i style="width:${Math.min(100, (w.days / w.target) * 100)}%"></i></div><p>${w.days} / ${w.target} ${t('days')}</p>${w.claimed ? done : `<button class="btn soft" ${w.days >= w.target ? '' : 'disabled'} onclick="doAct('claimWeekly',this)">${t('claim')}</button>`}`)}
-    ${mc(t('spM'), esc(m.special || t('noSpecial')), 200, '')}`;
+    ${mc(t('spM'), esc(m.special || t('noSpecial')), 200, '')}
+    ${eventCards()}`;
   },
   async stats() {
     const s = await api('stats');
@@ -954,16 +995,15 @@ const V = {
   async profile() {
     const m = await api('me'); const u = (S.user = m.user);
     const pic = getPic(u);
-    return `<div class="card pfh"><div class="pfa" role="button" tabindex="0" onclick="pickPic()" aria-label="Change photo"><span class="pfp">${pic ? `<img class="avimg" src="${pic}" alt="">` : esc(u.avatar)}</span><i class="cam">+</i></div>
-      <div class="pfi"><b>@${esc(String(u.username).replace(/^@/, ''))}</b><span class="lvp"><span class="lvi">${lvBadge(u.level, 'cur', 26)}</span>LV.${u.level} · ${esc(lvName(u.level))}</span></div></div>
-    <button class="btn idbtn" onclick="go('idcard')">${ic('star', 16)} ${t('cert')}</button>
+    return `<div class="phd"><div class="pfa" role="button" tabindex="0" onclick="pickPic()" aria-label="Change photo"><span class="pfp">${pic ? `<img class="avimg" src="${pic}" alt="">` : esc(u.avatar)}</span><i class="cam">+</i></div>
+      <b class="pfn2">${esc(String(u.username).replace(/^@/, ''))}</b><div class="pfsub"><span>MOLO2 Streamer •</span><span class="lvt">LV.${u.level} · ${esc(lvName(u.level))}</span></div></div>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('theme')}</span><button class="tag" style="border:0" onclick="toggleTheme()">${ic(theme === 'light' ? 'sun' : 'moon', 14)} ${theme === 'light' ? t('light') : t('dark')}</button></div><div><span>${t('language')}</span><button class="tag" style="border:0" onclick="toggleLang()">${lang === 'th' ? 'ไทย' : 'English'}</button></div><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
-    <div class="more">${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
+    <div class="more"><button class="pill" onclick="go('ranking')">${ic('trophy', 14)} ${t('ranking')}</button><button class="pill" onclick="go('idcard')">${ic('star', 14)} ${t('cert')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
   },
   async idcard() {
     if (!S.user) S.user = (await api('me')).user;
@@ -1022,15 +1062,17 @@ const HC = (() => { try { return JSON.parse(sessionStorage.getItem('hc') || '{}'
 let warmed = false, shown = '', gen = 0;
 const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; try { sessionStorage.removeItem('hc'); } catch {} };
 const SKEL = '<div class="skl"></div><div class="skl"></div><div class="skl s"></div>';
+const PFQ = {};
+function prefetch(k) {
+  if ((!S.token && !DEMO) || !V[k]) return;
+  const key = k + lang; if (HC[key] || PFQ[key]) return;
+  PFQ[key] = 1;
+  V[k]().then((h) => { if (!HC[key]) HC[key] = h; }).catch(() => {}).finally(() => { delete PFQ[key]; });
+}
 function warm() {
   if (warmed || DEMO || !S.token) return;
   warmed = true;
-  setTimeout(async () => {
-    for (const k of ['playlist', 'missions', 'stats', 'station', 'ranking', 'profile']) {
-      const key = k + lang;
-      try { if (!HC[key] && S.token) HC[key] = await V[k](); } catch {}
-    }
-  }, 200);
+  setTimeout(() => ['playlist', 'missions', 'stats', 'station', 'ranking', 'profile'].forEach(prefetch), 30);
 }
 async function render(force) {
   document.documentElement.lang = lang;
@@ -1043,7 +1085,7 @@ async function render(force) {
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
   if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
-  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['idcard', 'admin'].includes(S.tab))));
+  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'idcard', 'admin'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; main.classList.remove('fi'); void main.offsetWidth; main.classList.add('fi'); }
   let html;
@@ -1071,10 +1113,11 @@ window.toggleLang = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.set
   const SEL = 'nav button,button,a[href],[role=button],.btn,.pill,.tag,.tr,.pf,.ytv,.go,.seg button,.card.feat';
   document.addEventListener('touchstart', () => {}, { passive: true });
   document.addEventListener('pointerdown', (e) => {
+    const nb = e.target.closest && e.target.closest('nav button'); if (nb && nb.dataset.k) prefetch(nb.dataset.k);
     const el = e.target.closest && e.target.closest(SEL);
     if (!el || el.disabled) return;
     el.classList.add('pr'); el._t = Date.now();
-    const off = () => { const w = Math.max(0, 140 - (Date.now() - el._t)); setTimeout(() => el.classList.remove('pr'), w); };
+    const off = () => { const w = Math.max(0, 80 - (Date.now() - el._t)); setTimeout(() => el.classList.remove('pr'), w); };
     ['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => el.addEventListener(n, off, { once: true }));
   }, { passive: true });
 })();
