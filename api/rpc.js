@@ -31,15 +31,47 @@ const SESS_TTL = 60 * 60 * 24 * 180, MAX_FAILS = 5, LOCK_SEC = 15 * 60;
 const hashPin = (pin, salt) => crypto.scryptSync(String(pin), salt + PEPPER, 32).toString('hex');
 const same = (x, y) => { const a = Buffer.from(String(x)), b = Buffer.from(String(y)); return a.length === b.length && crypto.timingSafeEqual(a, b); };
 const isAdminAcc = (id) => ADMINS.includes(lc(id));
-async function newSession(id) {
+// ---- device id: random id the browser keeps in localStorage; sent as x-device on every request ----
+const DEV_RE = /^[a-f0-9]{32}$/;
+const devOf = (x) => (DEV_RE.test(String(x || '')) ? String(x) : '');
+const BLOCKED_MSG = 'This device is blocked. Please contact the admin. / อุปกรณ์นี้ถูกบล็อก กรุณาติดต่อแอดมิน';
+async function checkDevice(ctx) {
+  if (!ctx.dev) fail('Please refresh the page and try again. / กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง');
+  if (await redis.sismember('ss:bandev', ctx.dev)) fail(BLOCKED_MSG, 403);
+}
+async function newSession(id, dev) {
   const token = crypto.randomBytes(24).toString('hex');
-  await redis.set('sess:' + token, 'a|' + id, { ex: SESS_TTL });
+  await redis.set('sess:' + token, 'a|' + id + (dev ? '|' + dev : ''), { ex: SESS_TTL });
+  await redis.sadd('ss:usess:' + id, token);
+  await redis.expire('ss:usess:' + id, SESS_TTL);
+  if (dev) await redis.sadd('ss:devices:' + id, dev);
   return token;
 }
-async function sessionAcc(token) {
+async function killSessions(id) {
+  const toks = (await redis.smembers('ss:usess:' + id)).map(String);
+  if (toks.length) await redis.del(...toks.map((x) => 'sess:' + x));
+  await redis.del('ss:usess:' + id);
+}
+// returns { id, dev } or null. A session on a blocked device is dropped on the spot.
+async function sessionOf(token, devHdr) {
   if (!/^[a-f0-9]{48}$/.test(String(token || ''))) return null;
-  const v = await redis.get('sess:' + token);
-  return typeof v === 'string' && v.startsWith('a|') ? v.slice(2) : null;
+  const dev = devOf(devHdr);
+  const p = redis.pipeline();
+  p.get('sess:' + token);
+  if (dev) p.sismember('ss:bandev', dev);
+  const [v, banned] = await p.exec();
+  if (typeof v !== 'string' || !v.startsWith('a|')) return null;
+  const [id, sdev] = v.slice(2).split('|');
+  if (Number(banned) === 1 || (sdev && sdev !== dev && (await redis.sismember('ss:bandev', sdev)))) {
+    await redis.del('sess:' + token);
+    return null;
+  }
+  if (!sdev && dev) {   // session made before device tracking: learn the device now
+    await redis.set('sess:' + token, v + '|' + dev, { keepTtl: true });
+    await redis.sadd('ss:devices:' + id, dev);
+    await redis.sadd('ss:usess:' + id, token);
+  }
+  return { id, dev: sdev || dev };
 }
 async function checkPin(u, pin) {
   const id = lc(u.account), k = 'pinfail:' + id;
@@ -52,6 +84,7 @@ async function checkPin(u, pin) {
   if (n === 1 || n >= MAX_FAILS) await redis.expire(k, LOCK_SEC);
   fail(n >= MAX_FAILS ? `Too many attempts. Try again in ${LOCK_SEC / 60} min.` : `Incorrect PIN. ${MAX_FAILS - n} attempt(s) left.`, 401);
 }
+const recView = (r) => (r && r.status === 'ss:pending' ? { ...r, status: 'pending' } : r);
 const okUrl = (u) => typeof u === 'string' && /^https:\/\/[^\s]+$/.test(u) && u.length < 500;
 // Spotify cover via the public oEmbed endpoint (no API key). Returns '' if unavailable.
 async function spCover(url) {
@@ -68,7 +101,7 @@ async function getUser(id) {
   const u = await redis.hgetall(`ss:user:${id}`);
   if (u && u.username) return u;
   const acc = await redis.hget('users', id);
-  if (!acc) fail('User not found', 404);
+  if (!acc) fail('Account not found. Please log in again.', 401);
   await redis.hset(`ss:user:${id}`, { id, username: acc.account, avatar: AVATARS[Math.floor(Math.random() * AVATARS.length)], exp: 0, level: 1, streak: 0, bestStreak: 0, lastCheckin: '', totalHours: 0, totalStreams: 0, public: 1 });
   await redis.zadd('ss:leaderboard', { score: 0, member: id });
   return getUser(id);
@@ -114,6 +147,7 @@ async function weekDays(id) {
 // ---------- actions ----------
 const A = {
   async register({ username, pin }, ctx) {
+    await checkDevice(ctx);
     await limit(`ss:rl:reg:${ctx.ip}`, 10, 3600);
     const account = cleanAcc(username);
     if (!ACC_RE.test(account)) fail('Enter your Twitter account (letters, numbers, _)');
@@ -121,15 +155,16 @@ const A = {
     const id = lc(account), salt = crypto.randomBytes(16).toString('hex');
     const made = await redis.hsetnx('users', id, { account, salt, hash: hashPin(pin, salt), created: Date.now(), updated: Date.now() });
     if (!made) fail('This account already exists. Please log in.', 409);
-    return { token: await newSession(id), user: view(await getUser(id)) };
+    return { token: await newSession(id, ctx.dev), user: view(await getUser(id)) };
   },
   async login({ username, pin }, ctx) {
+    await checkDevice(ctx);
     await limit(`ss:rl:login:${ctx.ip}`, 30, 600);
     const id = lc(cleanAcc(username));
     const rec = ACC_RE.test(id) ? await redis.hget('users', id) : null;
     if (!rec) fail('Wrong account or PIN', 401);
     await checkPin(rec, pin);
-    return { token: await newSession(id), user: view(await getUser(id)) };
+    return { token: await newSession(id, ctx.dev), user: view(await getUser(id)) };
   },
   async me(_, ctx) {
     const u = await getUser(ctx.need());
@@ -207,10 +242,12 @@ const A = {
     if (!isDate(date) || date > t || date < addDays(t, -7)) fail('Date must be within the last 7 days');
     if (evidence && !okUrl(evidence)) fail('Evidence must be an https link');
     const rid = crypto.randomUUID();
-    const rec = { rid, uid: id, platform, hours, streams, date, evidence: evidence || '', status: 'ss:pending', at: Date.now() };
+    const rec = { rid, uid: id, platform, hours, streams, date, evidence: evidence || '', status: 'pending', at: Date.now() };
     await redis.set(`ss:rec:${rid}`, rec);
     await redis.lpush(`ss:records:${id}`, rid);
     await redis.ltrim(`ss:records:${id}`, 0, 99);
+    await redis.lpush('ss:records:all', rid);       // latest activity of everyone (admin feed)
+    await redis.ltrim('ss:records:all', 0, 299);
     await redis.sadd('ss:pending', rid);
     const dk = `ss:daily:${id}:${date}`;
     await redis.hincrbyfloat(dk, 'hours', hours);
@@ -222,7 +259,7 @@ const A = {
     const u = view(await getUser(id));
     const { hours } = await weekDays(id);
     const rids = await redis.lrange(`ss:records:${id}`, 0, 9);
-    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean) : [];
+    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean).map(recView) : [];
     return { totalHours: u.totalHours, totalStreams: u.totalStreams, week: hours, recent: recs };
   },
   async ranking() {
@@ -278,13 +315,13 @@ const A = {
   async a_pending(_, ctx) {
     ctx.admin();
     const rids = (await redis.smembers('ss:pending')).slice(0, 50);
-    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean) : [];
+    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean).map(recView) : [];
     return { items: recs };
   },
   async a_review({ rid, approve }, ctx) {
     ctx.admin();
     const rec = await redis.get(`ss:rec:${rid}`);
-    if (!rec || rec.status !== 'ss:pending') fail('Record not pending', 409);
+    if (!rec || (rec.status !== 'pending' && rec.status !== 'ss:pending')) fail('Record not pending', 409);
     rec.status = approve ? 'approved' : 'rejected';
     await redis.set(`ss:rec:${rid}`, rec);
     await redis.srem('ss:pending', rid);
@@ -293,6 +330,101 @@ const A = {
       await redis.hincrby(`ss:user:${rec.uid}`, 'totalStreams', rec.streams);
       await addExp(rec.uid, Math.min(100, Math.round(rec.hours * 10)));
     }
+    return { ok: true };
+  },
+
+  // ----- admin: users, history, PIN reset, delete + block device -----
+  async a_users({ q, page }, ctx) {
+    ctx.admin();
+    const ids = (await redis.hkeys('users')).map(String).sort();
+    const s = lc(cleanAcc(q || ''));
+    const hit = s ? ids.filter((i) => i.includes(s)) : ids;
+    const PS = 30, pg = Math.max(0, Math.floor(Number(page) || 0));
+    const slice = hit.slice(pg * PS, pg * PS + PS);
+    let rows = [];
+    if (slice.length) {
+      const p = redis.pipeline();
+      slice.forEach((id) => { p.hmget(`ss:user:${id}`, 'username', 'exp', 'totalHours', 'totalStreams'); p.scard(`ss:devices:${id}`); });
+      rows = await p.exec();
+    }
+    const items = slice.map((id, i) => {
+      const u = rows[i * 2] || {};
+      const exp = Number(u.exp) || 0;
+      return { id, username: String(u.username || id), exp, level: levelOf(exp), totalHours: Number(u.totalHours) || 0, totalStreams: Number(u.totalStreams) || 0, devices: Number(rows[i * 2 + 1]) || 0, isAdmin: isAdminAcc(id) };
+    });
+    return { items, total: hit.length, page: pg, pageSize: PS };
+  },
+  async a_history({ uid }, ctx) {
+    ctx.admin();
+    const id = lc(cleanAcc(uid));
+    if (!ACC_RE.test(id) || !(await redis.hget('users', id))) fail('User not found', 404);
+    const u = view(await getUser(id));
+    const rids = await redis.lrange(`ss:records:${id}`, 0, 99);
+    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean).map(recView) : [];
+    const { hours } = await weekDays(id);
+    const devices = Number(await redis.scard(`ss:devices:${id}`)) || 0;
+    return { user: { ...u, devices }, week: hours, items: recs };
+  },
+  async a_feed(_, ctx) {
+    ctx.admin();
+    const rids = (await redis.lrange('ss:records:all', 0, 59)).map(String);
+    const recs = rids.length ? (await redis.mget(...rids.map((r) => `ss:rec:${r}`))).filter(Boolean).map(recView) : [];
+    return { items: recs };
+  },
+  async a_resetPin({ uid, pin }, ctx) {
+    ctx.admin();
+    const id = lc(cleanAcc(uid));
+    const rec = ACC_RE.test(id) ? await redis.hget('users', id) : null;
+    if (!rec) fail('User not found', 404);
+    let np = String(pin || '').trim();
+    if (np && !/^\d{4}$/.test(np)) fail('PIN must be 4 digits');
+    if (!np) np = String(crypto.randomInt(0, 10000)).padStart(4, '0');
+    const salt = crypto.randomBytes(16).toString('hex');
+    await redis.hset('users', { [id]: { ...rec, salt, hash: hashPin(np, salt), updated: Date.now() } });
+    await redis.del('pinfail:' + id);   // also lifts a "too many attempts" lock
+    await killSessions(id);
+    return { ok: true, pin: np, username: String(rec.account) };
+  },
+  async a_deleteUser({ uid, block }, ctx) {
+    ctx.admin();
+    const id = lc(cleanAcc(uid));
+    if (!ACC_RE.test(id)) fail('Invalid user');
+    if (isAdminAcc(id)) fail('An admin account cannot be deleted', 403);
+    const rec = await redis.hget('users', id);
+    if (!rec) fail('User not found', 404);
+    const devs = (await redis.smembers('ss:devices:' + id)).map(String);
+    const doBlock = block !== false;
+    if (doBlock && devs.length) {
+      const p = redis.pipeline();
+      devs.forEach((d) => { p.sadd('ss:bandev', d); p.hset('ss:bandev:meta', { [d]: { acc: String(rec.account), at: Date.now() } }); });
+      await p.exec();
+    }
+    await killSessions(id);
+    const rids = (await redis.lrange(`ss:records:${id}`, 0, -1)).map(String);
+    const t = today(), wk = weekDates()[0];
+    const p = redis.pipeline();
+    rids.forEach((r) => { p.del(`ss:rec:${r}`); p.srem('ss:pending', r); p.lrem('ss:records:all', 0, r); });
+    for (let i = -62; i <= 1; i++) p.del(`ss:daily:${id}:${addDays(t, i)}`);
+    for (let i = -2; i <= 0; i++) { p.del(`ss:checkin:${id}:${addDays(t, i)}`); p.del(`ss:plclaim:${id}:${addDays(t, i)}`); }
+    p.del(`ss:wk:${id}:${wk}`); p.del(`ss:wk:${id}:${addDays(wk, -7)}`);
+    p.del(`ss:records:${id}`); p.del(`ss:user:${id}`); p.del(`ss:devices:${id}`); p.del('pinfail:' + id);
+    p.zrem('ss:leaderboard', id);
+    p.hdel('users', id);
+    await p.exec();
+    return { ok: true, devices: devs.length, blocked: doBlock ? devs.length : 0 };
+  },
+  async a_bans(_, ctx) {
+    ctx.admin();
+    const devs = (await redis.smembers('ss:bandev')).map(String);
+    const meta = devs.length ? (await redis.hmget('ss:bandev:meta', ...devs)) || {} : {};
+    const items = devs.map((d) => ({ dev: d, short: d.slice(0, 8), acc: (meta[d] && meta[d].acc) || '', at: (meta[d] && meta[d].at) || 0 })).sort((a, b) => b.at - a.at);
+    return { items };
+  },
+  async a_unban({ dev }, ctx) {
+    ctx.admin();
+    if (!DEV_RE.test(String(dev || ''))) fail('Invalid device');
+    await redis.srem('ss:bandev', dev);
+    await redis.hdel('ss:bandev:meta', dev);
     return { ok: true };
   },
 };
@@ -304,9 +436,11 @@ export default async function handler(req, res) {
     const { action, ...body } = req.body || {};
     const fn = Object.prototype.hasOwnProperty.call(A, action) ? A[action] : null;
     if (!fn) fail('Unknown action', 404);
-    const uid = await sessionAcc((req.headers.authorization || '').replace('Bearer ', ''));
+    const sess = await sessionOf((req.headers.authorization || '').replace('Bearer ', ''), req.headers['x-device']);
+    const uid = sess ? sess.id : null;
     const ctx = {
       ip: String(req.headers['x-forwarded-for'] || 'x').split(',')[0].trim(),
+      dev: devOf(req.headers['x-device']),
       need: () => uid || fail('Please log in', 401),
       admin: () => (uid && isAdminAcc(uid)) || fail('Admin only', 403),
     };
