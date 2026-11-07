@@ -85,6 +85,9 @@ async function checkPin(u, pin) {
   fail(n >= MAX_FAILS ? `Too many attempts. Try again in ${LOCK_SEC / 60} min.` : `Incorrect PIN. ${MAX_FAILS - n} attempt(s) left.`, 401);
 }
 const recView = (r) => (r && r.status === 'ss:pending' ? { ...r, status: 'pending' } : r);
+// profile photo: small JPEG thumbnail stored as a data URL (the app sends 128x128, ~5 KB)
+const PIC_MAX = 30000;
+const okPic = (p) => typeof p === 'string' && p.length <= PIC_MAX && /^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(p);
 const okUrl = (u) => typeof u === 'string' && /^https:\/\/[^\s]+$/.test(u) && u.length < 500;
 // Spotify cover via the public oEmbed endpoint (no API key). Returns '' if unavailable.
 async function spCover(url) {
@@ -123,6 +126,7 @@ function view(u) {
     prevExp: LV_AT[level - 1], nextExp: LV_AT[level] ?? null,
     streak: Number(u.streak) || 0, totalHours: Number(u.totalHours) || 0, totalStreams: Number(u.totalStreams) || 0,
     public: u.public !== 0 && u.public !== '0' && u.public !== false, badges,
+    pic: okPic(u.pic) ? u.pic : '',
   };
 }
 async function addExp(id, n) {
@@ -268,11 +272,11 @@ const A = {
     for (let i = 0; i < top.length; i += 2) ids.push([String(top[i]), Number(top[i + 1])]);
     if (!ids.length) return { items: [] };
     const p = redis.pipeline();
-    ids.forEach(([id]) => p.hmget(`ss:user:${id}`, 'username', 'avatar', 'public'));
+    ids.forEach(([id]) => p.hmget(`ss:user:${id}`, 'username', 'avatar', 'public', 'pic'));
     const info = await p.exec();
     const items = ids.map(([id, exp], i) => ({ ...(info[i] || {}), exp }))
       .filter((x) => x.username && x.public !== 0 && x.public !== '0')
-      .map((x, i) => ({ rank: i + 1, username: String(x.username), avatar: x.avatar, exp: x.exp, level: levelOf(x.exp) }));
+      .map((x, i) => ({ rank: i + 1, username: String(x.username), avatar: x.avatar, exp: x.exp, level: levelOf(x.exp), pic: okPic(x.pic) ? x.pic : '' }));
     return { items };
   },
   async changePin({ oldPin, newPin }, ctx) {
@@ -285,6 +289,17 @@ const A = {
     const salt = crypto.randomBytes(16).toString('hex');
     await redis.hset('users', { [id]: { ...rec, salt, hash: hashPin(newPin, salt), updated: Date.now() } });
     return { ok: true };
+  },
+  async setPic({ pic }, ctx) {
+    const id = ctx.need();
+    await limit(`ss:rl:pic:${id}`, 20, 3600);
+    await getUser(id);   // make sure the profile exists first
+    if (!pic) await redis.hdel(`ss:user:${id}`, 'pic');   // empty = remove the photo
+    else {
+      if (!okPic(pic)) fail('Invalid image');
+      await redis.hset(`ss:user:${id}`, { pic });
+    }
+    return { user: view(await getUser(id)) };
   },
   async setPublic({ value }, ctx) {
     const id = ctx.need();
