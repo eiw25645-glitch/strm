@@ -1,7 +1,7 @@
-// Vercel function: GET /api/stats -> { views: { happiest: 123, myfriend: 456, n1999: 789 } }
+// Vercel function: GET /api/stats -> { views: { happiest: 123, myfriend: 456, n1999: 789, child: 12 } }
 // Setup: add YT_API_KEY (YouTube Data API v3 key) in Vercel > Settings > Environment Variables,
-// then paste each song's YouTube video ID below. Songs left empty are skipped.
-const YT = { happiest: '', myfriend: '', n1999: '' };
+// then paste each song's YouTube video ID below (the part after v= or youtu.be/). Songs left empty are skipped.
+const YT = { happiest: '7aIOY0UZXTA', myfriend: '', n1999: '', child: '' };
 
 export default async function handler(req, res) {
   const key = process.env.YT_API_KEY;
