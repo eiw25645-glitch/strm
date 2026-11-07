@@ -625,6 +625,40 @@ nav .on{width:52px;height:52px}
 .lr{border-radius:22px;border:1px solid var(--ln);padding:10px 16px 10px 14px}
 .pts svg{color:var(--lk)}
 .pod{margin-top:6px}
+
+/* ===== leaderboard: solid theme background, no pattern, no gradients ===== */
+body.rkpg{background:var(--bg)!important}
+.lb{background:none!important}
+.blk{background:var(--y)!important}
+.p1 .blk{background:var(--b)!important}
+.p3 .blk{background:var(--y)!important;opacity:.7}
+
+/* ===== dock nav: flush to the bottom edge, flat, no float ===== */
+nav{bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;border:0;border-radius:0;box-shadow:none;margin:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:0;justify-content:space-around;background:var(--nav)}
+nav button{flex:0 0 46px;width:46px;height:46px;border-radius:16px;background:transparent;color:var(--mu)}
+nav .on{width:46px;height:46px;margin:0;background:var(--y);color:var(--on)}
+html[data-theme=dark] nav{background:#1d1c21}
+html[data-theme=dark] nav button{color:#a6a5ad}
+html[data-theme=dark] nav .on{color:#1d1c21}
+html[data-theme=light] nav{background:#fff!important;border:0!important;border-top:1px solid #c9ced6!important;border-radius:0!important}
+html[data-theme=light] nav button{background:transparent!important;color:#6b6a73!important}
+html[data-theme=light] nav .on{background:#fae469!important;color:#1d1c21!important}
+html[data-theme=dark] nav{border-top:1px solid #34333a!important}
+/* ===== soft, quick press + page fade ===== */
+.btn,.pill,.tag,.go,.pb,.tr,.pf,.ytv,.seg button,nav button,.card[role=button],.card.feat,.lvc,.stat{transition:transform .24s cubic-bezier(.2,.8,.2,1),background-color .2s ease,filter .2s ease}
+.pr{transform:scale(.96)!important;filter:none!important;transition:transform .12s ease-out!important}
+nav button.pr{transform:scale(.9)!important}
+.tr.pr,.card.pr{transform:scale(.985)!important}
+.btn:active,.pill:active,button.tag:active,a.tag:active,.go:active,.seg button:active,.pf:active,nav button:active{filter:none}
+.fi{animation:fi .2s ease-out}
+@keyframes fi{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ===== solid page background: white (light) / black (dark), no gradient, no tint ===== */
+html[data-theme=dark]{--bg:#000}
+html[data-theme=light]{--bg:#fff}
+html,body,body.idpg,body.rkpg,body.nothome,body.login{background:var(--bg)!important;background-image:none!important}
+#app,main,header{background:transparent!important}
+html[data-theme=dark] nav{background:#000!important}
 </style>
 </head>
 <body>
@@ -632,7 +666,7 @@ nav .on{width:52px;height:52px}
 <div id="app">
   <header>
     <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM HUB</em></span></h1></div>
-    <button class="pill" id="theme" type="button"></button><button class="pill" id="lang"></button>
+    
   </header>
   <main id="main"></main>
   <nav id="nav" hidden></nav>
@@ -683,7 +717,7 @@ const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 1
 
 /* ---------- i18n ---------- */
 const T = {
-  en: { cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
+  en: { theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
     welcome: 'Welcome back!', journey: 'Your streaming journey', left: (n, l) => `${n} EXP left to reach Level ${l}`, maxed: 'Max level reached',
     hours: 'Streaming hours', streams: 'Reported streams', totalExp: 'Total EXP', streak: 'Current streak', days: 'days', todayPl: 'Today’s playlist', open: 'Open', none: 'Not set yet',
     openSpotify: 'Open Spotify', schedule: 'Playlist schedule', today: 'Today', upcoming: 'Upcoming', notSet: 'Not set',
@@ -696,7 +730,7 @@ const T = {
     login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-  th: { cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
+  th: { theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
     welcome: 'ยินดีต้อนรับกลับ!', journey: 'เส้นทางสตรีมของคุณ', left: (n, l) => `อีก ${n} EXP ถึงเลเวล ${l}`, maxed: 'ถึงเลเวลสูงสุดแล้ว',
     hours: 'ชั่วโมงสตรีม', streams: 'ยอดสตรีมที่รายงาน', totalExp: 'EXP รวม', streak: 'สตรีคต่อเนื่อง', days: 'วัน', todayPl: 'เพลย์ลิสต์วันนี้', open: 'เปิด', none: 'ยังไม่ได้ตั้ง',
     openSpotify: 'เปิด Spotify', schedule: 'ตารางเพลย์ลิสต์', today: 'วันนี้', upcoming: 'เร็วๆ นี้', notSet: 'ยังไม่ตั้ง',
@@ -725,7 +759,7 @@ const MOCK = {
   ranking: () => ({ items: [{ rank: 1, username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4 }, { rank: 2, username: 'bunny_01', avatar: '🐱', exp: 420, level: 3 }] }),
   a_pending: () => ({ items: [] }),
 };
-const TTL = { today: 60e3, schedule: 60e3, ranking: 30e3 }, MEM = {};
+const TTL = { today: 60e3, schedule: 60e3, ranking: 30e3, me: 20e3, missions: 20e3, stats: 20e3 }, MEM = {};
 const READ = new Set(['me', 'today', 'schedule', 'missions', 'stats', 'ranking', 'a_pending', 'login', 'register']);
 let pending = 0;
 const bar = (d) => { pending += d; $('#bar').classList.toggle('on', pending > 0); };
@@ -737,7 +771,8 @@ async function api(action, body = {}) {
     const v = await rawApi(action, body);
     if (ttl) MEM[action] = { t: Date.now(), v };
     if (action.startsWith('a_set')) { delete MEM.today; delete MEM.schedule; }
-    if (!READ.has(action)) clearHC();
+    if (!READ.has(action)) { clearHC(); delete MEM.me; delete MEM.missions; delete MEM.stats; delete MEM.ranking; }
+    if (action === 'login' || action === 'register') for (const k in MEM) delete MEM[k];
     return v;
   } finally { bar(-1); }
 }
@@ -796,7 +831,7 @@ async function drawId(u) {
   try { await Promise.all([document.fonts.load('800 40px Rubik'), document.fonts.load('500 24px Rubik')]); } catch {}
   if (my !== drawGen) return;
   const F = 'Rubik, Anuphan, system-ui, sans-serif', Y = '#fae469', B = '#89cefa', ON = '#1d1c21';
-  const BG = dark ? '#1d1c21' : '#ffffff', TX = dark ? '#fdfefd' : '#1d1c21', MU = dark ? '#a6a5ad' : '#6b6a73', LN = dark ? '#3a3940' : '#d9dde3', SF = dark ? '#26252b' : '#ffffff';
+  const BG = dark ? '#000000' : '#ffffff', TX = dark ? '#fdfefd' : '#1d1c21', MU = dark ? '#a6a5ad' : '#6b6a73', LN = dark ? '#3a3940' : '#d9dde3', SF = dark ? '#26252b' : '#ffffff';
   const rr = (a, b, w, h, r) => { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); };
   const txt = (s, px, py, font, col, al = 'left') => { x.font = font; x.fillStyle = col; x.textAlign = al; x.fillText(s, px, py); };
   const line = (x1, y1, x2, y2) => { x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); x.lineWidth = 1; x.strokeStyle = LN; x.stroke(); };
@@ -926,7 +961,7 @@ const V = {
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
-    <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
+    <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('theme')}</span><button class="tag" style="border:0" onclick="toggleTheme()">${ic(theme === 'light' ? 'sun' : 'moon', 14)} ${theme === 'light' ? t('light') : t('dark')}</button></div><div><span>${t('language')}</span><button class="tag" style="border:0" onclick="toggleLang()">${lang === 'th' ? 'ไทย' : 'English'}</button></div><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
     <div class="more">${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
   },
@@ -991,18 +1026,18 @@ function warm() {
   if (warmed || DEMO || !S.token) return;
   warmed = true;
   setTimeout(async () => {
-    for (const k of ['playlist', 'missions', 'stats', 'station']) {
+    for (const k of ['playlist', 'missions', 'stats', 'station', 'ranking', 'profile']) {
       const key = k + lang;
       try { if (!HC[key] && S.token) HC[key] = await V[k](); } catch {}
     }
-  }, 600);
+  }, 200);
 }
 async function render(force) {
-  $('#lang').textContent = lang === 'th' ? 'EN' : 'ไทย';
   document.documentElement.lang = lang;
   document.body.classList.toggle('login', !S.token && !DEMO);
   document.body.classList.toggle('nothome', S.tab !== 'home');
   document.body.classList.toggle('idpg', S.tab === 'idcard');
+  document.body.classList.toggle('rkpg', S.tab === 'ranking');
   const nav = $('#nav'), main = $('#main');
   if (!S.token && !DEMO) { nav.hidden = true; main.innerHTML = V.auth(); shown = 'auth'; return; }
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
@@ -1010,7 +1045,7 @@ async function render(force) {
   if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
   [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['idcard', 'admin'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
-  if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; }
+  if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; main.classList.remove('fi'); void main.offsetWidth; main.classList.add('fi'); }
   let html;
   try { html = await V[tab](); } catch (e) { html = `<div class="card"><p>${esc(e.message)}</p></div>`; }
   if (my !== gen) return;
@@ -1024,14 +1059,12 @@ async function render(force) {
 let theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 function applyTheme() {
   document.documentElement.dataset.theme = theme;
-  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = theme === 'light' ? '#ffffff' : '#1d1c21';
-  const b = $('#theme'); b.innerHTML = ic(theme === 'light' ? 'moon' : 'sun', 18);
-  b.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+  const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = theme === 'light' ? '#ffffff' : '#000000';
   if (document.getElementById('idc')) drawId(S.user);
 }
-$('#theme').onclick = () => { theme = theme === 'light' ? 'dark' : 'light'; try { localStorage.setItem('theme', theme); } catch {} applyTheme(); };
+window.toggleTheme = () => { theme = theme === 'light' ? 'dark' : 'light'; try { localStorage.setItem('theme', theme); } catch {} applyTheme(); render(true); };
 applyTheme();
-$('#lang').onclick = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(); };
+window.toggleLang = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(true); };
 
 /* press feedback: pointerdown adds .pr, removed shortly after release */
 (() => {
