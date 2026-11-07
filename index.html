@@ -532,6 +532,14 @@ header h1 .chip em,html[data-theme=light] header h1 .chip em{background:linear-g
 
 .tag.ol.lnk{border:0;background:none;padding:4px 0;font-size:13px;font-weight:600;color:var(--tx);display:inline-flex;align-items:center;gap:4px}
 .ytrow{margin-top:2px}
+
+/* heart removed from brand */
+header h1 .chip::after{content:none!important}
+/* profile photo */
+.pav{position:relative;cursor:pointer;font-size:48px}
+.avimg{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.pav .cam{position:absolute;right:-2px;bottom:-2px;width:28px;height:28px;border-radius:50%;background:var(--y);color:var(--on);display:grid;place-items:center;font:700 20px/1 "Rubik",sans-serif;font-style:normal;border:2px solid var(--bg)}
+.idc{display:block;width:100%;max-width:340px;margin:0 auto 6px;border-radius:22px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
 </style>
 </head>
 <body>
@@ -674,13 +682,76 @@ const ACH = [['first', 'sprout'], ['streak5', 'flame'], ['listener', 'headphones
 const pct = (u) => (u.nextExp ? Math.min(100, ((u.exp - u.prevExp) / (u.nextExp - u.prevExp)) * 100) : 100);
 const fmtDate = (d) => new Date(d + 'T00:00:00Z').toLocaleDateString(lang === 'th' ? 'th-TH-u-ca-gregory' : 'en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
+
+/* ---------- profile photo + ID card ---------- */
+const picKey = (u) => 'pic:' + ((u && u.username) || 'me');
+const getPic = (u) => { try { return localStorage.getItem(picKey(u)) || ''; } catch { return ''; } };
+window.pickPic = () => {
+  const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*';
+  i.onchange = async () => {
+    const f = i.files && i.files[0]; if (!f) return;
+    try {
+      const bmp = await createImageBitmap(f), sz = Math.min(bmp.width, bmp.height), c = document.createElement('canvas');
+      c.width = c.height = 360;
+      c.getContext('2d').drawImage(bmp, (bmp.width - sz) / 2, (bmp.height - sz) / 2, sz, sz, 0, 0, 360, 360);
+      localStorage.setItem(picKey(S.user), c.toDataURL('image/jpeg', 0.85));
+      clearHC(); render(true); toast(t('saved'));
+    } catch { toast('Could not use this image'); }
+  };
+  i.click();
+};
+const loadImg = (src) => new Promise((ok, no) => { const m = new Image(); m.onload = () => ok(m); m.onerror = no; m.src = src; });
+async function drawId(u) {
+  const cv = document.getElementById('idc'); if (!cv || !u) return;
+  const W = 640, H = 960, x = cv.getContext('2d'); cv.width = W; cv.height = H;
+  try { await Promise.all([document.fonts.load('800 40px Rubik'), document.fonts.load('500 24px Rubik')]); } catch {}
+  const F = 'Rubik, Anuphan, system-ui, sans-serif', INK = '#1d1c21', Y = '#fae469', B = '#89cefa', MU = '#6b6a73';
+  const rr = (a, b, w, h, r) => { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); };
+  const txt = (s, px, py, font, col, al = 'center') => { x.font = font; x.fillStyle = col; x.textAlign = al; x.fillText(s, px, py); };
+  x.fillStyle = B; x.fillRect(0, 0, W, H);
+  rr(28, 28, W - 56, H - 56, 44); x.fillStyle = '#fff'; x.fill();
+  x.save(); rr(28, 28, W - 56, H - 56, 44); x.clip(); x.fillStyle = Y; x.fillRect(28, 28, W - 56, 150); x.restore();
+  txt('MOLO#2 STRM HUB', W / 2, 108, `800 42px ${F}`, INK);
+  txt('STREAMER ID CARD', W / 2, 146, `600 20px ${F}`, 'rgba(29,28,33,.7)');
+  const cx = W / 2, cy = 330, R = 108;
+  x.beginPath(); x.arc(cx, cy, R + 10, 0, 7); x.fillStyle = Y; x.fill();
+  x.save(); x.beginPath(); x.arc(cx, cy, R, 0, 7); x.clip(); x.fillStyle = '#eef5fb'; x.fillRect(cx - R, cy - R, R * 2, R * 2);
+  const pic = getPic(u);
+  if (pic) { try { x.drawImage(await loadImg(pic), cx - R, cy - R, R * 2, R * 2); } catch {} }
+  else txt(u.avatar || '🙂', cx, cy + 40, `110px ${F}`, INK);
+  x.restore();
+  let nm = '@' + String(u.username || '').replace(/^@/, ''), fs = 40;
+  while (fs > 20) { x.font = `800 ${fs}px ${F}`; if (x.measureText(nm).width <= W - 120) break; fs -= 2; }
+  txt(nm, cx, 500, `800 ${fs}px ${F}`, INK);
+  const lv = `LV.${u.level} · ${lvName(u.level)}`; x.font = `600 22px ${F}`;
+  const pw = x.measureText(lv).width + 40; rr(cx - pw / 2, 524, pw, 44, 22); x.fillStyle = Y; x.fill(); txt(lv, cx, 554, `600 22px ${F}`, INK);
+  const bx = 64, bw = W - 128, pr = Math.max(0, Math.min(1, pct(u) / 100));
+  rr(bx, 606, bw, 18, 9); x.fillStyle = '#d6e6f3'; x.fill();
+  if (pr > 0) { rr(bx, 606, Math.max(18, bw * pr), 18, 9); x.fillStyle = Y; x.fill(); }
+  txt(`${u.exp} / ${u.nextExp ?? '—'} EXP`, cx, 656, `500 22px ${F}`, MU);
+  const st = [[u.streak ?? 0, 'STREAK'], [u.totalHours ?? 0, 'HOURS'], [u.totalStreams ?? 0, 'STREAMS'], [(u.badges || []).length, 'BADGES']], cw = bw / 4;
+  st.forEach(([n, l], i) => { const sx = bx + cw * i + cw / 2; txt(String(n), sx, 730, `800 38px ${F}`, INK); txt(l, sx, 764, `600 16px ${F}`, MU); });
+  x.setLineDash([3, 9]); x.lineCap = 'round'; x.lineWidth = 3; x.strokeStyle = '#c9d6e2'; x.beginPath(); x.moveTo(bx, 812); x.lineTo(bx + bw, 812); x.stroke(); x.setLineDash([]);
+  txt('ID ' + String(u.id || '').replace(/[^\w]/g, '').slice(0, 8).toUpperCase(), bx, 862, `600 20px ${F}`, MU, 'left');
+  txt(thaiToday(), bx + bw, 862, `600 20px ${F}`, MU, 'right');
+  txt('Stream together, grow together.', cx, 912, `500 18px ${F}`, MU);
+}
+window.saveId = () => {
+  const cv = document.getElementById('idc'); if (!cv) return;
+  cv.toBlob(async (b) => {
+    const f = new File([b], 'molo2-id-card.png', { type: 'image/png' });
+    try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'molo2-id-card.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+};
+
 const V = {
   async home() {
     const [m, d, yv] = await Promise.all([api('me'), api('today'), getViews()]);
     S.user = m.user; const u = m.user;
     const rw = 'style="justify-content:flex-start;gap:12px"';
     return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')} 👋</h2>
-    <div class="card feat cc"><div class="row"><div class="row" ${rw}><div class="ico plc">${ic('music', 16)}${plImg(d.playlist)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="go" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener" aria-label="Open">${ic('arrow', 16)}</a>` : ''}</div></div>
+    <div class="card feat cc"><div class="row"><div class="row" ${rw}><div class="ico plc">${ic('music', 16)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="go" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener" aria-label="Open">${ic('arrow', 16)}</a>` : ''}</div></div>
     <div class="card cc" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><div class="row"><div class="row" ${rw}><div class="ico gr">${ic('headphones', 16)}</div><div><b>Stationhead</b><p>Join Stationhead</p></div></div><span class="tag ol">${t('open')}</span></div></div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
     <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="rk">${n + 1}</span><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
@@ -738,7 +809,9 @@ const V = {
   },
   async profile() {
     const m = await api('me'); const u = (S.user = m.user);
-    return `<div class="av">${esc(u.avatar)}</div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
+    const pic = getPic(u);
+    return `<div class="av pav" role="button" tabindex="0" onclick="pickPic()" aria-label="Change photo">${pic ? `<img class="avimg" src="${pic}" alt="">` : esc(u.avatar)}<i class="cam">+</i></div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
+    <button class="btn" style="margin:0 0 12px" onclick="go('idcard')">${ic('medal', 16)} ID Card</button>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
@@ -746,6 +819,12 @@ const V = {
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
     <div class="more"><button class="pill" onclick="go('ranking')">${ic('trophy', 14)} ${t('ranking')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
+  },
+  async idcard() {
+    const m = await api('me'); const u = (S.user = m.user);
+    return `<div class="row" style="justify-content:flex-start;margin-bottom:10px"><button class="pill" onclick="go('profile')">← ${t('profile')}</button></div>
+    <canvas id="idc" class="idc" width="640" height="960"></canvas>
+    <button class="btn" onclick="saveId()">Save image</button><button class="btn soft" onclick="pickPic()">${getPic(u) ? 'Change photo' : 'Add photo'}</button>`;
   },
   async ranking() {
     const r = await api('ranking');
@@ -814,7 +893,7 @@ async function render(force) {
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
   if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
-  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'admin'].includes(S.tab))));
+  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'admin', 'idcard'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; }
   let html;
@@ -823,6 +902,7 @@ async function render(force) {
   const typing = !force && /INPUT|SELECT/.test((document.activeElement || {}).tagName || '');
   if (HC[key] !== html && !typing) main.innerHTML = html;
   HC[key] = html;
+  if (tab === 'idcard') drawId(S.user);
   try { sessionStorage.setItem('hc', JSON.stringify(HC)); } catch {}
   warm();
 }
