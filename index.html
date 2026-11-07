@@ -517,6 +517,18 @@ header h1 .chip::after{font-size:20px}
 .pr{transform:scale(.92)!important;filter:brightness(.9)!important;transition:transform .08s ease-out,filter .08s!important}
 nav button.pr{transform:scale(.84)!important}
 .tr.pr,.card.pr{transform:scale(.97)!important}
+
+/* bigger top cards (space freed below) */
+.card.cc{padding:11px 14px;margin-bottom:8px;border-radius:20px}
+.cc .ico,.feat .ico.ico.plc{width:40px;height:40px;border-radius:14px}
+.cc b{font-size:15px}.cc p{font-size:13px}
+.cc .tag{padding:5px 12px;font-size:12px}
+/* section headings: vertical bar instead of star */
+.sec::before{content:"";width:3px;height:1.05em;border-radius:3px;background:var(--y2);color:inherit;font-size:inherit}
+.sec.nob::before{display:none}
+/* STRM HUB: half-height highlighter stripe */
+html[data-theme=dark] header h1 .chip em{background:linear-gradient(transparent 52%,rgba(250,228,105,.5) 52%,rgba(250,228,105,.5) 94%,transparent 94%);border-radius:0;padding:0 5px;color:var(--tx)}
+header h1 .chip em,html[data-theme=light] header h1 .chip em{background:linear-gradient(transparent 52%,var(--y) 52%,var(--y) 94%,transparent 94%);border-radius:0;padding:0 5px;color:var(--tx)}
 </style>
 </head>
 <body>
@@ -669,7 +681,6 @@ const V = {
     <div class="card cc" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><div class="row"><div class="row" ${rw}><div class="ico gr">${ic('headphones', 16)}</div><div><b>Stationhead</b><p>Join Stationhead</p></div></div><span class="tag ol">${t('open')}</span></div></div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
     <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="rk">${n + 1}</span><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
-    <h3 class="sec">MARK's YouTube</h3>
     <div class="ytrow">${SONGS.filter((x) => x.isNew).map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
       const media = ok ? `<div class="ytv"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" onerror="this.src='${esc(x.img)}'"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0&modestbranding=1" title="${esc(x.t)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
         : `<a class="ytv" href="https://www.youtube.com/results?search_query=${encodeURIComponent('MARK ' + x.t)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on YouTube"><img src="${esc(x.img)}" alt="" loading="lazy"></a>`;
