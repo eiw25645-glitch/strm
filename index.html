@@ -609,6 +609,22 @@ nav button svg{color:inherit}
 .rk{font-size:15px;font-weight:800;width:30px}
 .av2{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--b);flex:none}
 .ln{min-width:0;display:flex;flex-direction:column;align-items:flex-start}.ln b{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ===== certificate page: full theme background, thin lines ===== */
+body.idpg{background:var(--bg)!important}
+.idtop{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+.idtop h2{margin:0;font-size:20px}
+.idback{width:40px;height:40px;padding:0;border-radius:50%;border:1px solid var(--ln);background:var(--bg);color:var(--tx);display:grid;place-items:center;cursor:pointer}
+.idc{display:block;width:100%;max-width:380px;height:auto;margin:0 auto;border-radius:0;box-shadow:none}
+.ida{max-width:380px;margin:14px auto 0}
+.ida .btn.soft{background:transparent}
+/* ===== nav: 6 tabs fit ===== */
+nav button{flex:0 1 44px;width:44px;min-width:0;height:44px}
+nav .on{width:52px;height:52px}
+/* ===== leaderboard: card rows like the reference ===== */
+.lr{border-radius:22px;border:1px solid var(--ln);padding:10px 16px 10px 14px}
+.pts svg{color:var(--lk)}
+.pod{margin-top:6px}
 </style>
 </head>
 <body>
@@ -667,7 +683,7 @@ const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 1
 
 /* ---------- i18n ---------- */
 const T = {
-  en: { tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Ranking', admin: 'Admin',
+  en: { cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
     welcome: 'Welcome back!', journey: 'Your streaming journey', left: (n, l) => `${n} EXP left to reach Level ${l}`, maxed: 'Max level reached',
     hours: 'Streaming hours', streams: 'Reported streams', totalExp: 'Total EXP', streak: 'Current streak', days: 'days', todayPl: 'Today’s playlist', open: 'Open', none: 'Not set yet',
     openSpotify: 'Open Spotify', schedule: 'Playlist schedule', today: 'Today', upcoming: 'Upcoming', notSet: 'Not set',
@@ -680,7 +696,7 @@ const T = {
     login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-  th: { tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
+  th: { cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
     welcome: 'ยินดีต้อนรับกลับ!', journey: 'เส้นทางสตรีมของคุณ', left: (n, l) => `อีก ${n} EXP ถึงเลเวล ${l}`, maxed: 'ถึงเลเวลสูงสุดแล้ว',
     hours: 'ชั่วโมงสตรีม', streams: 'ยอดสตรีมที่รายงาน', totalExp: 'EXP รวม', streak: 'สตรีคต่อเนื่อง', days: 'วัน', todayPl: 'เพลย์ลิสต์วันนี้', open: 'เปิด', none: 'ยังไม่ได้ตั้ง',
     openSpotify: 'เปิด Spotify', schedule: 'ตารางเพลย์ลิสต์', today: 'วันนี้', upcoming: 'เร็วๆ นี้', notSet: 'ยังไม่ตั้ง',
@@ -743,7 +759,7 @@ const lock = (el) => { if (el) { el.dataset.t = el.textContent; el.disabled = tr
 function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; clearHC(); for (const k in MEM) delete MEM[k]; render(); }
 
 /* ---------- views ---------- */
-const TABS = [['home', 'home'], ['playlist', 'music'], ['missions', 'spark'], ['stats', 'chart'], ['profile', 'user']];
+const TABS = [['home', 'home'], ['playlist', 'music'], ['missions', 'spark'], ['stats', 'chart'], ['ranking', 'trophy'], ['profile', 'user']];
 const LV_NAMES = [['Newbie', 'มือใหม่'], ['Fan', 'แฟนคลับ'], ['Voter', 'นักโหวต'], ['Dedicated', 'ตัวจริง'], ['Super Fan', 'ซูเปอร์แฟน'], ['Star Voter', 'สตาร์โหวต'], ['Elite', 'อีลีท'], ['Master', 'มาสเตอร์'], ['Legend', 'ตำนาน'], ['Hall of Fame', 'หอเกียรติยศ']];
 const LV_ICON = ['🌱', '🎧', '📣', '⭐', '💫', '🌟', '💎', '👑', '🔥', '🏆'];
 const lvName = (n) => { const i = Math.min(Math.max(n, 1), 10) - 1; return LV_NAMES[i][lang === 'th' ? 1 : 0]; };
@@ -771,75 +787,71 @@ window.pickPic = () => {
 };
 const loadImg = (src) => new Promise((ok, no) => { const m = new Image(); m.onload = () => ok(m); m.onerror = no; m.src = src; });
 
-/* ---------- ID card (click to open, save as image) ---------- */
+/* ---------- Certificate page (own page, follows theme, save as image) ---------- */
+let drawGen = 0;
 async function drawId(u) {
   const cv = document.getElementById('idc'); if (!cv || !u) return;
+  const my = ++drawGen, dark = document.documentElement.dataset.theme === 'dark';
   const W = 640, H = 960, x = cv.getContext('2d'); cv.width = W; cv.height = H;
   try { await Promise.all([document.fonts.load('800 40px Rubik'), document.fonts.load('500 24px Rubik')]); } catch {}
-  const F = 'Rubik, Anuphan, system-ui, sans-serif', INK = '#1d1c21', Y = '#fae469', B = '#89cefa', MU = '#6b6a73';
+  if (my !== drawGen) return;
+  const F = 'Rubik, Anuphan, system-ui, sans-serif', Y = '#fae469', B = '#89cefa', ON = '#1d1c21';
+  const BG = dark ? '#1d1c21' : '#ffffff', TX = dark ? '#fdfefd' : '#1d1c21', MU = dark ? '#a6a5ad' : '#6b6a73', LN = dark ? '#3a3940' : '#d9dde3', SF = dark ? '#26252b' : '#ffffff';
   const rr = (a, b, w, h, r) => { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); };
   const txt = (s, px, py, font, col, al = 'left') => { x.font = font; x.fillStyle = col; x.textAlign = al; x.fillText(s, px, py); };
+  const line = (x1, y1, x2, y2) => { x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); x.lineWidth = 1; x.strokeStyle = LN; x.stroke(); };
   const star = (cx, cy, r, col, rot = 0) => { x.beginPath(); for (let i = 0; i < 10; i++) { const a = rot + (Math.PI / 5) * i - Math.PI / 2, rad = i % 2 ? r * 0.45 : r; x[i ? 'lineTo' : 'moveTo'](cx + Math.cos(a) * rad, cy + Math.sin(a) * rad); } x.closePath(); x.fillStyle = col; x.fill(); };
-  x.clearRect(0, 0, W, H);
-  // paper + grid
-  x.save(); rr(2, 2, W - 4, H - 4, 44); x.clip(); x.fillStyle = '#f4f9fe'; x.fillRect(0, 0, W, H);
-  x.strokeStyle = 'rgba(137,206,250,.35)'; x.lineWidth = 1.5; x.beginPath();
-  for (let g = 0; g <= W; g += 32) { x.moveTo(g, 0); x.lineTo(g, H); } for (let g = 0; g <= H; g += 32) { x.moveTo(0, g); x.lineTo(W, g); } x.stroke();
-  // header band
-  x.fillStyle = B; x.fillRect(0, 0, W, 130); x.fillStyle = 'rgba(29,28,33,.14)'; x.fillRect(0, 130, W, 6);
-  x.restore();
-  rr(2, 2, W - 4, H - 4, 44); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke();
-  x.beginPath(); x.arc(84, 66, 38, 0, 7); x.fillStyle = Y; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke(); star(84, 67, 22, INK);
-  txt('MOLO#2 STRM HUB', 142, 66, `800 38px ${F}`, INK);
-  txt('Certified Streamer', 142, 100, `600 22px ${F}`, 'rgba(29,28,33,.72)');
+  // full background = theme colour (dark -> dark, light -> white), no grid
+  x.fillStyle = BG; x.fillRect(0, 0, W, H);
+  rr(16, 16, W - 32, H - 32, 32); x.lineWidth = 1; x.strokeStyle = LN; x.stroke(); // thin border
+  // header
+  x.beginPath(); x.arc(92, 92, 30, 0, 7); x.fillStyle = Y; x.fill(); star(92, 93, 17, ON);
+  txt('MOLO#2 STRM HUB', 140, 90, `800 34px ${F}`, TX);
+  txt('Certified Streamer', 140, 122, `500 20px ${F}`, MU);
+  line(48, 156, W - 48, 156);
   // polaroid
-  x.save(); x.translate(320, 360); x.rotate(-0.05);
-  x.shadowColor = 'rgba(0,0,0,.18)'; x.shadowBlur = 16; x.shadowOffsetY = 6; rr(-136, -190, 272, 380, 8); x.fillStyle = '#fff'; x.fill(); x.shadowColor = 'transparent';
-  x.lineWidth = 1.5; x.strokeStyle = '#d6e6f3'; x.stroke();
+  x.save(); x.translate(320, 380); x.rotate(-0.04);
+  rr(-136, -190, 272, 380, 8); x.fillStyle = SF; x.fill(); x.lineWidth = 1; x.strokeStyle = LN; x.stroke();
   x.save(); x.beginPath(); x.rect(-120, -174, 240, 300); x.clip(); x.fillStyle = Y; x.fillRect(-120, -174, 240, 300);
   const pic = getPic(u);
-  if (pic) { try { x.drawImage(await loadImg(pic), -120, -174, 240, 300); } catch {} } else txt(u.avatar || '🙂', 0, -64, `120px ${F}`, INK, 'center');
+  if (pic) {
+    try {
+      const im = await loadImg(pic); if (my !== drawGen) { x.restore(); x.restore(); return; }
+      const sh = im.height, sw = sh * 0.8, sx = (im.width - sw) / 2; // cover-crop, no stretching
+      x.drawImage(im, sx, 0, sw, sh, -120, -174, 240, 300);
+    } catch {}
+  } else txt(u.avatar || '🙂', 0, -64, `120px ${F}`, ON, 'center');
   x.restore();
-  txt('ID ' + (String(u.id || '').replace(/[^\w]/g, '').slice(0, 6).toUpperCase() || '—'), 0, 168, `700 24px ${F}`, '#4a4a55', 'center');
-  [[-124, -190, -0.65], [124, -190, 0.65]].forEach(([tx, ty, r]) => { x.save(); x.translate(tx, ty); x.rotate(r); x.fillStyle = 'rgba(137,206,250,.88)'; x.fillRect(-36, -12, 72, 24); x.restore(); });
+  txt('ID ' + (String(u.id || '').replace(/[^\w]/g, '').slice(0, 6).toUpperCase() || '—'), 0, 168, `700 24px ${F}`, MU, 'center');
+  [[-124, -190, -0.65], [124, -190, 0.65]].forEach(([tx, ty, r]) => { x.save(); x.translate(tx, ty); x.rotate(r); x.fillStyle = 'rgba(137,206,250,.75)'; x.fillRect(-36, -12, 72, 24); x.restore(); });
   x.restore();
-  star(96, 250, 18, Y, 0.3); star(548, 214, 14, B, -0.2); star(560, 440, 20, Y, 0.5); star(76, 470, 13, B, 0.1);
+  star(96, 262, 16, Y, 0.3); star(548, 226, 12, B, -0.2); star(560, 450, 18, Y, 0.5); star(78, 484, 12, B, 0.1);
   // name + level pill
   let nm = '@' + String(u.username || '').replace(/^@/, ''), fs = 40;
   while (fs > 20) { x.font = `800 ${fs}px ${F}`; if (x.measureText(nm).width <= W - 100) break; fs -= 2; }
-  txt(nm, W / 2, 618, `800 ${fs}px ${F}`, INK, 'center');
+  txt(nm, W / 2, 618, `800 ${fs}px ${F}`, TX, 'center');
   const lv = `${LV_ICON[Math.min(Math.max(u.level, 1), 10) - 1]}  LV.${u.level} · ${lvName(u.level)}`; x.font = `700 24px ${F}`;
-  const pw = x.measureText(lv).width + 48; rr(W / 2 - pw / 2, 638, pw, 52, 26); x.fillStyle = Y; x.fill(); x.lineWidth = 2; x.strokeStyle = INK; x.stroke(); txt(lv, W / 2, 673, `700 24px ${F}`, INK, 'center');
-  // field boxes
+  const pw = x.measureText(lv).width + 48; rr(W / 2 - pw / 2, 640, pw, 52, 26); x.fillStyle = Y; x.fill(); txt(lv, W / 2, 675, `700 24px ${F}`, ON, 'center');
+  // stats: plain text + thin dividers (no boxes)
   const fl = [['STREAK', `${u.streak ?? 0} days`], ['HOURS', String(u.totalHours ?? 0)], ['BADGES', String((u.badges || []).length)], ['EXP', `${u.exp} / ${u.nextExp ?? '—'}`]];
+  line(48, 722, W - 48, 722); line(48, 806, W - 48, 806);
   fl.forEach(([l, v], i) => {
-    const fx = 48 + (i % 2) * 284, fy = 716 + Math.floor(i / 2) * 84;
-    rr(fx, fy, 260, 68, 14); x.fillStyle = 'rgba(137,206,250,.28)'; x.fill();
-    txt(l, fx + 18, fy + 26, `700 17px ${F}`, MU); txt(v, fx + 18, fy + 56, `800 26px ${F}`, INK);
+    const fx = 48 + (i % 2) * 284, fy = 722 + Math.floor(i / 2) * 84;
+    txt(l, fx, fy + 30, `700 16px ${F}`, MU); txt(v, fx, fy + 64, `800 26px ${F}`, TX);
   });
   // stamp
-  x.save(); x.translate(548, 902); x.rotate(-0.2); x.globalAlpha = 0.3; x.strokeStyle = '#1f6fb2'; x.lineWidth = 3;
-  x.beginPath(); x.arc(0, 0, 44, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0, 36, 0, 7); x.lineWidth = 1.5; x.stroke();
-  txt(LV_ICON[Math.min(Math.max(u.level, 1), 10) - 1], 0, 14, `38px ${F}`, INK, 'center'); x.restore();
-  txt('Stream together, grow together.', 48, 920, `500 20px ${F}`, MU);
+  x.save(); x.translate(556, 916); x.rotate(-0.2); x.globalAlpha = 0.5; x.strokeStyle = dark ? B : '#1f6fb2'; x.lineWidth = 1.5;
+  x.beginPath(); x.arc(0, 0, 28, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0, 23, 0, 7); x.lineWidth = 1; x.stroke();
+  txt(LV_ICON[Math.min(Math.max(u.level, 1), 10) - 1], 0, 9, `24px ${F}`, TX, 'center'); x.restore();
+  txt('Stream together, grow together.', 48, 922, `500 19px ${F}`, MU);
 }
 window.saveId = () => {
   const cv = document.getElementById('idc'); if (!cv) return;
-  const o = document.createElement('canvas'), pad = 36; o.width = cv.width + pad * 2; o.height = cv.height + pad * 2;
-  const c = o.getContext('2d'); c.fillStyle = '#89cefa'; c.fillRect(0, 0, o.width, o.height); c.drawImage(cv, pad, pad);
-  o.toBlob(async (b) => {
-    const f = new File([b], 'molo2-id-card.png', { type: 'image/png' });
+  cv.toBlob(async (b) => {
+    const f = new File([b], 'molo2-certificate.png', { type: 'image/png' });
     try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
-    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'molo2-id-card.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'molo2-certificate.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }, 'image/png');
-};
-window.closeId = () => { const m = document.getElementById('idm'); if (m) m.remove(); document.body.style.overflow = ''; };
-window.openId = () => {
-  if (document.getElementById('idm')) return;
-  const m = document.createElement('div'); m.id = 'idm'; m.className = 'idm';
-  m.innerHTML = `<div class="idw"><div class="idcw"><canvas id="idc" class="idc"></canvas><button class="idx" aria-label="Close" onclick="closeId()">×</button></div><div class="ida"><button class="btn" onclick="saveId()">Save image</button><button class="btn soft" onclick="pickPic()">${getPic(S.user) ? 'Change photo' : 'Add photo'}</button></div></div>`;
-  m.addEventListener('click', (e) => { if (e.target === m || e.target.classList.contains('idw')) closeId(); });
-  document.body.appendChild(m); document.body.style.overflow = 'hidden'; drawId(S.user);
 };
 
 const V = {
@@ -909,21 +921,28 @@ const V = {
     const pic = getPic(u);
     return `<div class="card pfh"><div class="pfa" role="button" tabindex="0" onclick="pickPic()" aria-label="Change photo"><span class="pfp">${pic ? `<img class="avimg" src="${pic}" alt="">` : esc(u.avatar)}</span><i class="cam">+</i></div>
       <div class="pfi"><b>@${esc(String(u.username).replace(/^@/, ''))}</b><span class="lvp"><span class="lvi">${lvBadge(u.level, 'cur', 26)}</span>LV.${u.level} · ${esc(lvName(u.level))}</span></div></div>
-    <button class="btn idbtn" onclick="openId()">${ic('star', 16)} ID Card</button>
+    <button class="btn idbtn" onclick="go('idcard')">${ic('star', 16)} ${t('cert')}</button>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
       <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
-    <div class="more"><button class="pill" onclick="go('ranking')">${ic('trophy', 14)} ${t('ranking')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
+    <div class="more">${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
+  },
+  async idcard() {
+    if (!S.user) S.user = (await api('me')).user;
+    const u = S.user;
+    return `<div class="idtop"><button class="idback" onclick="go('profile')" aria-label="Back"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M15 5l-7 7 7 7"/></svg></button><h2>${t('cert')}</h2></div>
+    <canvas id="idc" class="idc"></canvas>
+    <div class="ida"><button class="btn" onclick="saveId()">${t('saveImg')}</button><button class="btn soft" onclick="pickPic()">${getPic(u) ? t('chgPhoto') : t('addPhoto')}</button></div>`;
   },
   async ranking() {
     const r = await api('ranking'), it = r.items || [], top = it.slice(0, 3), rest = it.slice(3);
     const mo = new Date().toLocaleString(lang === 'th' ? 'th-TH' : 'en-US', { month: 'long' }), me = (S.user && S.user.username) || '';
-    const col = [0, 1, 2].map((i) => { const x = top[[1, 0, 2][i]], k = [1, 0, 2][i]; return x ? `<div class="pc p${k + 1}"><div class="pav2"><span>${esc(x.avatar)}</span><i>${x.rank}</i></div><b>${esc(x.username)}</b><span class="pts">${ic('star', 12)} ${x.exp}</span><div class="blk"></div></div>` : '<div class="pc"></div>'; }).join('');
+    const col = [0, 1, 2].map((i) => { const x = top[[1, 0, 2][i]], k = [1, 0, 2][i]; return x ? `<div class="pc p${k + 1}"><div class="pav2"><span>${esc(x.avatar)}</span><i>${x.rank}</i></div><b>${esc(x.username)}</b><span class="pts">${ic('diamond', 12)} ${x.exp}</span><div class="blk"></div></div>` : '<div class="pc"></div>'; }).join('');
     return `<div class="lb"><div class="lbm"><span>${esc(mo)}</span></div><div class="lbt">${t('ranking')}</div><div class="pod">${col}</div></div>
-    <div class="lbl">${rest.length ? rest.map((x) => `<div class="lr${x.username === me ? ' me' : ''}"><b class="rk">#${x.rank}</b><span class="av2">${esc(x.avatar)}</span><div class="ln"><b>${esc(x.username)}</b><span class="pts">${ic('star', 12)} ${x.exp}</span></div></div>`).join('') : (it.length ? '' : `<p class="sub" style="text-align:center">${t('empty')}</p>`)}</div>`;
+    <div class="lbl">${rest.length ? rest.map((x) => `<div class="lr${x.username === me ? ' me' : ''}"><b class="rk">#${x.rank}</b><span class="av2">${esc(x.avatar)}</span><div class="ln"><b>${esc(x.username)}</b><span class="pts">${ic('diamond', 12)} ${x.exp}</span></div></div>`).join('') : (it.length ? '' : `<p class="sub" style="text-align:center">${t('empty')}</p>`)}</div>`;
   },
   async admin() {
     if (!S.user) S.user = (await api('me')).user;
@@ -983,12 +1002,13 @@ async function render(force) {
   document.documentElement.lang = lang;
   document.body.classList.toggle('login', !S.token && !DEMO);
   document.body.classList.toggle('nothome', S.tab !== 'home');
+  document.body.classList.toggle('idpg', S.tab === 'idcard');
   const nav = $('#nav'), main = $('#main');
   if (!S.token && !DEMO) { nav.hidden = true; main.innerHTML = V.auth(); shown = 'auth'; return; }
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
   if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
-  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'admin'].includes(S.tab))));
+  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['idcard', 'admin'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; }
   let html;
@@ -998,6 +1018,7 @@ async function render(force) {
   if (HC[key] !== html && !typing) main.innerHTML = html;
   HC[key] = html;
   try { sessionStorage.setItem('hc', JSON.stringify(HC)); } catch {}
+  if (tab === 'idcard') drawId(S.user);
   warm();
 }
 let theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -1006,6 +1027,7 @@ function applyTheme() {
   const m = document.querySelector('meta[name=theme-color]'); if (m) m.content = theme === 'light' ? '#ffffff' : '#1d1c21';
   const b = $('#theme'); b.innerHTML = ic(theme === 'light' ? 'moon' : 'sun', 18);
   b.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+  if (document.getElementById('idc')) drawId(S.user);
 }
 $('#theme').onclick = () => { theme = theme === 'light' ? 'dark' : 'light'; try { localStorage.setItem('theme', theme); } catch {} applyTheme(); };
 applyTheme();
