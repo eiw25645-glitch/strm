@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#1d1c21"><meta name="color-scheme" content="dark light"><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Anuphan:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,800;1,800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Anuphan:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,800;1,800&family=Dancing+Script:wght@700&family=Jua&family=Nunito:wght@600;700;800&family=Itim&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#141414;--mute:#5f6272;--blue:#2447d6;--blue2:#5b7bf0;--soft:#dde5ff;--card:#f5f7fc;--line:#e4e9f2;--ok:#2f8f63;--bad:#d63a30;--paper:#fff;--butter:#ffd84d}
 *{box-sizing:border-box;margin:0}
@@ -784,11 +784,64 @@ button,.btn,[role=button]{min-height:44px}
 
 /* windmill + wave hand + neutral songs panel */
 header h1{display:flex;align-items:center;gap:6px}
-.wm{width:38px;height:38px;color:var(--tx);margin-top:-6px;flex:none}
-.wv{width:26px;height:26px;vertical-align:-4px;margin-left:4px;color:var(--tx)}
-.wv .mo{stroke:var(--y2)}
-.tl{background:transparent!important;border:1.5px solid var(--tx)!important}
+svg.i.wm{width:42px;height:42px;margin-top:-8px;flex:none;color:var(--tx);stroke-width:2.2px!important}
+svg.i.wv{width:31px;height:27px;vertical-align:-5px;margin-left:5px;color:var(--tx);stroke-width:1.8px!important}
+.wl{font-size:17px!important}
 .tr+.tr::before{background:rgba(128,128,128,.3)!important}
+
+/* ===== vote-site look: Jua + Nunito (Itim for Thai), hairline outlines, even spacing. Colours stay on this app's theme ===== */
+:root{--fb:'Nunito','Itim',system-ui,sans-serif;--fd:'Jua','Itim',system-ui,sans-serif;--hl:rgba(255,255,255,.14);--hl2:rgba(255,255,255,.26);--hl3:rgba(255,255,255,.3);--ib:#1d1c21}
+html[data-theme=light]{--hl:rgba(20,20,20,.12);--hl2:rgba(20,20,20,.22);--hl3:rgba(20,20,20,.35)}
+html body{font-synthesis:none;font-weight:700;letter-spacing:0}
+body *{font-family:var(--fb)!important}
+/* display font (Jua has one weight, so never bold it) */
+body h1,body h2,body h3,body .chip,body .big,body .sec,body .btn,body .pill,body .pfn2,body .lbt,body .stat .n,body .seg button,body .seg2 button,body .card h3,body .wl,body .idtop h2,body .hero .big,body .ach b{font-family:var(--fd)!important;font-weight:400!important}
+body b,body strong,body .tn b,body .qt b,body .srow .st b,body .ln b,body .pc b{font-weight:800}
+body .sub,body .card p,body label,body .stat .l,body .qt small,body .srow .st small,body .tn .vw{font-weight:700}
+body nav button{font-weight:800;font-size:11px}
+/* hairline outlines + even radii */
+body .card:not(.feat),body .stat,body .qc,body .lr,body .tl,body .prow,body .pf,body .pill,body .toast,body .card.set{border:1px solid var(--hl)!important;box-shadow:none!important}
+body .card,body .stat{border-radius:24px}
+body .qc,body .lr,body .prow{border-radius:22px}
+body .pill,body .btn.soft{border:1px solid var(--hl2)!important}
+body .btn.soft{background:transparent;border-style:dashed!important;border-color:var(--tx)!important}
+body .btn{border:2px solid var(--ib);box-shadow:none!important;font-size:17px;padding:11px 15px 12px}
+body .btn.sm{font-size:14px;padding:6px 0 7px}
+body input,body select{border:2px solid var(--hl2)!important;border-radius:18px!important;padding:11px 15px;font-weight:700}
+body input:focus,body select:focus{border-color:var(--tx)!important}
+body .login .card{border-radius:26px}
+body .login input{border-radius:18px!important}
+body nav{border-top:1px solid var(--hl2)!important;border-radius:24px 24px 0 0}
+body .list>div,body .srow{border-bottom:1px dotted var(--hl3)!important}
+body .srow:last-child,body .list>div:last-child{border-bottom:0!important}
+body .tr+.tr::before{background:none!important;border-top:1px dotted var(--hl3)}
+body .ico,body .ach span,body .tc,body .cov{border-color:var(--hl)}
+/* spacing + type order (title > heading > body > date) */
+body header h1 .chip{font-size:24px}
+body .sec{font-size:18px;margin:20px 4px 10px}
+body .wl{margin:0 0 14px}
+body .dt{margin:0 0 4px}
+body .card{margin-bottom:12px}
+body .card+.card{margin-top:0}
+body .grid,body .qa{gap:10px}
+body .songs,body .pfs{gap:10px}
+/* ===== thinner outlines, 4-box PIN, soft springy press (as on the vote site) ===== */
+:root{--spring:cubic-bezier(.3,1.9,.5,1)}
+body .btn{border:1px solid var(--ib)}
+body input:not(.pin-box),body select{border:1px solid var(--hl3)!important}
+body label.pl{text-align:center;margin-left:0}
+body .pin{display:flex;justify-content:center;gap:10px}
+body input.pin-box{width:54px;height:54px;padding:0;text-align:center;font-family:var(--fd)!important;font-weight:400!important;font-size:27px!important;line-height:1;border-radius:18px!important;border:1px solid var(--hl3)!important;background:var(--inp);color:var(--tx);caret-color:var(--tx);box-shadow:none!important;transition:border-color .15s,background-color .15s,transform .5s var(--spring)!important}
+body input.pin-box:focus{border-color:var(--tx)!important;transform:translateY(-2px)}
+body input.pin-box.on{background:var(--lkbg)}
+body .pin.shake{animation:pinShake .38s}
+@keyframes pinShake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.pinf .pin{margin-bottom:4px}
+body :is(.btn,.pill,.tag,.go,.pb,.pf,.seg button,.seg2 button,nav button,.card.feat,.idback,#xb){--px:.93;--py:.88;transition:transform .55s var(--spring),background-color .15s,color .15s,border-color .15s,opacity .15s!important}
+body :is(.tr,.qc,.srow,.lvc,.ytv,.card[role=button]){--px:.97;--py:.95;transition:transform .55s var(--spring),background-color .15s,color .15s,border-color .15s,opacity .15s!important}
+body nav button{--px:.9;--py:.9}
+html body .pr.pr{transform:scale(var(--px,.94),var(--py,.9))!important;filter:none!important;transition:transform .08s ease-out,background-color .15s,color .15s!important}
+@media (prefers-reduced-motion:reduce){body :is(.btn,.pill,.tag,.go,.pb,.pf,.tr,.qc,.srow,.lvc,.ytv,nav button,.seg button,.seg2 button){transition:transform .12s ease-out,background-color .15s!important}html body .pr.pr{transform:scale(.97)!important}body .pin.shake{animation:none}}
 </style>
 <script>/* no zoom: block pinch + double-tap zoom on iOS */
 ['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
@@ -801,7 +854,7 @@ var _lt=0;document.addEventListener('touchend',function(e){var n=Date.now();if(n
 <button id="xb" hidden aria-label="Close" onclick="back()"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 <div id="app">
   <header>
-    <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM ZONE</em></span><svg class="i wm" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 25h10l3 19H16z" style="fill:var(--y)"/><path d="M18 25l6-7 6 7z"/><path d="M21.5 44v-5a2.5 2.5 0 0 1 5 0v5"/><g transform="translate(24 19) rotate(-14)"><path d="M0 0V-16M0 0H16M0 0V16M0 0H-16"/><rect x="1.5" y="-15" width="6" height="8" rx="1" transform="rotate(0)"/><rect x="1.5" y="-15" width="6" height="8" rx="1" transform="rotate(90)"/><rect x="1.5" y="-15" width="6" height="8" rx="1" transform="rotate(180)"/><rect x="1.5" y="-15" width="6" height="8" rx="1" transform="rotate(270)"/></g><circle cx="24" cy="19" r="2.2" style="fill:var(--bg)"/><path d="M9 44h30"/></svg></h1></div>
+    <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM ZONE</em></span><svg class="i wm" viewBox="0 0 56 56" aria-hidden="true"><g transform="translate(28 22) rotate(-12)"><g transform="rotate(0)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(90)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(180)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(270)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g></g><path d="M20 28h16l4 24H16z" style="fill:var(--y)"/><path d="M24.5 52v-7a3.5 3.5 0 0 1 7 0v7"/><path d="M17 28a11 11 0 0 1 22 0z" style="fill:var(--b)"/><circle cx="28" cy="22" r="3" style="fill:var(--y)"/><path d="M8 52h40"/></svg></h1></div>
     
   </header>
   <main id="main"></main>
@@ -1150,7 +1203,7 @@ const V = {
     S.user = m.user; const u = m.user;
     const rw = 'style="justify-content:flex-start;gap:12px"';
     const qt = d.playlist ? 'a' : 'div', qa = d.playlist ? ` href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener"` : '';
-    return `<h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')} <svg class="i wv" viewBox="-3 0 27 24" aria-hidden="true"><g transform="rotate(12 12 12)"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g><path class="mo" d="M-1.5 9.5a9 9 0 0 1 2.5-5.5M-2.5 13a12 12 0 0 1 2-8.5"/></svg></h2>
+    return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')} <svg class="i wv" viewBox="-4 0 36 32" aria-hidden="true"><g transform="rotate(12 16 18)" style="fill:var(--y)"><rect x="24.2" y="15" width="4.2" height="9" rx="2.1" transform="rotate(-42 26.3 19.5)"/><rect x="21" y="8.5" width="4.2" height="14" rx="2.1"/><rect x="16.5" y="4.5" width="4.2" height="18" rx="2.1"/><rect x="12" y="3" width="4.2" height="19" rx="2.1"/><rect x="7.5" y="6" width="4.2" height="16" rx="2.1"/><path d="M7.5 17v5.5c0 4.2 3 6.5 7.2 6.5h3.3c4 0 7.2-2.4 7.2-6.4V17z"/></g><path d="M2.5 11a8 8 0 0 1 2-5.5M-1 13a11.5 11.5 0 0 1 2.5-9"/></svg></h2>
     <div class="qa"><${qt} class="qc q1"${qa}><span class="qi">${ic('music', 18)}</span><span class="qt"><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><small>${t('todayPl')} · Spotify</small></span><i class="qg">${ic('arrow', 14)}</i></${qt}>
     <div class="qc q2" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><span class="qi">${ic('headphones', 18)}</span><span class="qt"><b>Stationhead</b><small>Join Stationhead</small></span><i class="qg">${ic('arrow', 14)}</i></div></div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
@@ -1219,7 +1272,7 @@ const V = {
       <div class="srow" role="button" tabindex="0" onclick="go('missions')"><span class="si">${ic('chk', 24)}</span><span class="st"><b>${t('checkin')}</b><small>${t('ckSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
       <div class="srow" role="button" tabindex="0" onclick="go('howto')"><span class="si">${ic('doc', 24)}</span><span class="st"><b>${t('howUse')}</b><small>${t('howSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
       <div class="srow" role="button" tabindex="0" onclick="const f=document.getElementById('pinf');f.hidden=!f.hidden"><span class="si">${ic('lock', 24)}</span><span class="st"><b>${t('chPin')}</b><small>${t('chPinSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
-      <div class="pinf" id="pinf" hidden><label for="pin-o">${t('oldPin')}</label><input id="pin-o" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"><label for="pin-n">${t('newPin')}</label><input id="pin-n" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password"><button class="btn" onclick="savePin(this)">${t('save')}</button></div>
+      <div class="pinf" id="pinf" hidden><label class="pl">${t('oldPin')}</label><div class="pin" data-for="pin-o">${PINB}</div><input id="pin-o" type="hidden"><label class="pl">${t('newPin')}</label><div class="pin" data-for="pin-n">${PINB}</div><input id="pin-n" type="hidden"><button class="btn" onclick="savePin(this)">${t('save')}</button></div>
       <div class="srow"><span class="si">${ic('globe', 24)}</span><span class="st"><b>${t('language')}</b></span><span class="seg2"><button class="${lang === 'en' ? 'on' : ''}" onclick="setLang('en')">English</button><button class="${lang === 'th' ? 'on' : ''}" onclick="setLang('th')">ไทย</button></span></div>
       <div class="srow"><span class="si">${ic(theme === 'light' ? 'sun' : 'moon', 24)}</span><span class="st"><b>${t('theme')}</b></span><span class="seg2"><button class="${theme === 'light' ? 'on' : ''}" onclick="setTheme('light')">${t('light')}</button><button class="${theme === 'dark' ? 'on' : ''}" onclick="setTheme('dark')">${t('dark')}</button></span></div>
       <div class="srow"><span class="si">${ic('eye', 24)}</span><span class="st"><b>${t('pub')}</b></span><span class="seg2"><button class="${u.public ? 'on' : ''}" onclick="togglePub(true)">${t('on')}</button><button class="${u.public ? '' : 'on'}" onclick="togglePub(false)">${t('off')}</button></span></div>
@@ -1276,7 +1329,7 @@ const V = {
   },
   auth() {
     return `<div class="card">
-    <label for="u">${t('user')}</label><input id="u" autocomplete="username" autocapitalize="none" placeholder="@twitter"><label for="p">${t('pin')}</label><input id="p" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password">
+    <label for="u">${t('user')}</label><input id="u" autocomplete="username" autocapitalize="none" placeholder="@twitter"><label class="pl">${t('pin')}</label><div class="pin" data-for="p" data-enter="login">${PINB}</div><input id="p" type="hidden">
     <button class="btn" onclick="auth('login')">${t('login')}</button><button class="btn soft" onclick="auth('register')">${t('register')}</button><div class="err" id="err" role="alert"></div></div>`;
   },
 };
@@ -1302,7 +1355,7 @@ window.logout = logout;
 window.auth = async (kind) => {
   const bt = [...document.querySelectorAll('.login .btn')]; bt.forEach((b) => { b.disabled = true; b.style.opacity = '.6'; });
   try { const r = await api(kind, { username: v('u'), pin: v('p') }); S.token = r.token; S.user = r.user; localStorage.setItem('tok', r.token); S.tab = 'home'; render(); }
-  catch (e) { $('#err').textContent = e.message; bt.forEach((b) => { b.disabled = false; b.style.opacity = ''; }); }
+  catch (e) { $('#err').textContent = e.message; { const pr = document.querySelector('.pin[data-for="p"]'); if (pr) { clearPin('p'); pr.classList.remove('shake'); void pr.offsetWidth; pr.classList.add('shake'); const f = pr.querySelector('input'); if (f) f.focus(); } } bt.forEach((b) => { b.disabled = false; b.style.opacity = ''; }); }
 };
 window.doCheckin = safe(async (el) => { lock(el); const r = await api('checkin'); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
 window.doAct = safe(async (a, el) => { lock(el); const r = await api(a); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
@@ -1392,20 +1445,50 @@ window.setLang = (l) => { if (lang !== l) toggleLang(); };
 window.savePin = safe(async (el) => {
   const o = v('pin-o'), n = v('pin-n'); lock(el);
   try { await api('changePin', { oldPin: o, newPin: n }); } finally { el.disabled = false; el.textContent = el.dataset.t; }
-  toast(t('saved')); $('#pin-o').value = ''; $('#pin-n').value = ''; $('#pinf').hidden = true;
+  toast(t('saved')); clearPin('pin-o'); clearPin('pin-n'); $('#pinf').hidden = true;
 });
 window.toggleLang = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(true); };
 
+const PINB = [1, 2, 3, 4].map((n) => `<input class="pin-box" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="PIN ${n}">`).join('');
+function clearPin(id) { const r = document.querySelector('.pin[data-for="' + id + '"]'); if (r) r.querySelectorAll('input').forEach((b) => { b.value = ''; b.classList.remove('on'); }); const h = document.getElementById(id); if (h) h.value = ''; }
+/* 4-box PIN: auto-advance, backspace, arrows, paste, Enter (works after every re-render) */
+(() => {
+  const isBox = (el) => el && el.classList && el.classList.contains('pin-box');
+  const boxes = (b) => [...b.parentNode.querySelectorAll('input')];
+  const sync = (root) => { const h = document.getElementById(root.dataset.for); if (h) h.value = [...root.querySelectorAll('input')].map((b) => b.value).join(''); };
+  document.addEventListener('focusin', (e) => { if (isBox(e.target)) { try { e.target.select(); } catch {} } });
+  document.addEventListener('input', (e) => {
+    const b = e.target; if (!isBox(b)) return;
+    b.value = b.value.replace(/\D/g, '').slice(-1); b.classList.toggle('on', !!b.value);
+    const bx = boxes(b), i = bx.indexOf(b); if (b.value && i < 3) bx[i + 1].focus();
+    sync(b.parentNode);
+  });
+  document.addEventListener('keydown', (e) => {
+    const b = e.target; if (!isBox(b)) return;
+    const bx = boxes(b), i = bx.indexOf(b);
+    if (e.key === 'Backspace' && !b.value && i > 0) { e.preventDefault(); bx[i - 1].value = ''; bx[i - 1].classList.remove('on'); bx[i - 1].focus(); sync(b.parentNode); }
+    else if (e.key === 'ArrowLeft' && i > 0) { e.preventDefault(); bx[i - 1].focus(); }
+    else if (e.key === 'ArrowRight' && i < 3) { e.preventDefault(); bx[i + 1].focus(); }
+    else if (e.key === 'Enter' && b.parentNode.dataset.enter === 'login') { e.preventDefault(); window.auth('login'); }
+  });
+  document.addEventListener('paste', (e) => {
+    const b = e.target; if (!isBox(b)) return;
+    const tx = ((e.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '').slice(0, 4); if (!tx) return;
+    e.preventDefault(); const bx = boxes(b);
+    tx.split('').forEach((c, k) => { bx[k].value = c; bx[k].classList.add('on'); }); bx[Math.min(tx.length, 3)].focus(); sync(b.parentNode);
+  });
+})();
+
 /* press feedback: pointerdown adds .pr, removed shortly after release */
 (() => {
-  const SEL = 'nav button,button,a[href],[role=button],.btn,.pill,.tag,.tr,.pf,.ytv,.go,.seg button,.card.feat';
+  const SEL = 'nav button,button,a[href],[role=button],.btn,.pill,.tag,.tr,.pf,.ytv,.go,.seg button,.card.feat,.qc,.srow,.lvc';
   document.addEventListener('touchstart', () => {}, { passive: true });
   document.addEventListener('pointerdown', (e) => {
     const nb = e.target.closest && e.target.closest('nav button'); if (nb && nb.dataset.k) prefetch(nb.dataset.k);
     const el = e.target.closest && e.target.closest(SEL);
     if (!el || el.disabled) return;
     el.classList.add('pr'); el._t = Date.now();
-    const off = () => { const w = Math.max(0, 80 - (Date.now() - el._t)); setTimeout(() => el.classList.remove('pr'), w); };
+    const off = () => { const w = Math.max(0, 110 - (Date.now() - el._t)); setTimeout(() => el.classList.remove('pr'), w); };
     ['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => el.addEventListener(n, off, { once: true }));
   }, { passive: true });
 })();
