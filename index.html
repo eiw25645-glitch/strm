@@ -785,7 +785,6 @@ button,.btn,[role=button]{min-height:44px}
 /* windmill + wave hand + neutral songs panel */
 header h1{display:flex;align-items:center;gap:6px}
 svg.i.wm{width:42px;height:42px;margin-top:-8px;flex:none;color:var(--tx);stroke-width:2.2px!important}
-svg.i.wv{width:31px;height:27px;vertical-align:-5px;margin-left:5px;color:var(--tx);stroke-width:1.8px!important}
 .wl{font-size:17px!important}
 .tr+.tr::before{background:rgba(128,128,128,.3)!important}
 
@@ -842,6 +841,28 @@ body :is(.tr,.qc,.srow,.lvc,.ytv,.card[role=button]){--px:.97;--py:.95;transitio
 body nav button{--px:.9;--py:.9}
 html body .pr.pr{transform:scale(var(--px,.94),var(--py,.9))!important;filter:none!important;transition:transform .08s ease-out,background-color .15s,color .15s!important}
 @media (prefers-reduced-motion:reduce){body :is(.btn,.pill,.tag,.go,.pb,.pf,.tr,.qc,.srow,.lvc,.ytv,nav button,.seg button,.seg2 button){transition:transform .12s ease-out,background-color .15s!important}html body .pr.pr{transform:scale(.97)!important}body .pin.shake{animation:none}}
+/* ===== round 2: title marker, bolder song titles, tighter home, compact settings ===== */
+body header h1 .chip em{font-family:var(--fd)!important;font-weight:400!important;font-style:normal;color:var(--tx);padding:0 4px;background:linear-gradient(transparent 62%,var(--y) 62%,var(--y) 92%,transparent 92%)!important}
+body .tl{background:transparent!important}
+body .tn b{font-weight:800!important}
+body .tr{padding:3px 8px!important;gap:12px!important}
+body .tc{width:38px!important;height:38px!important}
+body .tl{padding:2px 6px!important;margin:2px 0 8px!important}
+body .pb{width:30px!important;height:30px!important}
+body .card.cc{margin-bottom:8px}
+body .sec{margin:14px 4px 6px}
+body .wl{margin:0 0 10px}
+/* settings: slim rows */
+body .srow{padding:9px 14px;gap:12px;min-height:0}
+body .srow .si{width:22px}
+body .srow .si svg{width:20px;height:20px}
+body .srow .st{gap:0}
+body .srow .st b{font-size:15px}
+body .srow .st small{font-size:12px}
+body .seg2 button{min-height:0;padding:5px 12px;font-size:13px}
+body .seg2{padding:2px}
+body .more .pill{min-height:0;padding:6px 12px;font-size:13px}
+body .more{gap:8px;margin-top:10px}
 </style>
 <script>/* no zoom: block pinch + double-tap zoom on iOS */
 ['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
@@ -1203,7 +1224,7 @@ const V = {
     S.user = m.user; const u = m.user;
     const rw = 'style="justify-content:flex-start;gap:12px"';
     const qt = d.playlist ? 'a' : 'div', qa = d.playlist ? ` href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener"` : '';
-    return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')} <svg class="i wv" viewBox="-4 0 36 32" aria-hidden="true"><g transform="rotate(12 16 18)" style="fill:var(--y)"><rect x="24.2" y="15" width="4.2" height="9" rx="2.1" transform="rotate(-42 26.3 19.5)"/><rect x="21" y="8.5" width="4.2" height="14" rx="2.1"/><rect x="16.5" y="4.5" width="4.2" height="18" rx="2.1"/><rect x="12" y="3" width="4.2" height="19" rx="2.1"/><rect x="7.5" y="6" width="4.2" height="16" rx="2.1"/><path d="M7.5 17v5.5c0 4.2 3 6.5 7.2 6.5h3.3c4 0 7.2-2.4 7.2-6.4V17z"/></g><path d="M2.5 11a8 8 0 0 1 2-5.5M-1 13a11.5 11.5 0 0 1 2.5-9"/></svg></h2>
+    return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')}</h2>
     <div class="qa"><${qt} class="qc q1"${qa}><span class="qi">${ic('music', 18)}</span><span class="qt"><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><small>${t('todayPl')} · Spotify</small></span><i class="qg">${ic('arrow', 14)}</i></${qt}>
     <div class="qc q2" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><span class="qi">${ic('headphones', 18)}</span><span class="qt"><b>Stationhead</b><small>Join Stationhead</small></span><i class="qg">${ic('arrow', 14)}</i></div></div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
