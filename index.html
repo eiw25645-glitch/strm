@@ -888,9 +888,13 @@ const MOCK = {
   stats: () => ({ totalHours: 12.5, totalStreams: 2450, week: [1, 2.5, 0.8, 3, 1.8, 1.4, 0.6], recent: [{ rid: '1', platform: 'Spotify', hours: 2, streams: 150, date: thaiToday(), status: 'approved' }] }),
   ranking: () => ({ items: [{ rank: 1, username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4 }, { rank: 2, username: 'bunny_01', avatar: '🐱', exp: 420, level: 3 }] }),
   a_pending: () => ({ items: [] }),
+  a_users: () => ({ items: [{ id: 'molo2_listener', username: 'molo2_listener', exp: 600, level: 4, totalHours: 12.5, totalStreams: 2450, devices: 1 }, { id: 'bunny_01', username: 'bunny_01', exp: 420, level: 3, totalHours: 6, totalStreams: 800, devices: 2 }], total: 2, page: 0, pageSize: 30 }),
+  a_history: () => ({ user: { id: 'molo2_listener', username: 'molo2_listener', exp: 600, level: 4, streak: 5, totalHours: 12.5, totalStreams: 2450, devices: 1, pic: '' }, week: [1, 2.5, 0.8, 3, 1.8, 1.4, 0.6], items: [{ rid: '1', uid: 'molo2_listener', platform: 'Spotify', hours: 2, streams: 150, date: '2026-11-06', status: 'approved' }] }),
+  a_feed: () => ({ items: [{ rid: '1', uid: 'molo2_listener', platform: 'Spotify', hours: 2, streams: 150, date: '2026-11-06', status: 'approved' }] }),
+  a_bans: () => ({ items: [] }),
 };
 const TTL = { today: 60e3, schedule: 60e3, ranking: 30e3, me: 20e3, missions: 20e3, stats: 20e3 }, MEM = {};
-const READ = new Set(['me', 'today', 'schedule', 'missions', 'stats', 'ranking', 'a_pending', 'login', 'register']);
+const READ = new Set(['me', 'today', 'schedule', 'missions', 'stats', 'ranking', 'a_pending', 'a_users', 'a_history', 'a_feed', 'a_bans', 'login', 'register']);
 let pending = 0;
 const bar = (d) => { pending += d; $('#bar').classList.toggle('on', pending > 0); };
 const INF = {};
@@ -964,9 +968,9 @@ window.pickPic = () => {
 };
 const loadImg = (src) => new Promise((ok, no) => { const m = new Image(); m.onload = () => ok(m); m.onerror = no; m.src = src; });
 /* ===== default avatars: simple person icon on a coloured circle ===== */
-const AV_COLORS = ['#fae469', '#89cefa', '#f9b8cf', '#a8e6cf', '#c9b8f5', '#ffc999', '#ff9f9f', '#8fdcd8'];
+const AV_COLORS = ['#ecd0e6', '#cfe6fb', '#fbeaa0', '#cdeedd', '#ddd3f5', '#fbd9c0', '#f9cdd2', '#c5ebe8'];
 const avIdx = (u) => { const s = String((u && u.username) || '').replace(/^@/, '').toLowerCase(); let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h % AV_COLORS.length; };
-const avSvg = (u) => `<svg class="avs" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="${AV_COLORS[avIdx(u)]}"/><g stroke="#1d1c21" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255,255,255,.7)"><circle cx="50" cy="40" r="15"/><path d="M20 90c0-17 13-26 30-26s30 9 30 26z"/></g></svg>`;
+const avSvg = (u) => `<svg class="avs" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="${AV_COLORS[avIdx(u)]}"/><g fill="#fff"><circle cx="50" cy="39" r="17"/><path d="M16 104c0-23 15-36 34-36s34 13 34 36z"/></g></svg>`;
 const avUri = (u) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(avSvg(u).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" '));
 /* avatar html: uploaded photo if we have one (own photo from this device, or `pic` sent by the server), otherwise the coloured icon */
 const picOk = (v) => typeof v === 'string' && /^(data:image\/(jpeg|png|webp);base64,|https:\/\/)/.test(v);
@@ -1176,12 +1180,30 @@ const V = {
   async admin() {
     if (!S.user) S.user = (await api('me')).user;
     if (!S.user.isAdmin) return `<h2>${t('admin')}</h2><div class="card"><p>Admin only.</p></div>`;
-    const p = await api('a_pending');
+    const [p, us, hi, fd, bn] = await Promise.all([api('a_pending'), api('a_users', { q: AD.q, page: AD.page }), AD.uid ? api('a_history', { uid: AD.uid }).catch(() => null) : null, AD.feed ? api('a_feed').catch(() => null) : null, AD.bans ? api('a_bans').catch(() => null) : null]);
+    const xl = (n) => (/^[A-Za-z0-9_]{1,40}$/.test(String(n)) ? `<a href="https://x.com/${n}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--lk);text-decoration:underline">@${esc(n)}</a>` : '@' + esc(n));
+    const L = (en, th) => (lang === 'th' ? th : en), DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const stc = { approved: 'ok', rejected: 'bad' };
+    const rec = (r, who) => `<div><div><b>${who ? xl(r.uid) + ' · ' : ''}${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams</p></div><span class="tag ${stc[r.status] || ''}">${t(r.status)}</span></div>`;
+    const pages = Math.max(1, Math.ceil((us.total || 0) / (us.pageSize || 30)));
+    const usersHtml = `<div class="card"><h3>${L('Users', 'ผู้ใช้ทั้งหมด')} (${us.total || 0})</h3>
+      <input id="au-q" value="${esc(AD.q)}" placeholder="${L('Search account', 'ค้นหาบัญชี')}" autocapitalize="none" onkeydown="if(event.key==='Enter')admSearch()"><button class="btn soft" onclick="admSearch()">${L('Search', 'ค้นหา')}</button>
+      <div class="list">${us.items.length ? us.items.map((u) => `<div role="button" tabindex="0" onclick="admUser('${esc(u.id)}')" style="cursor:pointer;gap:10px;justify-content:flex-start"><span class="av2">${avSvg(u)}</span><div style="min-width:0;flex:1"><b>${xl(u.username)}${u.isAdmin ? ' ★' : ''}</b><p>LV.${u.level} · ${u.exp} EXP · ${u.totalHours}h · ${u.totalStreams} streams · ${u.devices} ${L('device(s)', 'เครื่อง')}</p></div></div>`).join('') : `<p>${t('empty')}</p>`}</div>
+      ${pages > 1 ? `<div style="display:flex;gap:8px;align-items:center;margin-top:10px"><button class="btn soft" style="margin:0" ${AD.page <= 0 ? 'disabled' : ''} onclick="admPage(${AD.page - 1})">‹</button><span style="flex:1;text-align:center">${AD.page + 1} / ${pages}</span><button class="btn soft" style="margin:0" ${AD.page + 1 >= pages ? 'disabled' : ''} onclick="admPage(${AD.page + 1})">›</button></div>` : ''}</div>`;
+    const detHtml = hi ? `<div class="card"><div class="row" style="justify-content:flex-start;gap:12px"><span class="av2">${avHtml(hi.user)}</span><div style="min-width:0"><h3 style="margin:0">${xl(hi.user.username)}</h3><p class="sub" style="margin:0">LV.${hi.user.level} · ${hi.user.exp} EXP</p></div></div>
+      <p class="sub" style="margin:10px 0 4px">${L('Streak', 'สตรีค')} ${hi.user.streak} · ${L('Hours', 'ชั่วโมง')} ${hi.user.totalHours} · ${L('Streams', 'สตรีม')} ${hi.user.totalStreams} · ${hi.user.devices} ${L('device(s)', 'เครื่อง')}</p>
+      <p class="sub" style="margin:0 0 8px">${L('This week', 'สัปดาห์นี้')}: ${hi.week.map((h, i) => DAYS[i] + ' ' + h).join(' · ')}</p>
+      <div class="list">${hi.items.length ? hi.items.map((r) => rec(r, false)).join('') : `<p>${t('empty')}</p>`}</div>
+      ${AD.pin ? `<p class="sub" style="margin-top:10px">${L('New PIN', 'PIN ใหม่')}: <b>${esc(AD.pin)}</b></p>` : ''}
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn soft" style="margin:0;flex:1" onclick="admReset('${esc(hi.user.id)}')">${L('Reset PIN', 'รีเซ็ต PIN')}</button><button class="btn soft" style="margin:0;flex:1;color:var(--bad,#d63a30)" onclick="admDel('${esc(hi.user.id)}')">${L('Delete user', 'ลบผู้ใช้')}</button></div></div>` : '';
+    const feedHtml = `<div class="card"><div class="row"><h3>${L('Recent activity', 'กิจกรรมล่าสุด')}</h3><button class="tag" onclick="admToggle('feed')">${AD.feed ? L('Hide', 'ซ่อน') : L('Show', 'แสดง')}</button></div>${AD.feed ? `<div class="list">${fd && fd.items.length ? fd.items.map((r) => rec(r, true)).join('') : `<p>${t('empty')}</p>`}</div>` : ''}</div>`;
+    const bansHtml = `<div class="card"><div class="row"><h3>${L('Blocked devices', 'อุปกรณ์ที่ถูกบล็อก')}</h3><button class="tag" onclick="admToggle('bans')">${AD.bans ? L('Hide', 'ซ่อน') : L('Show', 'แสดง')}</button></div>${AD.bans ? `<div class="list">${bn && bn.items.length ? bn.items.map((b) => `<div><div><b>${esc(b.short)}${b.acc ? ' · ' + xl(b.acc) : ''}</b><p>${b.at ? esc(new Date(b.at).toLocaleString()) : ''}</p></div><button class="tag ok" style="border:0" onclick="admUnban('${esc(b.dev)}')">${L('Unblock', 'ปลดบล็อก')}</button></div>`).join('') : `<p>${t('empty')}</p>`}</div>` : ''}</div>`;
     return `<h2>${t('admin')}</h2><p class="sub"></p>
     <div class="card"><h3>${t('aPl')}</h3><label for="a-d">${t('date')}</label><input id="a-d" type="date" value="${thaiToday()}"><label for="a-t">${t('aTitle')}</label><input id="a-t" value="MARK LEE — Daily Stream"><label for="a-u">${t('aUrl')}</label><input id="a-u" type="url"><button class="btn" onclick="adm('a_setPlaylist',{date:v('a-d'),title:v('a-t'),url:v('a-u')})">${t('save')}</button></div>
     <div class="card"><h3>${t('aRoom')}</h3><input id="a-r" type="url" placeholder="https://"><button class="btn" onclick="adm('a_setRoom',{url:v('a-r')})">${t('save')}</button></div>
     <div class="card"><h3>${t('aSpecial')}</h3><input id="a-x"><button class="btn" onclick="adm('a_setSpecial',{text:v('a-x')})">${t('save')}</button></div>
-    <div class="card"><h3>${t('aPend')}</h3><div class="list">${p.items.length ? p.items.map((r) => `<div><div><b>${esc(r.uid)} · ${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams${/^https:\/\//.test(r.evidence) ? ` · <a href="${safeUrl(r.evidence)}" target="_blank" rel="noopener">link</a>` : ''}</p></div><div style="display:flex;gap:6px"><button class="tag ok" style="border:0" onclick="review('${esc(r.rid)}',true)">${t('approve')}</button><button class="tag bad" style="border:0" onclick="review('${esc(r.rid)}',false)">${t('reject')}</button></div></div>`).join('') : `<p>${t('empty')}</p>`}</div></div>`;
+    <div class="card"><h3>${t('aPend')}</h3><div class="list">${p.items.length ? p.items.map((r) => `<div><div><b>${xl(r.uid)} · ${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams${/^https:\/\//.test(r.evidence) ? ` · <a href="${safeUrl(r.evidence)}" target="_blank" rel="noopener">link</a>` : ''}</p></div><div style="display:flex;gap:6px"><button class="tag ok" style="border:0" onclick="review('${esc(r.rid)}',true)">${t('approve')}</button><button class="tag bad" style="border:0" onclick="review('${esc(r.rid)}',false)">${t('reject')}</button></div></div>`).join('') : `<p>${t('empty')}</p>`}</div></div>
+    ${usersHtml}${detHtml}${feedHtml}${bansHtml}`;
   },
   auth() {
     return `<div class="card">
@@ -1223,6 +1245,14 @@ window.sendRec = safe(async (el) => {
 window.togglePub = safe(async (val) => { await api('setPublic', { value: val }); render(); });
 window.unlock = safe(async () => { S.admin = v('a-s'); sessionStorage.setItem('adm', S.admin); try { await api('a_pending'); } catch (e) { S.admin = ''; sessionStorage.removeItem('adm'); throw e; } render(); });
 window.adm = safe(async (a, b) => { await api(a, b); toast(t('saved')); });
+const AD = { q: '', page: 0, uid: '', feed: false, bans: false, pin: '' };   // admin page state
+window.admSearch = () => { AD.q = v('au-q'); AD.page = 0; AD.uid = ''; render(true); };
+window.admPage = (n) => { AD.page = Math.max(0, n); render(true); };
+window.admUser = (id) => { AD.uid = AD.uid === id ? '' : id; AD.pin = ''; render(true); };
+window.admToggle = (k) => { AD[k] = !AD[k]; render(true); };
+window.admReset = safe(async (id) => { if (!confirm(lang === 'th' ? 'รีเซ็ต PIN ของ @' + id + ' ? (ผู้ใช้จะถูกออกจากระบบทุกเครื่อง)' : 'Reset PIN for @' + id + '? (they will be logged out everywhere)')) return; const r = await api('a_resetPin', { uid: id }); AD.pin = r.pin; render(true); });
+window.admDel = safe(async (id) => { if (!confirm(lang === 'th' ? 'ลบ @' + id + ' ถาวร?' : 'Permanently delete @' + id + '?')) return; const block = confirm(lang === 'th' ? 'บล็อกอุปกรณ์ของผู้ใช้นี้ด้วยไหม? (OK = บล็อก, Cancel = ไม่บล็อก)' : 'Also block this user\'s devices? (OK = block, Cancel = don\'t block)'); await api('a_deleteUser', { uid: id, block }); AD.uid = ''; toast(t('saved')); render(true); });
+window.admUnban = safe(async (dev) => { await api('a_unban', { dev }); render(true); });
 window.review = safe(async (rid, approve) => { await api('a_review', { rid, approve }); render(); });
 
 /* ---------- shell ---------- */
