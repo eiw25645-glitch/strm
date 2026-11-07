@@ -263,6 +263,7 @@ nav .on{background:rgba(77,163,255,.14);color:#5aa9ff;border-radius:14px}
 .song .vw{display:flex;align-items:center;justify-content:center;gap:3px;font-size:10px;color:#a9a5d0;margin:-3px 0 6px}.song .vw svg{color:#ff9ec7}
 /* youtube cards */
 .ytrow{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 0 8px}.ytrow::-webkit-scrollbar{display:none}
+.ytc:only-child{flex-basis:100%}
 .ytc{flex:0 0 78%;scroll-snap-align:start;background:#1c1930;border:2px solid #2d2a4a;border-radius:24px;padding:10px;box-shadow:0 4px 0 #0a0914;min-width:0}
 .ytv{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#241f3d;border:0;padding:0;margin-bottom:10px;cursor:pointer}
 .ytv img,.ytv iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
@@ -519,7 +520,7 @@ const V = {
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">MARK LEE ${ic('arrow', 12)}</a></div>
     <div class="songs">${SONGS.map((x) => `<div class="song"><div class="cov">${x.isNew ? '<i class="nw">NEW</i>' : ''}${x.img ? `<img src="${esc(x.img)}" alt="${esc(x.t)} cover" loading="lazy">` : ic('music', 22)}</div><b>${esc(x.t)}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}<a class="btn sm" href="${safeUrl(x.url)}" target="_blank" rel="noopener">Stream</a></div>`).join('')}</div>
     <h3 class="sec">MARK's YouTube</h3>
-    <div class="ytrow">${SONGS.map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
+    <div class="ytrow">${SONGS.filter((x) => x.isNew).map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
       const media = ok ? `<button class="ytv" onclick="playYt(this,'${id}')" aria-label="Play ${esc(x.t)}"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="${esc(x.t)}" loading="lazy" onerror="this.src='${esc(x.img)}'"><span class="pl"><i>${ic('play', 22)}</i></span></button>`
         : `<a class="ytv" href="https://www.youtube.com/results?search_query=${encodeURIComponent('MARK ' + x.t)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on YouTube"><img src="${esc(x.img)}" alt="" loading="lazy"><span class="pl"><i>${ic('arrow', 20)}</i></span></a>`;
       return `<div class="ytc">${media}<div class="row"><div><b>${esc(x.t)}</b>${vw}</div>${ok ? `<a class="tag ol" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">YouTube ${ic('arrow', 12)}</a>` : ''}</div></div>`; }).join('')}</div>
