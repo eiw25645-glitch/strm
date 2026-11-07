@@ -53,6 +53,16 @@ async function checkPin(u, pin) {
   fail(n >= MAX_FAILS ? `Too many attempts. Try again in ${LOCK_SEC / 60} min.` : `Incorrect PIN. ${MAX_FAILS - n} attempt(s) left.`, 401);
 }
 const okUrl = (u) => typeof u === 'string' && /^https:\/\/[^\s]+$/.test(u) && u.length < 500;
+// Spotify cover via the public oEmbed endpoint (no API key). Returns '' if unavailable.
+async function spCover(url) {
+  if (!/^https:\/\/open\.spotify\.com\//.test(url || '')) return '';
+  try {
+    const r = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url), { signal: AbortSignal.timeout(4000) });
+    if (!r.ok) return '';
+    const j = await r.json();
+    return okUrl(j.thumbnail_url) ? j.thumbnail_url : '';
+  } catch { return ''; }
+}
 
 async function getUser(id) {
   const u = await redis.hgetall(`ss:user:${id}`);
@@ -128,7 +138,11 @@ const A = {
   },
   async today() {
     const t = today();
-    const [pl, room] = await Promise.all([redis.get(`ss:playlist:${t}`), redis.get('ss:config:room')]);
+    let [pl, room] = await Promise.all([redis.get(`ss:playlist:${t}`), redis.get('ss:config:room')]);
+    if (pl && pl.img === undefined) {   // playlist saved before covers existed: fetch once and keep it
+      pl.img = await spCover(pl.url);
+      await redis.set(`ss:playlist:${t}`, pl, { keepTtl: true });
+    }
     return { date: t, playlist: pl || null, room: room || null, guide: (await redis.get('ss:config:guide')) || null };
   },
   async schedule() {
@@ -235,9 +249,9 @@ const A = {
     ctx.admin();
     if (!isDate(date)) fail('Invalid date');
     if (!okUrl(url)) fail('URL must start with https://');
-    const v = { url, title: String(title || 'Daily Stream').slice(0, 80) };
+    const v = { url, title: String(title || 'Daily Stream').slice(0, 80), img: await spCover(url) };
     await redis.set(`ss:playlist:${date}`, v, { ex: 90 * 864e2 });
-    return { ok: true };
+    return { ok: true, cover: !!v.img };
   },
   async a_setRoom({ url }, ctx) {
     ctx.admin();
