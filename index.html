@@ -918,9 +918,17 @@ async function apiRun(action, body, ttl) {
     return v;
   } finally { bar(-1); }
 }
+const DEV = (() => {
+  const mk = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), (x) => x.toString(16).padStart(2, '0')).join('');
+  try {
+    let d = localStorage.getItem('dev');
+    if (!/^[a-f0-9]{32}$/.test(d || '')) { d = mk(); localStorage.setItem('dev', d); }
+    return d;
+  } catch { return mk(); }
+})();
 async function rawApi(action, body = {}) {
   if (DEMO) { const f = MOCK[action]; return f ? f() : { ok: true, user: S.user, gained: 10 }; }
-  const r = await fetch('/api/rpc', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token, 'x-admin-secret': S.admin }, body: JSON.stringify({ action, ...body }) });
+  const r = await fetch('/api/rpc', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token, 'x-admin-secret': S.admin, 'x-device': DEV }, body: JSON.stringify({ action, ...body }) });
   const j = await r.json().catch(() => ({ error: 'Server error' }));
   if (!r.ok) { if (r.status === 401 && S.token) { logout(); } throw new Error(j.error || 'Error'); }
   return j;
