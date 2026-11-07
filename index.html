@@ -677,6 +677,32 @@ nav .on{width:auto;height:auto;margin:0;background:var(--y);color:var(--on)}
 .fi{animation:none!important}
 .btn,.pill,.tag,.go,.pb,.tr,.pf,.ytv,.seg button,nav button,.card[role=button],.card.feat,.lvc,.stat{transition:transform .1s ease-out,background-color .1s ease,filter .1s ease}
 .pr{transition:transform .06s ease-out!important}
+
+/* ===== songs list: no background panel, no rank numbers ===== */
+.tl{background:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
+
+/* ===== dark theme: Stationhead card = clean dark surface, readable text ===== */
+html[data-theme=dark] .card.cc:not(.feat){background:#1a1a1f!important;border:1px solid #34333a!important;color:var(--tx)}
+html[data-theme=dark] .card.cc:not(.feat) b{color:var(--tx)!important}
+html[data-theme=dark] .card.cc:not(.feat) p{color:var(--mu)!important}
+html[data-theme=dark] .card.cc:not(.feat) .ico.gr{background:var(--y)!important}
+html[data-theme=dark] .card.cc:not(.feat) .ico.gr svg{color:#1d1c21!important}
+html[data-theme=dark] .card.cc:not(.feat) .tag.ol{background:var(--y)!important;color:#1d1c21!important}
+
+/* ===== settings list ===== */
+.card.set{padding:0!important;overflow:hidden;border:1px solid var(--ln)!important;border-radius:22px!important}
+.srow{display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid var(--ln);cursor:pointer;color:var(--tx)}
+.srow:last-child{border-bottom:0}
+.srow .si{width:28px;display:grid;place-items:center;color:var(--lk);flex:none}
+.srow .st{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.srow .st b{font-size:16px;font-weight:700}
+.srow .st small{color:var(--mu);font-size:13px}
+.srow .ch{color:var(--mu);display:grid;place-items:center}
+.seg2{display:inline-flex;border:1px solid var(--ln);border-radius:99px;padding:3px;gap:2px;flex:none}
+.seg2 button{border:0;background:transparent;color:var(--tx);border-radius:99px;padding:7px 14px;font:600 13px "Rubik","Anuphan",sans-serif;cursor:pointer}
+.seg2 button.on{background:var(--y);color:var(--on)}
+.pinf{padding:0 16px 16px;border-bottom:1px solid var(--ln)}
+.pinf[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -695,6 +721,7 @@ const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const IC={"home": "<path d=\"M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/>", "music": "<path d=\"M9 18V5l11-2v13\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><circle cx=\"17\" cy=\"16\" r=\"3\"/>", "radio": "<rect x=\"3\" y=\"8\" width=\"18\" height=\"12\" rx=\"3\"/><path d=\"M7 8l10-5\"/><circle cx=\"9\" cy=\"14\" r=\"2.5\"/><path d=\"M15 12h3M15 15h3\"/>", "spark": "<path d=\"M12 3l2.4 5.6 6 .6-4.5 4 1.4 5.9L12 16l-5.3 3.1 1.4-5.9-4.5-4 6-.6z\"/>", "chart": "<path d=\"M4 20v-9M10 20V4M16 20v-6M2 20h20\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4 4-6 8-6s8 2 8 6\"/>", "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/><rect x=\"17\" y=\"14\" width=\"4\" height=\"7\" rx=\"2\"/>", "clock": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>", "bolt": "<path d=\"M13 2L4 14h7l-1 8 9-12h-7z\"/>", "flame": "<path d=\"M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z\"/>", "trophy": "<path d=\"M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M10 17h4\"/>", "gear": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"/>", "medal": "<circle cx=\"12\" cy=\"9\" r=\"5\"/><path d=\"M8.5 13L7 21l5-3 5 3-1.5-8\"/>", "crown": "<path d=\"M3 8l4 4 5-7 5 7 4-4-2 11H5z\"/>", "diamond": "<path d=\"M6 3h12l4 6-10 12L2 9zM2 9h20\"/>", "sprout": "<path d=\"M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z\"/>"};
 const ic=(n,s=20)=>`<svg class="i" data-n="${n}" viewBox="0 0 24 24" style="width:${s}px;height:${s}px">${IC[n]||''}</svg>`;
+IC.chk='<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/>';IC.doc='<path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 12h6M9 16h6"/>';IC.lock='<rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>';IC.globe='<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>';IC.swap='<path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/>';IC.chev='<path d="M9 5l7 7-7 7"/>';IC.eye='<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
 IC.star='<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>';IC.tri='<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>';IC.cal='<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>';IC.play='<rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>';IC.sun='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';IC.moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';IC.arrow='<path d="M5 12h14M13 6l6 6-6 6"/>';
 // MARK's songs (covers embedded as base64, no extra files)
 const MARK_PROFILE = 'https://open.spotify.com/artist/70DFixYAFPv4Pf9kgSfR9O';
@@ -735,7 +762,7 @@ const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 1
 
 /* ---------- i18n ---------- */
 const T = {
-  en: { theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
+  en: { ckSub: 'Check in for the day', howUse: 'How to use', howSub: 'Steps for using this page', chPin: 'Change PIN', chPinSub: 'Update your 4-digit code', oldPin: 'Current PIN', newPin: 'New PIN', switchAcc: 'Switch account', switchSub: 'Change Twitter account', theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
     welcome: 'Welcome back!', journey: 'Your streaming journey', left: (n, l) => `${n} EXP left to reach Level ${l}`, maxed: 'Max level reached',
     hours: 'Streaming hours', streams: 'Reported streams', totalExp: 'Total EXP', streak: 'Current streak', days: 'days', todayPl: 'Today’s playlist', open: 'Open', none: 'Not set yet',
     openSpotify: 'Open Spotify', schedule: 'Playlist schedule', today: 'Today', upcoming: 'Upcoming', notSet: 'Not set',
@@ -748,7 +775,7 @@ const T = {
     login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-  th: { theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
+  th: { ckSub: 'เช็คอินประจำวัน', howUse: 'วิธีใช้งาน', howSub: 'ขั้นตอนการใช้งานเว็บนี้', chPin: 'เปลี่ยน PIN', chPinSub: 'เปลี่ยนรหัส 4 หลัก', oldPin: 'PIN ปัจจุบัน', newPin: 'PIN ใหม่', switchAcc: 'เปลี่ยนบัญชี', switchSub: 'เปลี่ยนบัญชี Twitter', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
     welcome: 'ยินดีต้อนรับกลับ!', journey: 'เส้นทางสตรีมของคุณ', left: (n, l) => `อีก ${n} EXP ถึงเลเวล ${l}`, maxed: 'ถึงเลเวลสูงสุดแล้ว',
     hours: 'ชั่วโมงสตรีม', streams: 'ยอดสตรีมที่รายงาน', totalExp: 'EXP รวม', streak: 'สตรีคต่อเนื่อง', days: 'วัน', todayPl: 'เพลย์ลิสต์วันนี้', open: 'เปิด', none: 'ยังไม่ได้ตั้ง',
     openSpotify: 'เปิด Spotify', schedule: 'ตารางเพลย์ลิสต์', today: 'วันนี้', upcoming: 'เร็วๆ นี้', notSet: 'ยังไม่ตั้ง',
@@ -914,21 +941,6 @@ window.saveId = () => {
   }, 'image/png');
 };
 
-const eventCards = () => {
-  const row = (a, b) => `<div><span>${a}</span><span class="tag">${b}</span></div>`;
-  const step = (n, a, extra = '') => `<div><span>${n} · ${a}</span>${extra}</div>`;
-  return `<h3 class="sec">Support Stream “Windmill”</h3>
-    <div class="card"><h3>🐯♥️ ทีมสตรีมหลังบ้าน 5 คน</h3><div class="list">${row('LP vinyl (ถ้าหาได้)', '1 คน')}${row('Day dream kit', '1 คน')}${row('Photo Art Book', '1 คน')}${row('Pocket', '2 คน')}</div></div>
-    <div class="card"><h3>💬 วิธีเข้าร่วมกิจกรรม</h3><p>ให้ลงบันทึกการสตรีมรายวัน</p><div class="list">${step('1', 'check in สตรีมต่อเนื่องทุกวัน (เช็คจากระบบพี่เหมย)', '<span class="tag bad">กำลังพัฒนา</span>')}${step('2', 'เช็คอินวันที่สตรีม')}${step('3', 'กรอกจำนวนที่สตรีมต่อวัน')}</div>
-      <p style="margin-top:12px">กิจกรรมนี้จะสุ่มผู้โชคดีโดยนับจาก <b>5 ไอดี = 1 สิทธิ์</b></p>
-      <p style="margin-top:8px">ผู้เข้าร่วมต้องลงทะเบียนในเว็บของแอดมินเพื่อเช็คอินรายวันเท่านั้น โดยผู้เช็คอินจะถือว่าเข้าร่วมกิจกรรมโดยอัตโนมัติ</p>
-      <button class="btn soft" onclick="go('stats')">กรอกยอดสตรีม</button></div>
-    <div class="card"><h3>🎀 ประกาศ</h3><div class="list"><div><span>อัพเดทจำนวนสิทธิ์</span><span class="tag">หลังจบกิจกรรม 3 วัน</span></div><div><span>ประกาศผู้โชคดี</span><span class="tag">หลังจบกิจกรรม 7 วัน</span></div></div>
-      <p style="margin-top:10px">หากพบว่ามีการกรอกยอดเข้ามาเกินความเป็นจริง ขออนุญาตตัดสิทธิ์โดยไม่แจ้งให้ทราบ</p><p style="margin-top:6px">คำตัดสินจากทางบ้านถือเป็นที่สิ้นสุด</p></div>
-    <div class="card"><h3>🐯🎧 Markfs Spotify</h3><div class="list">${row('Pocket', '3 คน')}</div>
-      <p style="margin-top:10px">แคปหน้า listen stat วันที่ 4-6/12/26</p><p style="margin-top:6px">Top song : เพลงใหม่ของมาร์ค</p><p style="margin-top:6px">ยอดสตรีมขั้นต่ำ 82 plays</p></div>`;
-};
-
 const V = {
   async home() {
     const [m, d, yv] = await Promise.all([api('me'), api('today'), getViews()]);
@@ -938,7 +950,7 @@ const V = {
     <div class="card feat cc"><div class="row"><div class="row" ${rw}><div class="ico plc">${ic('music', 16)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="go" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener" aria-label="Open">${ic('arrow', 16)}</a>` : ''}</div></div>
     <div class="card cc" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><div class="row"><div class="row" ${rw}><div class="ico gr">${ic('headphones', 16)}</div><div><b>Stationhead</b><p>Join Stationhead</p></div></div><span class="tag ol">${t('open')}</span></div></div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
-    <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="rk">${n + 1}</span><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
+    <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
     <h3 class="sec">Play</h3>
     <div class="ytrow">${SONGS.filter((x) => x.isNew).map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
       const media = ok ? `<div class="ytv"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" onerror="this.src='${esc(x.img)}'"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0&modestbranding=1" title="${esc(x.t)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
@@ -972,8 +984,7 @@ const V = {
     ${mc(t('checkin'), t('checkinD'), 10, m.checkin ? done : `<button class="btn soft" onclick="doCheckin(this)">${t('doCheckin')}</button>`)}
     ${mc(t('plM'), t('plD'), 20, m.playlist.done ? done : `<button class="btn soft" ${m.playlist.available ? '' : 'disabled'} onclick="doAct('claimPlaylist',this)">${t('claim')}</button>`)}
     ${mc(t('wkM'), t('wkD'), 100, `<div class="bar"><i style="width:${Math.min(100, (w.days / w.target) * 100)}%"></i></div><p>${w.days} / ${w.target} ${t('days')}</p>${w.claimed ? done : `<button class="btn soft" ${w.days >= w.target ? '' : 'disabled'} onclick="doAct('claimWeekly',this)">${t('claim')}</button>`}`)}
-    ${mc(t('spM'), esc(m.special || t('noSpecial')), 200, '')}
-    ${eventCards()}`;
+    ${mc(t('spM'), esc(m.special || t('noSpecial')), 200, '')}`;
   },
   async stats() {
     const s = await api('stats');
@@ -1001,9 +1012,22 @@ const V = {
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
     <div class="card"><h3>${t('ach')}</h3><div class="ach">${ACH.map(([k, e]) => `<div class="${u.badges.includes(k) ? '' : 'lock'}"><span>${ic(e, 26)}</span>${t('ach_' + k)}</div>`).join('')}</div></div>
-    <div class="card"><h3>${t('acc')}</h3><div class="list"><div><span>${t('theme')}</span><button class="tag" style="border:0" onclick="toggleTheme()">${ic(theme === 'light' ? 'sun' : 'moon', 14)} ${theme === 'light' ? t('light') : t('dark')}</button></div><div><span>${t('language')}</span><button class="tag" style="border:0" onclick="toggleLang()">${lang === 'th' ? 'ไทย' : 'English'}</button></div><div><span>${t('pub')}</span><button class="tag" style="border:0" onclick="togglePub(${!u.public})">${u.public ? t('on') : t('off')}</button></div></div>
-      <button class="btn soft" onclick="logout()">${t('logout')}</button></div>
+    <div class="card set">
+      <div class="srow" role="button" tabindex="0" onclick="go('missions')"><span class="si">${ic('chk', 24)}</span><span class="st"><b>${t('checkin')}</b><small>${t('ckSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
+      <div class="srow" role="button" tabindex="0" onclick="go('howto')"><span class="si">${ic('doc', 24)}</span><span class="st"><b>${t('howUse')}</b><small>${t('howSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
+      <div class="srow" role="button" tabindex="0" onclick="const f=document.getElementById('pinf');f.hidden=!f.hidden"><span class="si">${ic('lock', 24)}</span><span class="st"><b>${t('chPin')}</b><small>${t('chPinSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
+      <div class="pinf" id="pinf" hidden><label for="pin-o">${t('oldPin')}</label><input id="pin-o" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"><label for="pin-n">${t('newPin')}</label><input id="pin-n" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password"><button class="btn" onclick="savePin(this)">${t('save')}</button></div>
+      <div class="srow"><span class="si">${ic('globe', 24)}</span><span class="st"><b>${t('language')}</b></span><span class="seg2"><button class="${lang === 'en' ? 'on' : ''}" onclick="setLang('en')">English</button><button class="${lang === 'th' ? 'on' : ''}" onclick="setLang('th')">ไทย</button></span></div>
+      <div class="srow"><span class="si">${ic(theme === 'light' ? 'sun' : 'moon', 24)}</span><span class="st"><b>${t('theme')}</b></span><span class="seg2"><button class="${theme === 'light' ? 'on' : ''}" onclick="setTheme('light')">${t('light')}</button><button class="${theme === 'dark' ? 'on' : ''}" onclick="setTheme('dark')">${t('dark')}</button></span></div>
+      <div class="srow"><span class="si">${ic('eye', 24)}</span><span class="st"><b>${t('pub')}</b></span><span class="seg2"><button class="${u.public ? 'on' : ''}" onclick="togglePub(true)">${t('on')}</button><button class="${u.public ? '' : 'on'}" onclick="togglePub(false)">${t('off')}</button></span></div>
+      <div class="srow" role="button" tabindex="0" onclick="logout()"><span class="si">${ic('swap', 24)}</span><span class="st"><b>${t('switchAcc')}</b><small>${t('switchSub')}</small></span><span class="ch">${ic('chev', 18)}</span></div>
+    </div>
     <div class="more"><button class="pill" onclick="go('ranking')">${ic('trophy', 14)} ${t('ranking')}</button><button class="pill" onclick="go('idcard')">${ic('star', 14)} ${t('cert')}</button>${u.isAdmin ? `<button class="pill" onclick="go('admin')">${ic('gear', 14)} ${t('admin')}</button>` : ''}</div>`;
+  },
+  async howto() {
+    return `<div class="idtop"><button class="idback" onclick="go('profile')" aria-label="Back"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M15 5l-7 7 7 7"/></svg></button><h2>${t('howUse')}</h2></div>
+    <div class="card"><h3>${t('howStream')}</h3><p>${t('howStreamTxt')}</p></div>
+    <div class="card"><h3>${t('how')}</h3><div class="list"><div><span>1 · ${t('s1')}</span></div><div><span>2 · ${t('s2')}</span></div><div><span>3 · ${t('s3')}</span></div></div></div>`;
   },
   async idcard() {
     if (!S.user) S.user = (await api('me')).user;
@@ -1085,7 +1109,7 @@ async function render(force) {
   if (DEMO && !S.user) S.user = { id: 'demo', username: 'molo2_listener', avatar: '🐰', exp: 600, level: 4, levelName: 'Dedicated Streamer', prevExp: 600, nextExp: 1000, streak: 5, totalHours: 12.5, totalStreams: 2450, public: true, badges: ['first', 'streak5', 'listener', 'dedicated'] };
   nav.hidden = false;
   if (nav.dataset.l !== lang) { nav.innerHTML = TABS.map(([k, e]) => `<button data-k="${k}" onclick="go('${k}')"><span>${ic(e, 20)}</span>${t(k)}</button>`).join(''); nav.dataset.l = lang; }
-  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'idcard', 'admin'].includes(S.tab))));
+  [...nav.children].forEach((b) => b.classList.toggle('on', b.dataset.k === S.tab || (b.dataset.k === 'home' && S.tab === 'station') || (b.dataset.k === 'profile' && ['ranking', 'idcard', 'howto', 'admin'].includes(S.tab))));
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; main.classList.remove('fi'); void main.offsetWidth; main.classList.add('fi'); }
   let html;
@@ -1106,6 +1130,13 @@ function applyTheme() {
 }
 window.toggleTheme = () => { theme = theme === 'light' ? 'dark' : 'light'; try { localStorage.setItem('theme', theme); } catch {} applyTheme(); render(true); };
 applyTheme();
+window.setTheme = (m) => { if (theme !== m) toggleTheme(); };
+window.setLang = (l) => { if (lang !== l) toggleLang(); };
+window.savePin = safe(async (el) => {
+  const o = v('pin-o'), n = v('pin-n'); lock(el);
+  try { await api('changePin', { oldPin: o, newPin: n }); } finally { el.disabled = false; el.textContent = el.dataset.t; }
+  toast(t('saved')); $('#pin-o').value = ''; $('#pin-n').value = ''; $('#pinf').hidden = true;
+});
 window.toggleLang = () => { lang = lang === 'th' ? 'en' : 'th'; localStorage.setItem('lang', lang); render(true); };
 
 /* press feedback: pointerdown adds .pr, removed shortly after release */
