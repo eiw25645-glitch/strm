@@ -540,6 +540,14 @@ header h1 .chip::after{content:none!important}
 .avimg{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
 .pav .cam{position:absolute;right:-2px;bottom:-2px;width:28px;height:28px;border-radius:50%;background:var(--y);color:var(--on);display:grid;place-items:center;font:700 20px/1 "Rubik",sans-serif;font-style:normal;border:2px solid var(--bg)}
 .idc{display:block;width:100%;max-width:340px;margin:0 auto 6px;border-radius:22px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+
+/* ID card modal */
+.idm{position:fixed;inset:0;z-index:50;background:rgba(20,20,26,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow-y:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom))}
+.idw{max-width:380px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center}
+.idcw{position:relative}
+.idc{display:block;width:100%;height:auto;max-width:none;margin:0;box-shadow:0 10px 36px rgba(0,0,0,.28);border-radius:34px}
+.idx{position:absolute;top:5.5%;right:5%;width:44px;height:44px;border-radius:50%;border:1.5px solid #d6d9de;background:#fff;color:#1d1c21;font:400 28px/1 "Rubik",sans-serif;display:grid;place-items:center;padding:0 0 3px;cursor:pointer}
+.ida{display:flex;gap:10px;margin-top:12px}.ida .btn{margin:0;flex:1;padding:13px 8px;font-size:14px}
 </style>
 </head>
 <body>
@@ -695,7 +703,7 @@ window.pickPic = () => {
       c.width = c.height = 360;
       c.getContext('2d').drawImage(bmp, (bmp.width - sz) / 2, (bmp.height - sz) / 2, sz, sz, 0, 0, 360, 360);
       localStorage.setItem(picKey(S.user), c.toDataURL('image/jpeg', 0.85));
-      clearHC(); render(true); toast(t('saved'));
+      clearHC(); await render(true); toast(t('saved')); if (document.getElementById('idc')) drawId(S.user);
     } catch { toast('Could not use this image'); }
   };
   i.click();
@@ -703,46 +711,71 @@ window.pickPic = () => {
 const loadImg = (src) => new Promise((ok, no) => { const m = new Image(); m.onload = () => ok(m); m.onerror = no; m.src = src; });
 async function drawId(u) {
   const cv = document.getElementById('idc'); if (!cv || !u) return;
-  const W = 640, H = 960, x = cv.getContext('2d'); cv.width = W; cv.height = H;
+  const W = 640, H = 1000, x = cv.getContext('2d'); cv.width = W; cv.height = H;
   try { await Promise.all([document.fonts.load('800 40px Rubik'), document.fonts.load('500 24px Rubik')]); } catch {}
-  const F = 'Rubik, Anuphan, system-ui, sans-serif', INK = '#1d1c21', Y = '#fae469', B = '#89cefa', MU = '#6b6a73';
+  const F = 'Rubik, Anuphan, system-ui, sans-serif', INK = '#1d1c21', Y = '#fae469', MU = '#6b6a73', BL = '#2f55e0', LN = '#d6e6f3';
   const rr = (a, b, w, h, r) => { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); };
-  const txt = (s, px, py, font, col, al = 'center') => { x.font = font; x.fillStyle = col; x.textAlign = al; x.fillText(s, px, py); };
-  x.fillStyle = B; x.fillRect(0, 0, W, H);
-  rr(28, 28, W - 56, H - 56, 44); x.fillStyle = '#fff'; x.fill();
-  x.save(); rr(28, 28, W - 56, H - 56, 44); x.clip(); x.fillStyle = Y; x.fillRect(28, 28, W - 56, 150); x.restore();
-  txt('MOLO#2 STRM HUB', W / 2, 108, `800 42px ${F}`, INK);
-  txt('STREAMER ID CARD', W / 2, 146, `600 20px ${F}`, 'rgba(29,28,33,.7)');
-  const cx = W / 2, cy = 330, R = 108;
+  const txt = (s, px, py, font, col, al = 'left') => { x.font = font; x.fillStyle = col; x.textAlign = al; x.fillText(s, px, py); };
+  x.clearRect(0, 0, W, H);
+  rr(3, 3, W - 6, H - 6, 56); x.fillStyle = '#fff'; x.fill(); x.lineWidth = 4; x.strokeStyle = INK; x.stroke();
+  // avatar with yellow ring + bolt badge
+  const cx = 130, cy = 132, R = 74;
   x.beginPath(); x.arc(cx, cy, R + 10, 0, 7); x.fillStyle = Y; x.fill();
+  x.beginPath(); x.arc(cx, cy, R + 3, 0, 7); x.fillStyle = '#fff'; x.fill();
   x.save(); x.beginPath(); x.arc(cx, cy, R, 0, 7); x.clip(); x.fillStyle = '#eef5fb'; x.fillRect(cx - R, cy - R, R * 2, R * 2);
   const pic = getPic(u);
   if (pic) { try { x.drawImage(await loadImg(pic), cx - R, cy - R, R * 2, R * 2); } catch {} }
-  else txt(u.avatar || '🙂', cx, cy + 40, `110px ${F}`, INK);
+  else txt(u.avatar || '🙂', cx, cy + 28, `76px ${F}`, INK, 'center');
   x.restore();
-  let nm = '@' + String(u.username || '').replace(/^@/, ''), fs = 40;
-  while (fs > 20) { x.font = `800 ${fs}px ${F}`; if (x.measureText(nm).width <= W - 120) break; fs -= 2; }
-  txt(nm, cx, 500, `800 ${fs}px ${F}`, INK);
-  const lv = `LV.${u.level} · ${lvName(u.level)}`; x.font = `600 22px ${F}`;
-  const pw = x.measureText(lv).width + 40; rr(cx - pw / 2, 524, pw, 44, 22); x.fillStyle = Y; x.fill(); txt(lv, cx, 554, `600 22px ${F}`, INK);
-  const bx = 64, bw = W - 128, pr = Math.max(0, Math.min(1, pct(u) / 100));
-  rr(bx, 606, bw, 18, 9); x.fillStyle = '#d6e6f3'; x.fill();
-  if (pr > 0) { rr(bx, 606, Math.max(18, bw * pr), 18, 9); x.fillStyle = Y; x.fill(); }
-  txt(`${u.exp} / ${u.nextExp ?? '—'} EXP`, cx, 656, `500 22px ${F}`, MU);
-  const st = [[u.streak ?? 0, 'STREAK'], [u.totalHours ?? 0, 'HOURS'], [u.totalStreams ?? 0, 'STREAMS'], [(u.badges || []).length, 'BADGES']], cw = bw / 4;
-  st.forEach(([n, l], i) => { const sx = bx + cw * i + cw / 2; txt(String(n), sx, 730, `800 38px ${F}`, INK); txt(l, sx, 764, `600 16px ${F}`, MU); });
-  x.setLineDash([3, 9]); x.lineCap = 'round'; x.lineWidth = 3; x.strokeStyle = '#c9d6e2'; x.beginPath(); x.moveTo(bx, 812); x.lineTo(bx + bw, 812); x.stroke(); x.setLineDash([]);
-  txt('ID ' + String(u.id || '').replace(/[^\w]/g, '').slice(0, 8).toUpperCase(), bx, 862, `600 20px ${F}`, MU, 'left');
-  txt(thaiToday(), bx + bw, 862, `600 20px ${F}`, MU, 'right');
-  txt('Stream together, grow together.', cx, 912, `500 18px ${F}`, MU);
+  const bx0 = cx + 52, by0 = cy + 54;
+  x.beginPath(); x.arc(bx0, by0, 26, 0, 7); x.fillStyle = '#fff'; x.fill(); x.lineWidth = 6; x.strokeStyle = Y; x.stroke();
+  x.beginPath(); [[3, -13], [-8, 2], [-1, 2], [-3, 13], [8, -3], [1, -3]].forEach(([dx, dy], i) => (i ? x.lineTo(bx0 + dx, by0 + dy) : x.moveTo(bx0 + dx, by0 + dy))); x.closePath();
+  x.fillStyle = Y; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.lineJoin = 'round'; x.stroke();
+  // name + level
+  let nm = '@' + String(u.username || '').replace(/^@/, ''), fs = 36;
+  while (fs > 18) { x.font = `800 ${fs}px ${F}`; if (x.measureText(nm).width <= 270) break; fs -= 2; }
+  txt(nm, 250, 124, `800 ${fs}px ${F}`, INK);
+  const lv = `LV.${u.level}`; x.font = `800 24px ${F}`; const pw = x.measureText(lv).width + 44;
+  rr(250, 146, pw, 50, 25); x.fillStyle = Y; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke(); txt(lv, 250 + pw / 2, 181, `800 24px ${F}`, INK, 'center');
+  txt(lvName(u.level), 250 + pw + 14, 181, `500 22px ${F}`, MU);
+  // stats rows
+  txt('Stats', 40, 290, `800 30px ${F}`, BL);
+  const rows = [['⭐', 'EXP', `${u.exp} / ${u.nextExp ?? '—'}`], ['🔥', 'STREAK', `${u.streak ?? 0} days`], ['⏱️', 'HOURS', String(u.totalHours ?? 0)], ['🎧', 'STREAMS', String(u.totalStreams ?? 0)], ['🏅', 'BADGES', String((u.badges || []).length)]];
+  rows.forEach(([ic2, l, val], i) => {
+    const ry = 318 + i * 86;
+    rr(40, ry, W - 80, 72, 36); x.fillStyle = '#fff'; x.fill(); x.lineWidth = 2; x.strokeStyle = LN; x.stroke();
+    x.beginPath(); x.arc(78, ry + 36, 24, 0, 7); x.fillStyle = i % 2 ? '#dff0fd' : '#fff6c9'; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke();
+    txt(ic2, 78, ry + 46, `24px ${F}`, INK, 'center');
+    txt(`${l}: ${val}`, 120, ry + 47, `800 28px ${F}`, INK);
+  });
+  // info grid
+  const info = [['ID', String(u.id || '').replace(/[^\w]/g, '').slice(0, 8).toUpperCase() || '—'], ['Issued', thaiToday()], ['Level', lvName(u.level)], ['Next level', u.nextExp ? `${Math.max(0, u.nextExp - u.exp)} EXP left` : 'Max']];
+  info.forEach(([l, val], i) => {
+    const gx = i % 2 ? 340 : 40, gy = 782 + Math.floor(i / 2) * 106, gw = 260;
+    txt(l, gx, gy, `500 24px ${F}`, MU);
+    x.font = `800 30px ${F}`; let v = val; while (x.measureText(v).width > gw && v.length > 3) v = v.slice(0, -2);
+    txt(v === val ? v : v + '…', gx, gy + 40, `800 30px ${F}`, INK);
+    x.setLineDash([2, 7]); x.lineCap = 'round'; x.lineWidth = 3; x.strokeStyle = '#c9d6e2'; x.beginPath(); x.moveTo(gx, gy + 62); x.lineTo(gx + gw, gy + 62); x.stroke(); x.setLineDash([]);
+  });
+  txt('MOLO#2 STRM HUB', W / 2, 972, `600 18px ${F}`, MU, 'center');
 }
 window.saveId = () => {
   const cv = document.getElementById('idc'); if (!cv) return;
-  cv.toBlob(async (b) => {
+  const o = document.createElement('canvas'), pad = 36; o.width = cv.width + pad * 2; o.height = cv.height + pad * 2;
+  const c = o.getContext('2d'); c.fillStyle = '#89cefa'; c.fillRect(0, 0, o.width, o.height); c.drawImage(cv, pad, pad);
+  o.toBlob(async (b) => {
     const f = new File([b], 'molo2-id-card.png', { type: 'image/png' });
     try { if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f] }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
     const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'molo2-id-card.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }, 'image/png');
+};
+window.closeId = () => { const m = document.getElementById('idm'); if (m) m.remove(); document.body.style.overflow = ''; };
+window.openId = () => {
+  if (document.getElementById('idm')) return;
+  const m = document.createElement('div'); m.id = 'idm'; m.className = 'idm';
+  m.innerHTML = `<div class="idw"><div class="idcw"><canvas id="idc" class="idc"></canvas><button class="idx" aria-label="Close" onclick="closeId()">×</button></div><div class="ida"><button class="btn" onclick="saveId()">Save image</button><button class="btn soft" onclick="pickPic()">${getPic(S.user) ? 'Change photo' : 'Add photo'}</button></div></div>`;
+  m.addEventListener('click', (e) => { if (e.target === m || e.target.classList.contains('idw')) closeId(); });
+  document.body.appendChild(m); document.body.style.overflow = 'hidden'; drawId(S.user);
 };
 
 const V = {
@@ -811,7 +844,7 @@ const V = {
     const m = await api('me'); const u = (S.user = m.user);
     const pic = getPic(u);
     return `<div class="av pav" role="button" tabindex="0" onclick="pickPic()" aria-label="Change photo">${pic ? `<img class="avimg" src="${pic}" alt="">` : esc(u.avatar)}<i class="cam">+</i></div><h2 style="text-align:center">${esc(u.username)}</h2><p class="sub" style="text-align:center">MOLO2 Streamer · <span class="tag">LV.${u.level} · ${esc(lvName(u.level))}</span></p>
-    <button class="btn" style="margin:0 0 12px" onclick="go('idcard')">${ic('medal', 16)} ID Card</button>
+    <button class="btn" style="margin:0 0 12px" onclick="openId()">${ic('medal', 16)} ID Card</button>
     <div class="card"><div class="row"><span>${u.exp} EXP</span><span>${u.nextExp ?? '—'} EXP</span></div><div class="bar"><i style="width:${pct(u)}%"></i></div></div>
     ${journey(u.level)}
     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="stat" style="text-align:center"><div class="ico ">${ic('medal', 18)}</div><div class="n">${u.badges.length}</div><div class="l">${t('badges')}</div></div><div class="stat" style="text-align:center"><div class="ico c2">${ic('flame', 18)}</div><div class="n">${u.streak}</div><div class="l">${t('streak')}</div></div><div class="stat" style="text-align:center"><div class="ico c3">${ic('clock', 18)}</div><div class="n">${u.totalHours}</div><div class="l">${t('hrs')}</div></div></div>
