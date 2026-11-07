@@ -529,6 +529,9 @@ nav button.pr{transform:scale(.84)!important}
 /* STRM HUB: half-height highlighter stripe */
 html[data-theme=dark] header h1 .chip em{background:linear-gradient(transparent 52%,rgba(250,228,105,.5) 52%,rgba(250,228,105,.5) 94%,transparent 94%);border-radius:0;padding:0 5px;color:var(--tx)}
 header h1 .chip em,html[data-theme=light] header h1 .chip em{background:linear-gradient(transparent 52%,var(--y) 52%,var(--y) 94%,transparent 94%);border-radius:0;padding:0 5px;color:var(--tx)}
+
+.tag.ol.lnk{border:0;background:none;padding:4px 0;font-size:13px;font-weight:600;color:var(--tx);display:inline-flex;align-items:center;gap:4px}
+.ytrow{margin-top:2px}
 </style>
 </head>
 <body>
@@ -679,8 +682,9 @@ const V = {
     return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')} 👋</h2>
     <div class="card feat cc"><div class="row"><div class="row" ${rw}><div class="ico plc">${ic('music', 16)}${plImg(d.playlist)}</div><div><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><p>${t('todayPl')} · Spotify</p></div></div>${d.playlist ? `<a class="go" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener" aria-label="Open">${ic('arrow', 16)}</a>` : ''}</div></div>
     <div class="card cc" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><div class="row"><div class="row" ${rw}><div class="ico gr">${ic('headphones', 16)}</div><div><b>Stationhead</b><p>Join Stationhead</p></div></div><span class="tag ol">${t('open')}</span></div></div>
-    <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
+    <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
     <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="rk">${n + 1}</span><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : ''}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
+    <h3 class="sec">Play</h3>
     <div class="ytrow">${SONGS.filter((x) => x.isNew).map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
       const media = ok ? `<div class="ytv"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" onerror="this.src='${esc(x.img)}'"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0&modestbranding=1" title="${esc(x.t)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`
         : `<a class="ytv" href="https://www.youtube.com/results?search_query=${encodeURIComponent('MARK ' + x.t)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on YouTube"><img src="${esc(x.img)}" alt="" loading="lazy"></a>`;
