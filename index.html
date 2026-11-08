@@ -863,6 +863,17 @@ body .seg2 button{min-height:0;padding:5px 12px;font-size:13px}
 body .seg2{padding:2px}
 body .more .pill{min-height:0;padding:6px 12px;font-size:13px}
 body .more{gap:8px;margin-top:10px}
+/* ===== round 3: blue marker in dark, sticker windmill, songs without frame, copy-link button ===== */
+svg.i.wm{color:#1d1c21}
+html:not([data-theme=light]) body header h1 .chip em{background:linear-gradient(transparent 62%,var(--b) 62%,var(--b) 92%,transparent 92%)!important}
+body .tl{border:0!important}
+body .cpy{position:absolute;top:10px;right:36px;width:28px;height:28px;min-width:0;min-height:0;padding:0;box-sizing:border-box;border-radius:50%;border:1px solid var(--hl3);display:grid;place-items:center;color:var(--tx);background:transparent;z-index:2}
+body .cpy b{grid-area:1/1;display:grid;place-items:center;font-weight:400;transition:opacity .15s,transform .3s var(--spring)}
+body .cpy .c2{opacity:0;transform:scale(.4)}
+body .cpy.ok{background:var(--y);border-color:var(--ib);color:var(--ib)}
+body .cpy.ok svg{stroke:var(--ib)}
+body .cpy.ok .c1{opacity:0;transform:scale(.4)}
+body .cpy.ok .c2{opacity:1;transform:scale(1)}
 </style>
 <script>/* no zoom: block pinch + double-tap zoom on iOS */
 ['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
@@ -875,7 +886,7 @@ var _lt=0;document.addEventListener('touchend',function(e){var n=Date.now();if(n
 <button id="xb" hidden aria-label="Close" onclick="back()"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 <div id="app">
   <header>
-    <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM ZONE</em></span><svg class="i wm" viewBox="0 0 56 56" aria-hidden="true"><g transform="translate(28 22) rotate(-12)"><g transform="rotate(0)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(90)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(180)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(270)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:var(--bg)"/><path d="M1.4 -13h7M4.9 -19v12"/></g></g><path d="M20 28h16l4 24H16z" style="fill:var(--y)"/><path d="M24.5 52v-7a3.5 3.5 0 0 1 7 0v7"/><path d="M17 28a11 11 0 0 1 22 0z" style="fill:var(--b)"/><circle cx="28" cy="22" r="3" style="fill:var(--y)"/><path d="M8 52h40"/></svg></h1></div>
+    <div class="hgrow"><h1><span class="chip">MOLO#2 <em>STRM ZONE</em></span><svg class="i wm" viewBox="0 0 56 56" aria-hidden="true"><g transform="translate(28 22) rotate(-12)"><g transform="rotate(0)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:#fffdf3"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(90)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:#fffdf3"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(180)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:#fffdf3"/><path d="M1.4 -13h7M4.9 -19v12"/></g><g transform="rotate(270)"><rect x="1.4" y="-19" width="7" height="12" rx="1.2" style="fill:#fffdf3"/><path d="M1.4 -13h7M4.9 -19v12"/></g></g><path d="M20 28h16l4 24H16z" style="fill:#fae469"/><path d="M24.5 52v-7a3.5 3.5 0 0 1 7 0v7" style="fill:#d9a93a"/><path d="M17 28a11 11 0 0 1 22 0z" style="fill:#89cefa"/><circle cx="28" cy="22" r="3" style="fill:#fffdf3"/><path d="M8 52h40" style="stroke:var(--tx)"/></svg></h1></div>
     
   </header>
   <main id="main"></main>
@@ -928,7 +939,7 @@ const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 1
 
 /* ---------- i18n ---------- */
 const T = {
-  en: { ckSub: 'Check in for the day', howUse: 'How to use', howSub: 'Steps for using this page', chPin: 'Change PIN', chPinSub: 'Update your 4-digit code', oldPin: 'Current PIN', newPin: 'New PIN', switchAcc: 'Switch account', switchSub: 'Change Twitter account', theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
+  en: { copied: 'Link copied', copyFail: 'Could not copy', copyLink: 'Copy link', ckSub: 'Check in for the day', howUse: 'How to use', howSub: 'Steps for using this page', chPin: 'Change PIN', chPinSub: 'Update your 4-digit code', oldPin: 'Current PIN', newPin: 'New PIN', switchAcc: 'Switch account', switchSub: 'Change Twitter account', theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
     welcome: 'Welcome back!', journey: 'Your streaming journey', left: (n, l) => `${n} EXP left to reach Level ${l}`, maxed: 'Max level reached',
     hours: 'Streaming hours', streams: 'Reported streams', totalExp: 'Total EXP', streak: 'Current streak', days: 'days', todayPl: 'Today’s playlist', open: 'Open', none: 'Not set yet',
     openSpotify: 'Open Spotify', schedule: 'Playlist schedule', today: 'Today', upcoming: 'Upcoming', notSet: 'Not set',
@@ -941,7 +952,7 @@ const T = {
     login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-  th: { ckSub: 'เช็คอินประจำวัน', howUse: 'วิธีใช้งาน', howSub: 'ขั้นตอนการใช้งานเว็บนี้', chPin: 'เปลี่ยน PIN', chPinSub: 'เปลี่ยนรหัส 4 หลัก', oldPin: 'PIN ปัจจุบัน', newPin: 'PIN ใหม่', switchAcc: 'เปลี่ยนบัญชี', switchSub: 'เปลี่ยนบัญชี Twitter', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
+  th: { copied: 'คัดลอกลิงก์แล้ว', copyFail: 'คัดลอกไม่สำเร็จ', copyLink: 'คัดลอกลิงก์', ckSub: 'เช็คอินประจำวัน', howUse: 'วิธีใช้งาน', howSub: 'ขั้นตอนการใช้งานเว็บนี้', chPin: 'เปลี่ยน PIN', chPinSub: 'เปลี่ยนรหัส 4 หลัก', oldPin: 'PIN ปัจจุบัน', newPin: 'PIN ใหม่', switchAcc: 'เปลี่ยนบัญชี', switchSub: 'เปลี่ยนบัญชี Twitter', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
     welcome: 'ยินดีต้อนรับกลับ!', journey: 'เส้นทางสตรีมของคุณ', left: (n, l) => `อีก ${n} EXP ถึงเลเวล ${l}`, maxed: 'ถึงเลเวลสูงสุดแล้ว',
     hours: 'ชั่วโมงสตรีม', streams: 'ยอดสตรีมที่รายงาน', totalExp: 'EXP รวม', streak: 'สตรีคต่อเนื่อง', days: 'วัน', todayPl: 'เพลย์ลิสต์วันนี้', open: 'เปิด', none: 'ยังไม่ได้ตั้ง',
     openSpotify: 'เปิด Spotify', schedule: 'ตารางเพลย์ลิสต์', today: 'วันนี้', upcoming: 'เร็วๆ นี้', notSet: 'ยังไม่ตั้ง',
@@ -1225,8 +1236,8 @@ const V = {
     const rw = 'style="justify-content:flex-start;gap:12px"';
     const qt = d.playlist ? 'a' : 'div', qa = d.playlist ? ` href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener"` : '';
     return `<p class="sub dt">${ic('cal', 16)} ${esc(fmtDate(d.date))}</p><h2 class="wl">${esc(t('welcome').replace(/!$/, '') + (lang === 'th' ? ' ' : ', ') + (u && u.username ? '@' + String(u.username).replace(/^@/, '') : '') + '!')}</h2>
-    <div class="qa"><${qt} class="qc q1"${qa}><span class="qi">${ic('music', 18)}</span><span class="qt"><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><small>${t('todayPl')} · Spotify</small></span><i class="qg">${ic('arrow', 14)}</i></${qt}>
-    <div class="qc q2" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')"><span class="qi">${ic('headphones', 18)}</span><span class="qt"><b>Stationhead</b><small>Join Stationhead</small></span><i class="qg">${ic('arrow', 14)}</i></div></div>
+    <div class="qa"><${qt} class="qc q1"${qa}><span class="qi">${ic('music', 18)}</span><span class="qt"><b>${esc(d.playlist ? d.playlist.title : t('none'))}</b><small>${t('todayPl')} · Spotify</small></span>${d.playlist && /^https:\/\//.test(d.playlist.url || '') ? `<span class="cpy" role="button" tabindex="0" aria-label="${t('copyLink')}" data-copy="${esc(d.playlist.url)}"><b class="c1"><svg class="i" viewBox="0 0 24 24" width="15" height="15"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></b><b class="c2"><svg class="i" viewBox="0 0 24 24" width="15" height="15"><path d="M5 13l4 4L19 7"/></svg></b></span>` : ''}<i class="qg">${ic('arrow', 14)}</i></${qt}>
+    ${d.room ? `<a class="qc q2" href="${safeUrl(d.room)}" target="_blank" rel="noopener">` : `<div class="qc q2" role="button" tabindex="0" onclick="go('station')" onkeydown="if(event.key==='Enter')go('station')">`}<span class="qi">${ic('headphones', 18)}</span><span class="qt"><b>Stationhead</b><small>Join Stationhead</small></span><i class="qg">${ic('arrow', 14)}</i>${d.room ? '</a>' : '</div>'}</div>
     <div class="row"><h3 class="sec">MARK's Songs</h3><a class="tag ol lnk" href="${safeUrl(MARK_PROFILE)}" target="_blank" rel="noopener">All ${ic('arrow', 12)}</a></div>
     <div class="tl">${SONGS.map((x, n) => `<a class="tr" href="${safeUrl(x.url)}" target="_blank" rel="noopener" aria-label="${esc(x.t)} on Spotify"><span class="tc">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : ic('music', 20)}</span><span class="tn"><b>${esc(x.t)}${x.isNew ? ' <i class="nw2">NEW</i>' : ''}</b>${yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])}</small>` : '<small class="vw">Spotify</small>'}</span><span class="pb">${ic('tri', 13)}</span></a>`).join('')}</div>
     <div class="ytsec"><div class="ytrow">${SONGS.filter((x) => x.isNew).map((x) => { const id = YTV[x.k], ok = /^[\w-]{11}$/.test(id || ''), vw = yv[x.k] != null ? `<small class="vw">${ic('play', 11)} ${fmtV(yv[x.k])} views</small>` : '<small class="vw">YouTube</small>';
@@ -1500,9 +1511,21 @@ function clearPin(id) { const r = document.querySelector('.pin[data-for="' + id 
   });
 })();
 
+/* copy-link button: copies to clipboard and does NOT open the link */
+document.addEventListener('click', async (e) => {
+  const c = e.target.closest && e.target.closest('.cpy'); if (!c) return;
+  e.preventDefault(); e.stopPropagation();
+  const u = c.dataset.copy || ''; let ok = false;
+  try { await navigator.clipboard.writeText(u); ok = true; }
+  catch { const ta = document.createElement('textarea'); ta.value = u; ta.style.cssText = 'position:fixed;top:0;opacity:0'; document.body.append(ta); ta.select(); try { ok = document.execCommand('copy'); } catch {} ta.remove(); }
+  toast(ok ? t('copied') : t('copyFail'));
+  if (ok) { c.classList.add('ok'); setTimeout(() => c.classList.remove('ok'), 1400); }
+}, true);
+document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('cpy')) { e.preventDefault(); e.target.click(); } });
+
 /* press feedback: pointerdown adds .pr, removed shortly after release */
 (() => {
-  const SEL = 'nav button,button,a[href],[role=button],.btn,.pill,.tag,.tr,.pf,.ytv,.go,.seg button,.card.feat,.qc,.srow,.lvc';
+  const SEL = 'nav button,button,a[href],[role=button],.btn,.pill,.tag,.tr,.pf,.ytv,.go,.seg button,.card.feat,.qc,.srow,.lvc,.cpy';
   document.addEventListener('touchstart', () => {}, { passive: true });
   document.addEventListener('pointerdown', (e) => {
     const nb = e.target.closest && e.target.closest('nav button'); if (nb && nb.dataset.k) prefetch(nb.dataset.k);
