@@ -377,7 +377,7 @@ nav{border-top-width:1px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 /* ===== themes: dark (charcoal) + light (white); yellow + sky blue accents ===== */
 :root{color-scheme:dark;--bg:#1d1c21;--sf:#26252b;--ln:#34333a;--tx:#fdfefd;--mu:#a6a5ad;--lk:#89cefa;--lkbg:rgba(137,206,250,.14);--lkbd:rgba(137,206,250,.3);--olc:#fae469;--y:#fae469;--y2:#fae469;--b:#89cefa;--on:#1d1c21;--inp:#26252b;--cov:#2d2c33;--lock:#2d2c33;--lockic:#5c6378;--nav:#17161a;--chart:#3a3942;--okbg:#1f3b36;--okfg:#8be8c4;--okbd:#2f5c52;--badbg:#3d2336;--badfg:#ff9ec7;--badbd:#7a3d62;--toastbg:#26252b;--toastfg:#fdfefd;--ring2:rgba(255,255,255,.14);--star:#fae469;--err:#ff8a8a;--ink:#fdfefd;--mute:#a6a5ad;--line:#34333a;--bd:1px solid #34333a}
-html[data-theme=light]{color-scheme:light;--bg:#ffffff;--sf:#eef5fb;--ln:#d6e6f3;--tx:#1d1c21;--mu:#6b6a73;--lk:#1f6fb2;--lkbg:rgba(31,111,178,.09);--lkbd:rgba(31,111,178,.28);--olc:#1d1c21;--y2:#f2c500;--inp:#ffffff;--cov:#e1edf7;--lock:#e2ebf3;--lockic:#9aa9b8;--nav:#ffffff;--chart:#d3e3f1;--okbg:#e0f3e8;--okfg:#14683f;--okbd:#a9d9bf;--badbg:#fde6eb;--badfg:#a3202f;--badbd:#e59aa8;--toastbg:#1d1c21;--toastfg:#ffffff;--ring2:rgba(0,0,0,.1);--star:#e0b000;--err:#c4372d;--ink:#1d1c21;--mute:#6b6a73;--line:#d6e6f3;--bd:1px solid #d6e6f3}
+html[data-theme=light]{color-scheme:light;--bg:#ffffff;--sf:#f5f5f6;--ln:#e3e3e7;--tx:#1d1c21;--mu:#6b6a73;--lk:#1f6fb2;--lkbg:rgba(31,111,178,.09);--lkbd:rgba(31,111,178,.28);--olc:#1d1c21;--y2:#f2c500;--inp:#ffffff;--cov:#ececef;--lock:#ececef;--lockic:#a8a8b0;--nav:#ffffff;--chart:#e6e6ea;--okbg:#e0f3e8;--okfg:#14683f;--okbd:#a9d9bf;--badbg:#fde6eb;--badfg:#a3202f;--badbd:#e59aa8;--toastbg:#1d1c21;--toastfg:#ffffff;--ring2:rgba(0,0,0,.1);--star:#e0b000;--err:#c4372d;--ink:#1d1c21;--mute:#6b6a73;--line:#e3e3e7;--bd:1px solid #e3e3e7}
 html,body{background:var(--bg);color:var(--tx)}
 h2,h3,b,.stat .n,.big{color:var(--tx)}
 .card,.stat,.song,.pf,.ytc,.pill,.btn.soft{background:var(--sf);border-color:var(--ln)}
@@ -872,6 +872,34 @@ body .cpy b{grid-area:1/1;display:grid;place-items:center;font-weight:400;transi
 body .cpy .c2{opacity:0;transform:scale(.4)}
 body .cpy.ok{background:var(--y);border-color:var(--ib);color:var(--ib)}
 body .cpy.ok svg{stroke:var(--ib)}
+/* ===== round 4: springy bottom toast ===== */
+body .toast{top:auto!important;bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;left:50%;display:flex;align-items:center;gap:10px;padding:9px 18px 9px 9px;max-width:88%;font-size:15px;font-weight:800;line-height:1.3;z-index:99;animation:toastIn .5s var(--spring) both}
+body .toast.out{animation:toastOut .35s ease-in both}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,26px) scale(.85)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes toastOut{to{opacity:0;transform:translate(-50%,12px) scale(.95)}}
+body .toast .tk{flex:none;width:26px;height:26px;border-radius:50%;background:var(--y);color:#1d1c21;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:15px}
+body .toast.err .tk{background:#ff8a80}
+/* ===== round 5: clear "submitted" feedback on Stats ===== */
+body .btn.busy{opacity:.6}
+body .btn.done{background:#2ea05a;border-color:#1f7a42;color:#fff;transition:background-color .2s}
+body .recok{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:11px 14px;border-radius:16px;background:rgba(46,160,90,.18);border:1px solid rgba(46,160,90,.5);color:var(--tx);font-size:14px;font-weight:700;line-height:1.4}
+html[data-theme=light] body .recok{background:#d9f3e0;border-color:#9fd8b0}
+body .recok[hidden]{display:none}
+body .recok{scroll-margin-bottom:110px}
+/* ===== round 6: playlist page - slim buttons + copy, no tinted fills (outline only) ===== */
+body .plb{display:flex;gap:8px;margin-top:12px;align-items:stretch}
+body .plb .btn{flex:1;width:auto;min-height:38px;margin:0;padding:0 14px;font-size:15px;line-height:1.2;box-sizing:border-box;display:inline-flex;justify-content:center;align-items:center}
+body .cpy.cpw{position:static;width:auto;height:auto;min-width:0;min-height:0;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 14px;min-height:38px;box-sizing:border-box;line-height:1.2;margin:0;border-radius:99px;border:1px dashed var(--tx);font-family:var(--fd)!important;font-weight:400!important;font-size:15px}
+body .cpw .cpi{display:grid;place-items:center}
+body .cpy.cpw.ok{border-style:solid}
+html[data-theme=light] body .card:not(.feat):not(.hero),html[data-theme=light] body .stat,html[data-theme=light] body .srow{background:transparent!important}
+body .card .list .tag:not(.ok):not(.bad){background:transparent;border:1px solid var(--hl3);color:var(--tx)}
+body .recok i{flex:none;width:24px;height:24px;border-radius:50%;background:#2ea05a;color:#fff;display:grid;place-items:center;font-style:normal}
+body .recok small{display:block;font-weight:600;opacity:.8;margin-top:2px}
+body .recok .rlk{display:inline-block;margin-top:6px;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+body .recok.pop{animation:recPop .5s var(--spring) both}
+@keyframes recPop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+body .pendnote{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:9px 14px;border:1px dashed var(--hl3);border-radius:16px;font-size:14px;font-weight:700;cursor:pointer}
 body .cpy.ok .c1{opacity:0;transform:scale(.4)}
 body .cpy.ok .c2{opacity:1;transform:scale(1)}
 </style>
@@ -913,7 +941,8 @@ const SONGS = [
 // YouTube views from /api/stats (empty if not configured) - never blocks the page
 const plImg = (p) => (p && p.img && /^https:\/\//.test(p.img) ? `<img src="${esc(p.img)}" alt="" onerror="this.remove()">` : '');
 const fmtV = (n) => n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K' : String(n);
-const getViews = () => Promise.race([fetch('/api/stats').then((r) => r.json()).then((j) => j.views || {}), new Promise((r) => setTimeout(() => r({}), 2500))]).catch(() => ({}));
+const VW = (() => { try { return JSON.parse(localStorage.getItem('vw') || '{}'); } catch { return {}; } })();
+const getViews = () => Promise.race([fetch('/api/stats').then((r) => r.json()).then((j) => { const v = j.views || {}; try { localStorage.setItem('vw', JSON.stringify(v)); } catch {} return v; }), new Promise((r) => setTimeout(() => r(VW), 700))]).catch(() => VW);
 const PF_LOGO = {"sp": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#1db954\"/><path d=\"M10 15c7-2 14-1.5 20 1.5M11.5 21c6-1.6 12-1 17 1.5M13 26.5c5-1.2 9.5-.8 13.5 1.2\" stroke=\"#fff\" stroke-width=\"2.6\" stroke-linecap=\"round\" fill=\"none\"/>", "yt": "<rect x=\"3\" y=\"8\" width=\"34\" height=\"24\" rx=\"7\" fill=\"#e53935\"/><path d=\"M16 14l10 6-10 6z\" fill=\"#fff\"/>", "ap": "<rect x=\"3\" y=\"3\" width=\"34\" height=\"34\" rx=\"9\" fill=\"#fa4b5f\"/><path d=\"M16 27V13l11-2v13\" stroke=\"#fff\" stroke-width=\"2.4\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"13.5\" cy=\"27\" r=\"3\" fill=\"#fff\"/><circle cx=\"24.5\" cy=\"24\" r=\"3\" fill=\"#fff\"/>", "me": "<circle cx=\"18\" cy=\"23\" r=\"12\" fill=\"#00cd3c\"/><circle cx=\"18\" cy=\"23\" r=\"5\" fill=\"#fff\"/><circle cx=\"32\" cy=\"9\" r=\"4.5\" fill=\"#00cd3c\"/>", "ge": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#3b9cf5\"/><text x=\"20\" y=\"28\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"800\" fill=\"#fff\" font-family=\"Rubik,sans-serif\">g</text>", "bu": "<circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#f05a3c\"/><text x=\"20\" y=\"28\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"800\" fill=\"#fff\" font-family=\"Rubik,sans-serif\">b</text>"};
 const HUB_PF = [
   { n: 'Spotify', l: 'sp', url: MARK_PROFILE },
@@ -939,7 +968,7 @@ const thaiToday = () => new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 1
 
 /* ---------- i18n ---------- */
 const T = {
-  en: { copied: 'Link copied', copyFail: 'Could not copy', copyLink: 'Copy link', ckSub: 'Check in for the day', howUse: 'How to use', howSub: 'Steps for using this page', chPin: 'Change PIN', chPinSub: 'Update your 4-digit code', oldPin: 'Current PIN', newPin: 'New PIN', switchAcc: 'Switch account', switchSub: 'Change Twitter account', theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
+  en: { sending: 'Submitting…', recSent: 'Submitted', recWait: 'Waiting for admin approval. It counts after approval.', seeRec: 'See in recent records', pendN: (n, h) => `${n} record${n > 1 ? 's' : ''} waiting for approval · ${h}h`, copied: 'Link copied', copyFail: 'Could not copy', copyLink: 'Copy link', ckSub: 'Check in for the day', howUse: 'How to use', howSub: 'Steps for using this page', chPin: 'Change PIN', chPinSub: 'Update your 4-digit code', oldPin: 'Current PIN', newPin: 'New PIN', switchAcc: 'Switch account', switchSub: 'Change Twitter account', theme: 'Theme', light: 'Light', dark: 'Dark', language: 'Language', cert: 'Certificate', saveImg: 'Save image', addPhoto: 'Add photo', chgPhoto: 'Change photo', tag: 'Stream together, grow together.', home: 'Home', playlist: 'Playlist', station: 'Stationhead', missions: 'Missions', stats: 'Stats', profile: 'Profile', ranking: 'Leaderboard', admin: 'Admin',
     welcome: 'Welcome back!', journey: 'Your streaming journey', left: (n, l) => `${n} EXP left to reach Level ${l}`, maxed: 'Max level reached',
     hours: 'Streaming hours', streams: 'Reported streams', totalExp: 'Total EXP', streak: 'Current streak', days: 'days', todayPl: 'Today’s playlist', open: 'Open', none: 'Not set yet',
     openSpotify: 'Open Spotify', schedule: 'Playlist schedule', today: 'Today', upcoming: 'Upcoming', notSet: 'Not set',
@@ -952,7 +981,7 @@ const T = {
     login: 'Log in', register: 'Create account', user: 'Twitter account', pin: 'PIN (4 digits)', gained: (n) => `+${n} EXP`, already: 'Already done today', saved: 'Saved',
     aPl: 'Set daily playlist', aTitle: 'Title', aUrl: 'Link (https://…)', aRoom: 'Set Stationhead room link', aSpecial: 'Special mission text', save: 'Save', aPend: 'Records waiting for review', approve: 'Approve', reject: 'Reject', empty: 'Nothing here yet.', secret: 'Admin secret', unlock: 'Unlock',
     ach_first: 'First step', ach_streak5: '5-day streak', ach_listener: 'Listener', ach_dedicated: 'Dedicated', ach_crown: 'Crown', ach_diamond: 'Diamond', days7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-  th: { copied: 'คัดลอกลิงก์แล้ว', copyFail: 'คัดลอกไม่สำเร็จ', copyLink: 'คัดลอกลิงก์', ckSub: 'เช็คอินประจำวัน', howUse: 'วิธีใช้งาน', howSub: 'ขั้นตอนการใช้งานเว็บนี้', chPin: 'เปลี่ยน PIN', chPinSub: 'เปลี่ยนรหัส 4 หลัก', oldPin: 'PIN ปัจจุบัน', newPin: 'PIN ใหม่', switchAcc: 'เปลี่ยนบัญชี', switchSub: 'เปลี่ยนบัญชี Twitter', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
+  th: { sending: 'กำลังส่ง…', recSent: 'ส่งแล้ว', recWait: 'รอแอดมินอนุมัติ ยอดจะนับหลังอนุมัติ', seeRec: 'ดูในรายการล่าสุด', pendN: (n, h) => `มี ${n} รายการรอแอดมินอนุมัติ · ${h} ชม.`, copied: 'คัดลอกลิงก์แล้ว', copyFail: 'คัดลอกไม่สำเร็จ', copyLink: 'คัดลอกลิงก์', ckSub: 'เช็คอินประจำวัน', howUse: 'วิธีใช้งาน', howSub: 'ขั้นตอนการใช้งานเว็บนี้', chPin: 'เปลี่ยน PIN', chPinSub: 'เปลี่ยนรหัส 4 หลัก', oldPin: 'PIN ปัจจุบัน', newPin: 'PIN ใหม่', switchAcc: 'เปลี่ยนบัญชี', switchSub: 'เปลี่ยนบัญชี Twitter', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', language: 'ภาษา', cert: 'ใบเซอร์', saveImg: 'บันทึกรูป', addPhoto: 'เพิ่มรูป', chgPhoto: 'เปลี่ยนรูป', tag: 'สตรีมไปด้วยกัน เติบโตไปด้วยกัน', home: 'หน้าแรก', playlist: 'เพลย์ลิสต์', station: 'Stationhead', missions: 'ภารกิจ', stats: 'สถิติ', profile: 'โปรไฟล์', ranking: 'อันดับ', admin: 'แอดมิน',
     welcome: 'ยินดีต้อนรับกลับ!', journey: 'เส้นทางสตรีมของคุณ', left: (n, l) => `อีก ${n} EXP ถึงเลเวล ${l}`, maxed: 'ถึงเลเวลสูงสุดแล้ว',
     hours: 'ชั่วโมงสตรีม', streams: 'ยอดสตรีมที่รายงาน', totalExp: 'EXP รวม', streak: 'สตรีคต่อเนื่อง', days: 'วัน', todayPl: 'เพลย์ลิสต์วันนี้', open: 'เปิด', none: 'ยังไม่ได้ตั้ง',
     openSpotify: 'เปิด Spotify', schedule: 'ตารางเพลย์ลิสต์', today: 'วันนี้', upcoming: 'เร็วๆ นี้', notSet: 'ยังไม่ตั้ง',
@@ -1006,7 +1035,7 @@ async function apiRun(action, body, ttl) {
     if (action === 'me' && v && v.user) setTimeout(() => syncPic(v.user), 0);
     if (action.startsWith('a_set')) { delete MEM.today; delete MEM.schedule; }
     if (!READ.has(action)) { clearHC(); delete MEM.me; delete MEM.missions; delete MEM.stats; delete MEM.ranking; }
-    if (action === 'login' || action === 'register') for (const k in MEM) delete MEM[k];
+    if (action === 'login' || action === 'register') { for (const k in MEM) delete MEM[k]; clearHC(); }
     return v;
   } finally { bar(-1); }
 }
@@ -1020,17 +1049,26 @@ const DEV = (() => {
 })();
 async function rawApi(action, body = {}) {
   if (DEMO) { const f = MOCK[action]; return f ? f() : { ok: true, user: S.user, gained: 10 }; }
-  const r = await fetch('/api/rpc', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token, 'x-admin-secret': S.admin, 'x-device': DEV }, body: JSON.stringify({ action, ...body }) });
+  const RD = ['me', 'today', 'schedule', 'missions', 'stats', 'ranking'].includes(action);
+  const go = async () => { const ac = new AbortController(); const tm = setTimeout(() => ac.abort(), RD ? 8000 : 25000); try { return await fetch('/api/rpc', { method: 'POST', signal: ac.signal, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token, 'x-admin-secret': S.admin, 'x-device': DEV }, body: JSON.stringify({ action, ...body }) }); } finally { clearTimeout(tm); } };
+  let r; try { r = await go(); } catch { if (!RD) throw new Error(lang === 'th' ? 'เชื่อมต่อไม่ได้ ลองอีกครั้ง' : 'Connection problem, try again'); try { r = await go(); } catch { throw new Error(lang === 'th' ? 'เชื่อมต่อไม่ได้ ลองอีกครั้ง' : 'Connection problem, try again'); } }
   const j = await r.json().catch(() => ({ error: 'Server error' }));
   if (!r.ok) { if (r.status === 401 && S.token) { logout(); } throw new Error(j.error || 'Error'); }
   return j;
 }
-function toast(m) { const e = document.createElement('div'); e.className = 'toast'; e.textContent = m; document.body.append(e); setTimeout(() => e.remove(), 2200); }
+function toast(m, kind) {
+  document.querySelectorAll('.toast').forEach((x) => x.remove());
+  const e = document.createElement('div'); e.className = 'toast' + (kind === 'err' ? ' err' : ''); e.setAttribute('role', 'status');
+  const ic = document.createElement('i'); ic.className = 'tk';
+  if (kind === 'err') ic.textContent = '!'; else ic.innerHTML = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+  const sp = document.createElement('span'); sp.textContent = m; e.append(ic, sp); document.body.append(e);
+  setTimeout(() => e.classList.add('out'), 2300); setTimeout(() => e.remove(), 2700);
+}
 let busy = false;
 const safe = (fn) => async (...a) => {
   if (busy) return; busy = true;
   const el = a.find((x) => x instanceof HTMLElement);
-  try { await fn(...a); } catch (e) { toast(e.message); if (el) { el.disabled = false; el.textContent = el.dataset.t; } } finally { busy = false; }
+  try { await fn(...a); } catch (e) { toast(e.message, 'err'); if (el) { el.disabled = false; el.textContent = el.dataset.t; } } finally { busy = false; }
 };
 const lock = (el) => { if (el) { el.dataset.t = el.textContent; el.disabled = true; el.textContent = '…'; } };
 function logout() { localStorage.removeItem('tok'); S.token = ''; S.user = null; clearHC(); for (const k in MEM) delete MEM[k]; render(); }
@@ -1251,7 +1289,7 @@ const V = {
     const [d, s] = await Promise.all([api('today'), api('schedule')]);
     return `<h2>${esc(fmtDate(d.date).split(',')[0])}</h2><p class="sub">${t('todayPl')}</p>
     <div class="card"><div class="row" style="gap:14px;justify-content:flex-start"><div class="logo plc big">${ic('headphones', 30)}${plImg(d.playlist)}</div><div><p>Spotify</p><h3>${esc(d.playlist ? d.playlist.title : t('none'))}</h3></div></div>
-      ${d.playlist ? `<a class="btn" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('openSpotify')} ↗</a>` : ''}</div>
+      ${d.playlist ? `<div class="plb"><a class="btn" href="${safeUrl(d.playlist.url)}" target="_blank" rel="noopener">${t('openSpotify')} ↗</a>${/^https:\/\//.test(d.playlist.url || '') ? `<span class="cpy cpw" role="button" tabindex="0" data-copy="${esc(d.playlist.url)}"><span class="cpi"><b class="c1"><svg class="i" viewBox="0 0 24 24" width="15" height="15"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></b><b class="c2"><svg class="i" viewBox="0 0 24 24" width="15" height="15"><path d="M5 13l4 4L19 7"/></svg></b></span><span>${t('copyLink')}</span></span>` : ''}</div>` : ''}</div>
     <div class="card"><h3>${t('schedule')}</h3><div class="list">${s.items.map((i, n) => `<div><div><b>${i.date.slice(5)}</b><p>${esc(i.title || t('notSet'))}</p></div><span class="tag">${n ? t('upcoming') : t('today')}</span></div>`).join('')}</div></div>
     <div class="card"><h3>${t('howStream')}</h3><p>${t('howStreamTxt')}</p></div>`;
   },
@@ -1279,17 +1317,18 @@ const V = {
     const max = Math.max(1, ...s.week), dn = T[lang].days7;
     const wd = (new Date(Date.now() + 7 * 36e5).getUTCDay() + 6) % 7;
     const st = { pending: 'tag', approved: 'tag ok', rejected: 'tag bad' };
+    const pn = s.recent.filter((r) => r.status === 'pending'), ph = Math.round(pn.reduce((a, r) => a + (+r.hours || 0), 0) * 10) / 10;
     return `<h2>${t('stats')}</h2><p class="sub"></p>
     <div class="grid"><div class="stat"><div class="l">${t('hours')}</div><div class="n">${s.totalHours}</div></div><div class="stat"><div class="l">${t('streams')}</div><div class="n">${s.totalStreams.toLocaleString()}</div></div></div>
-    <div class="card"><h3>${t('weeklyAct')}</h3><div class="chart">${s.week.map((h, i) => `<div class="${i === wd ? 'hi' : ''}"><i style="height:${(h / max) * 110}px" title="${h}h"></i>${dn[i]}</div>`).join('')}</div></div>
+    ${pn.length ? `<div class="pendnote" role="button" tabindex="0" onclick="document.getElementById('recent').scrollIntoView({behavior:'smooth',block:'start'})">${ic('clock', 16)}<span>${t('pendN', pn.length, ph)}</span></div>` : ''}<div class="card"><h3>${t('weeklyAct')}</h3><div class="chart">${s.week.map((h, i) => `<div class="${i === wd ? 'hi' : ''}"><i style="height:${(h / max) * 110}px" title="${h}h"></i>${dn[i]}</div>`).join('')}</div></div>
     <div class="card"><h3>${t('submit')}</h3><p>${t('submitD')}</p>
       <label for="f-p">${t('platform')}</label><select id="f-p">${['Spotify', 'Apple Music', 'YouTube Music', 'Stationhead', 'Other'].map((p) => `<option>${p}</option>`).join('')}</select>
       <label for="f-h">${t('sh')}</label><input id="f-h" type="number" inputmode="decimal" min="0.1" max="24" step="0.1" placeholder="2">
       <label for="f-s">${t('rs')}</label><input id="f-s" type="number" inputmode="numeric" min="0" placeholder="150">
       <label for="f-d">${t('date')}</label><input id="f-d" type="date" value="${thaiToday()}" max="${thaiToday()}">
       <label for="f-e">${t('ev')}</label><input id="f-e" type="url" placeholder="https://">
-      <button class="btn" onclick="sendRec(this)">${t('send')}</button></div>
-    <div class="card"><h3>${t('recent')}</h3><div class="list">${s.recent.length ? s.recent.map((r) => `<div><div><b>${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams</p></div><span class="${st[r.status]}">${t(r.status)}</span></div>`).join('') : `<p>${t('noRec')}</p>`}</div></div>`;
+      <button class="btn" id="sendbtn" onclick="sendRec(this)">${t('send')}</button><div id="recok" class="recok" hidden></div></div>
+    <div class="card" id="recent"><h3>${t('recent')}</h3><div class="list">${s.recent.length ? s.recent.map((r) => `<div><div><b>${esc(r.platform)} · ${r.hours}h</b><p>${esc(r.date)} · ${r.streams} streams</p></div><span class="${st[r.status]}">${t(r.status)}</span></div>`).join('') : `<p>${t('noRec')}</p>`}</div></div>`;
   },
   async profile() {
     const m = await api('me'); const u = (S.user = m.user);
@@ -1392,9 +1431,20 @@ window.auth = async (kind) => {
 window.doCheckin = safe(async (el) => { lock(el); const r = await api('checkin'); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
 window.doAct = safe(async (a, el) => { lock(el); const r = await api(a); toast(r.already ? t('already') : t('gained', r.gained)); render(); });
 window.sendRec = safe(async (el) => {
-  lock(el);
-  await api('submitRecord', { platform: v('f-p'), hours: v('f-h'), streams: v('f-s'), date: v('f-d'), evidence: v('f-e') });
-  toast(t('saved')); render(true);
+  const rec = { platform: v('f-p'), hours: v('f-h'), streams: v('f-s'), date: v('f-d'), evidence: v('f-e') };
+  el.dataset.t = el.textContent; el.disabled = true; el.classList.add('busy'); el.textContent = t('sending');
+  const box0 = document.getElementById('recok'); if (box0) box0.hidden = true;
+  try { await api('submitRecord', rec); } catch (e) { el.classList.remove('busy'); throw e; }
+  await render(true);                                   // totals, pending note and recent list refresh; form resets
+  const btn = document.getElementById('sendbtn');
+  if (btn) { btn.classList.add('done'); btn.textContent = '✓ ' + t('recSent'); setTimeout(() => { btn.classList.remove('done'); btn.textContent = t('send'); }, 1800); }
+  const box = document.getElementById('recok');
+  if (box) {
+    const ck = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+    box.innerHTML = `<i>${ck}</i><span><b>${t('recSent')}</b> · ${esc(rec.platform)} · ${esc(String(rec.hours))}${lang === 'th' ? ' ชม.' : 'h'}${rec.streams ? ' · ' + Number(rec.streams).toLocaleString() + ' streams' : ''}<small>${t('recWait')}</small><a class="rlk" role="button" tabindex="0" onclick="document.getElementById('recent').scrollIntoView({behavior:'smooth',block:'start'})">${t('seeRec')} ↓</a></span>`;
+    box.hidden = false; box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+    try { box.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {}
+  }
 });
 window.togglePub = safe(async (val) => { await api('setPublic', { value: val }); render(); });
 window.unlock = safe(async () => { S.admin = v('a-s'); sessionStorage.setItem('adm', S.admin); try { await api('a_pending'); } catch (e) { S.admin = ''; sessionStorage.removeItem('adm'); throw e; } render(); });
@@ -1410,16 +1460,18 @@ window.admUnban = safe(async (dev) => { await api('a_unban', { dev }); render(tr
 window.review = safe(async (rid, approve) => { await api('a_review', { rid, approve }); render(); });
 
 /* ---------- shell ---------- */
-const HC = (() => { try { return JSON.parse(sessionStorage.getItem('hc') || '{}'); } catch { return {}; } })(); // rendered HTML per tab: shown instantly, refreshed in background
+const HKEY = () => (S.token || '').slice(-16);
+const HC = (() => { try { const o = JSON.parse(localStorage.getItem('hc3') || '{}'); if (o.k && o.k === HKEY() && Date.now() - (o.ts || 0) < 432e5) return o.v || {}; } catch {} return {}; })();
+const saveHC = () => { try { localStorage.setItem('hc3', JSON.stringify({ k: HKEY(), ts: Date.now(), v: HC })); } catch {} }; // rendered HTML per tab: shown instantly, refreshed in background
 let warmed = false, shown = '', gen = 0;
-const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; try { sessionStorage.removeItem('hc'); } catch {} };
+const clearHC = () => { for (const k in HC) delete HC[k]; warmed = false; try { sessionStorage.removeItem('hc'); localStorage.removeItem('hc3'); } catch {} };
 const SKEL = '<div class="skl"></div><div class="skl"></div><div class="skl s"></div>';
 const PFQ = {};
 function prefetch(k) {
   if ((!S.token && !DEMO) || !V[k]) return;
   const key = k + lang; if (HC[key] || PFQ[key]) return;
   PFQ[key] = 1;
-  V[k]().then((h) => { if (!HC[key]) HC[key] = h; }).catch(() => {}).finally(() => { delete PFQ[key]; });
+  V[k]().then((h) => { if (HC[key] !== h) { HC[key] = h; saveHC(); } }).catch(() => {}).finally(() => { delete PFQ[key]; });
 }
 function warm() {
   if (warmed || DEMO || !S.token) return;
@@ -1453,14 +1505,15 @@ async function render(force) {
   const tab = S.tab, key = tab + lang, my = ++gen;
   if (shown !== key) { main.innerHTML = HC[key] || SKEL; window.scrollTo(0, 0); shown = key; main.classList.remove('fi'); void main.offsetWidth; main.classList.add('fi'); }
   if (tab === 'home') requestAnimationFrame(fitHome);
-  let html;
-  try { html = await V[tab](); } catch (e) { html = `<div class="card"><p>${esc(e.message)}</p></div>`; }
+  let html, failed = false;
+  try { html = await V[tab](); } catch (e) { failed = true; html = `<div class="card"><p>${esc(e.message)}</p></div>`; }
+  const changed = !failed && HC[key] !== html;
+  if (!failed) { HC[key] = html; saveHC(); }
   if (my !== gen) return;
+  if (failed) { if (!HC[key]) main.innerHTML = html; return; }
   const typing = !force && /INPUT|SELECT/.test((document.activeElement || {}).tagName || '');
-  if (HC[key] !== html && !typing) main.innerHTML = html;
+  if ((changed || main.querySelector('.skl')) && !typing) main.innerHTML = html;
   if (tab === 'home') requestAnimationFrame(fitHome);
-  HC[key] = html;
-  try { sessionStorage.setItem('hc', JSON.stringify(HC)); } catch {}
   if (tab === 'idcard') drawId(S.user);
   warm();
 }
@@ -1536,6 +1589,7 @@ document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key ==
     ['pointerup', 'pointercancel', 'pointerleave'].forEach((n) => el.addEventListener(n, off, { once: true }));
   }, { passive: true });
 })();
+if (S.token && !DEMO) { api('me').catch(() => {}); api('today').catch(() => {}); }
 render();
 </script>
 </body>
